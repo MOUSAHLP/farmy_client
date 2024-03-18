@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RewardController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AttributeController;
@@ -133,6 +134,42 @@ Route::group(['middleware' => 'cors'], function () {
         Route::delete('/delete_related', 'deleteRelatedProducts');
         Route::get('/{id}', 'relatedProducts');
         Route::post('/related_products', 'addRelatedProducts');
+    });
+
+    Route::group([
+        'middleware' => 'auth:user',
+        'prefix' => 'reward',
+        'controller' => RewardController::class,
+    ], function () {
+        Route::get('/user-statistics', 'userStatistics');
+
+        Route::group([
+            'prefix' => "achievements",
+        ], function () {
+            Route::get('/not-done', 'UserNotDoneAchievements');
+        });
+
+        Route::group([
+            'prefix' => "coupons",
+        ], function () {
+            Route::get('/', 'coupons');
+            Route::get('/offers', 'offers');
+        });
+
+        Route::group([
+            'prefix' => "points",
+        ], function () {
+            Route::get('/valid', 'userValidPoints');
+            Route::get('/used', 'userUsedPoints');
+            Route::get('/expired', 'userExpiredPoints');
+        });
+
+        Route::group([
+            'prefix' => "guide",
+        ], function () {
+            Route::get('/rewards', 'rewardsGuide');
+            Route::get('/memberships', 'membershipsGuide');
+        });
     });
 });
 Route::apiResource('delivery_time_infos', DeliveryTimeInfoController::class);

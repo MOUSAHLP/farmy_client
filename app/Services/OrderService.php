@@ -18,7 +18,10 @@ class OrderService
     public function __construct(
         private ProductService $productService,
         private PaymentProcessService $paymentProcessService,
-        private UserService $userService
+        private DeliveryMethodService $deliveryMethodService,
+        private UserService $userService,
+        private UserAddressService $userAddressService,
+
     ) {
     }
     public function getAll()
@@ -26,8 +29,8 @@ class OrderService
         $order =  Order::with([
             'user', 'deliveryMethod', 'paymentMethod', 'userAddress', 'city', 'orderDetails'
         ]);
-        if(request()->has('status')){
-            $order->where('status',request()->status);
+        if (request()->has('status')) {
+            $order->where('status', request()->status);
         }
         return $order->get();
     }
@@ -35,20 +38,20 @@ class OrderService
     {
         $userId = AuthHelper::userAuth()->id;
         $user = $this->userService->find($userId);
-        if(request()->has('status')){
+        if (request()->has('status')) {
             $user->orders()->with([
-            'user', 'deliveryMethod', 'paymentMethod', 'userAddress', 'city', 'orderDetails'
-        ])->where('status',request()->status)->orderBy('id','asc');
+                'user', 'deliveryMethod', 'paymentMethod', 'userAddress', 'city', 'orderDetails'
+            ])->where('status', request()->status)->orderBy('id', 'asc');
         }
 
         // return $user->orders;
-      return $user->orders()->orderBy('id','desc')->get();
+        return $user->orders()->orderBy('id', 'desc')->get();
     }
 
     public function find($orderId)
     {
         $order = Order::with([
-            'user', 'deliveryMethod', 'paymentMethod', 'userAddress', 'city', 'orderDetails','orderDetails.product',
+            'user', 'deliveryMethod', 'paymentMethod', 'userAddress', 'city', 'orderDetails', 'orderDetails.product',
 
         ])->findOrFail($orderId);
         $products = $order->orderDetails->map(function ($orderDetail) {
@@ -57,7 +60,7 @@ class OrderService
 
 
 
-        [$invoice ,$deliveryMethods]  = $this->paymentProcessService->calculateInvoice(
+        [$invoice, $deliveryMethods]  = $this->paymentProcessService->calculateInvoice(
             $order->orderDetails,
             collect([$order->deliveryMethod]),
             $order->userAddress->latitude,
@@ -84,7 +87,6 @@ class OrderService
         DB::commit();
 
         return $order;
-
     }
 
     public function update($validatedData, $orderId)
@@ -101,7 +103,7 @@ class OrderService
         $order->orderDetails()->delete();
         $order->orderDetails()->createMany($validatedData['products']);
 
-        if(isset($validatedData->delivery_attributes)){
+        if (isset($validatedData->delivery_attributes)) {
             $this->handleDeliveryAttributesUpdate($order, $validatedData);
         }
 
@@ -154,14 +156,24 @@ class OrderService
             return $product;
         }, $data['products']);
 
-         $data2 =$this->paymentProcessService->calculateInvoice($data['products']);
-         $data['total'] =  $data2[0]['total'];
+
+        $selectedAddress = $this->userAddressService->find($data['user_address_id']);
+
+        $data2 = $this->paymentProcessService->calculateInvoice(
+            $data['products'],
+            $this->deliveryMethodService->getAll(),
+            $selectedAddress->latitude,
+            $selectedAddress->longitude
+        );
+        $data['delivery_fee'] =  $data2[0]['delivery_price'];
+        $data['sub_total'] =  $data2[0]['subtotal'];
+        $data['total'] =  $data2[0]['total'];
 
         return $data;
-
     }
 
-    public function handleDeliveryAttributesUpdate($order, $validatedData){
+    public function handleDeliveryAttributesUpdate($order, $validatedData)
+    {
         if ($order->deliveryAttributes != null) {
             $deliveryAttributeIds = collect($validatedData['delivery_attributes'])->pluck('delivery_attribute_id')->toArray();
 

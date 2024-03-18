@@ -67,10 +67,9 @@ class PaymentProcessService
 
             $seller = $currentProduct->seller;
 
-            if ($seller && isset($seller->latitude) && isset($seller->longitude)) {
+           if ($seller && isset($seller->latitude) && isset($seller->longitude) && !in_array(['lat' => $seller->latitude, 'lon' => $seller->longitude], $sellerLocations)) {
                 $sellerLocations[] = ['lat' => $seller->latitude, 'lon' => $seller->longitude];
             }
-
             $productTotal = $currentProduct->price * $product['quantity'];
             $total = $total + $productTotal;
 

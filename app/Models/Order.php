@@ -24,6 +24,8 @@ class Order extends Model
 		'latitude',
 		'longitude',
 		'payment_status',
+		'delivery_fee',
+		'sub_total',
 		'total',
 		'date',
 		'notes',
@@ -43,11 +45,12 @@ class Order extends Model
 		'latitude'           => 'integer',
 		'longitude'          => 'integer',
 		'payment_status'     => 'boolean',
+		'delivery_fee'       => 'double',
+		'sub_total'          => 'double',
 		'total'              => 'double',
 		'date'               => 'datetime',
 		'notes'              => 'string',
-		'changes'             => "array",
-
+		'changes'            => "array",
 	];
 
     public function user()
