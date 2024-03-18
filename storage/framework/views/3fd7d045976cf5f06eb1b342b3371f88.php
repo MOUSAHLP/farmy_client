@@ -1,0 +1,1 @@
+<h1>who are we  </h1><?php /**PATH /home/peaklin2/control.farmy.peaklink.site/resources/views/who_we_are.blade.php ENDPATH**/ ?>

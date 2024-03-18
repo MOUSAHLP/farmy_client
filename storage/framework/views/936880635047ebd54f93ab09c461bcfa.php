@@ -1,0 +1,1 @@
+<h1>faq question in</h1><?php /**PATH /home/peaklin2/control.farmy.peaklink.site/resources/views/faq_question.blade.php ENDPATH**/ ?>
