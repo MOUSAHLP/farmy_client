@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Services\DriverService;
 use App\Services\OrderService;
 use App\Services\PaymentProcessService;
+
 class OrderController extends Controller
 {
-    public function __construct(private OrderService $orderService)
+    public function __construct(private OrderService $orderService, private DriverService $driverService)
     {
     }
 
@@ -83,6 +85,22 @@ class OrderController extends Controller
         return $this->successResponse(
             null,
             'dataUpdatedSuccessfully'
+        );
+    }
+
+    public function getorderstatus($orderId)
+    {
+        $order = $this->orderService->find($orderId);
+        $data = [];
+        $data["order_status"] = $order->status;
+        if ($order->driver_id != null) {
+            $data["driver_phone"] = $this->driverService->find($order->driver_id)->phone;
+        }
+
+
+        return $this->successResponse(
+            $data,
+            'dataFetchedSuccessfully'
         );
     }
 }
