@@ -73,6 +73,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::group(['middleware' => 'auth:user', 'prefix' => 'orders'], function () {
         Route::post('/update-status/{id}', [OrderController::class, 'updateStatus']);
         Route::get('/order-details/{id}', [OrderController::class, 'show']);
+        Route::get('order-status/{id}',[OrderController::class, 'getorderstatus']);
     });
 
     Route::apiResource('users', UserController::class);
