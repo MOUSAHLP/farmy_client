@@ -101,13 +101,16 @@ class HomePageController extends Controller
 
         $homePageDynamic->content()->delete();
 
-        foreach ($request->content as $content) {
-            HomePageDynamicContent::create([
-                'home_page_dynamic_id' => $homePageDynamic->id,
-                'product_id' => $content["product_id"] ?? null,
-                'category_id' => $content["category_id"] ?? null,
-                'banner_id' => $content["banner_id"] ?? null,
-            ]);
+        if (isset($request->content)) {
+
+            foreach ($request->content as $content) {
+                HomePageDynamicContent::create([
+                    'home_page_dynamic_id' => $homePageDynamic->id,
+                    'product_id' => $content["product_id"] ?? null,
+                    'category_id' => $content["category_id"] ?? null,
+                    'banner_id' => $content["banner_id"] ?? null,
+                ]);
+            }
         }
 
         $homePageDynamic->save();
