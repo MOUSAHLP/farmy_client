@@ -47,7 +47,7 @@ class UserRequest extends FormRequest
             'status'              => 'boolean',
             'fcm_token'           => 'nullable|string',
             'city_id'             => 'required|integer|exists:cities,id',
-           //'birthday'            => 'required|date',
+            //'birthday'            => 'required|date',
 
         ];
 
@@ -57,19 +57,19 @@ class UserRequest extends FormRequest
 
     public function getUpdateRules()
     {
-        $user_id = $this->route('user');
+        $user_id = intVal($this->route('user'));
         $rules = [
-            'first_name'          => 'required|string|max:255',
-            'last_name'           => 'required|string|max:255',
-            'email'               => [ 'required', 'email', Rule::unique('users', 'email')->ignore($user_id)],
-            'password'            => 'required|min:8',
+            'first_name'          => 'nullable|string|max:255',
+            'last_name'           => 'nullable|string|max:255',
+            'email'           => 'nullable|email|unique:users,email,' . $user_id,
+            'password'            => 'nullable|min:8',
             'address'             => 'nullable|string',
-            'phone'               => [ 'required', Rule::unique('users', 'phone')->ignore($user_id)],
-            'role_id'             => 'required|exists:roles,id',
+            'phone'               => ['nullable', Rule::unique('users', 'phone')->ignore($user_id)],
+            'role_id'             => 'nullable|exists:roles,id',
             'status'              => 'sometimes|boolean',
             'fcm_token'           => 'nullable|string',
-            'city_id'             => 'required|integer|exists:cities,id',
-        //    'birthday'            => 'sometimes|required|date',
+            'city_id'             => 'nullable|integer|exists:cities,id',
+            //    'birthday'            => 'sometimes|nullable|date',
 
         ];
 
@@ -82,9 +82,9 @@ class UserRequest extends FormRequest
         return  $rules = [
             'first_name'          => 'sometimes|required|string|max:255',
             'last_name'           => 'sometimes|required|string|max:255',
-           // 'email'               => ['sometimes', 'required', 'email', Rule::unique('users', 'email')->ignore($user_id)],
+            // 'email'               => ['sometimes', 'required', 'email', Rule::unique('users', 'email')->ignore($user_id)],
             'phone'               => ['sometimes', 'required', Rule::unique('users', 'phone')->ignore($user_id)],
-           // 'birthday'            => 'sometimes|required|date',
+            // 'birthday'            => 'sometimes|required|date',
         ];
     }
 
@@ -97,6 +97,5 @@ class UserRequest extends FormRequest
             'password'       => 'required|current_password:user',
             'phone'          => 'required|exists:users,phone,id,' . $id,
         ];
-
     }
 }
