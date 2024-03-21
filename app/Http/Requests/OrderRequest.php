@@ -70,8 +70,8 @@ class OrderRequest extends FormRequest
 
     public function getUpdateStatusRules()
     {
-        return[
-            'status'=> 'integer',
+        return [
+            'status' => 'integer',
         ];
     }
     public function getUpdateRules()

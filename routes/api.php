@@ -73,7 +73,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::group(['middleware' => 'auth:user', 'prefix' => 'orders'], function () {
         Route::post('/update-status/{id}', [OrderController::class, 'updateStatus']);
         Route::get('/order-details/{id}', [OrderController::class, 'show']);
-        Route::get('order-status/{id}',[OrderController::class, 'getorderstatus']);
+        Route::get('order-status/{id}', [OrderController::class, 'getorderstatus']);
     });
 
     Route::apiResource('users', UserController::class);
@@ -86,6 +86,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::apiResource('sub_categories', SubCategoryController::class);
     Route::post('fixed-attributes', [FixedAttributesController::class, 'updateAttribute']);
     Route::apiResource('products', ProductController::class);
+    Route::post('get-cart-products-info', [ProductController::class, 'getCartProductsInfo']); // for cart المسودة
     Route::get('web-product/{id}', [ProductController::class, 'webShow']);
     Route::apiResource('attributes', AttributeController::class);
     Route::post('attributes/{id}/values', [AttributeController::class, 'addValues']);

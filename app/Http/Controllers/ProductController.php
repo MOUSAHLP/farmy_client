@@ -102,4 +102,12 @@ class ProductController extends Controller
             'dataDeletedSuccessfully'
         );
     }
+    public function getCartProductsInfo(ProductRequest $request)
+    {
+        $validatedData = $request->validated();
+        return $this->successResponse(
+            $this->productService->findAllFromArray($validatedData),
+            'dataFetchedSuccessfully'
+        );
+    }
 }

@@ -17,7 +17,7 @@ class ProductService
 
     public function getAll($request)
     {
-        $product = Product::with('subCategory', 'commission', 'relatedProducts','attributes')
+        $product = Product::with('subCategory', 'commission', 'relatedProducts', 'attributes')
 
             // get the product by subcategory_id
             ->when($request->subCategoryId != null, function ($query) use ($request) {
@@ -51,6 +51,12 @@ class ProductService
     public function find($productId)
     {
         return Product::with(['subCategory', 'commission', 'relatedProducts'])->findOrFail($productId);
+    }
+
+
+    public function findAllFromArray($products)
+    {
+        return Product::with(['subCategory', 'commission', 'relatedProducts'])->whereIn("id", $products["products"])->get();
     }
 
     public function create($validatedData)

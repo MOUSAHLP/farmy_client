@@ -30,6 +30,7 @@ class ProductRequest extends FormRequest
             'update'               =>  $this->getUpdateRules(),
             'addRelatedProducts'   =>  $this->addRelatedProducts(),
             'deleteRelatedProducts' =>  $this->deleteRelatedProducts(),
+            'getCartProductsInfo'   =>  $this->getCartProductsInfoRules(),
         };
     }
 
@@ -102,6 +103,17 @@ class ProductRequest extends FormRequest
     {
         return [
             'relation_id'      => 'required|integer',
+        ];
+    }
+
+    public function getCartProductsInfoRules()
+    {
+        return [
+            'products'              => 'required|array|min:1',
+            'products.*' => [
+                'integer',
+                'exists:products,id',
+            ],
         ];
     }
 }
