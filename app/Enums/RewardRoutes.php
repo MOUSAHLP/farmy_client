@@ -26,11 +26,11 @@ class RewardRoutes
         $userId = AuthHelper::userAuth()->id;
         return '/coupons/user/' . $userId;
     }
-    public static function UserPurchasableCoupons()
-    {
-        $userId = AuthHelper::userAuth()->id;
-        return '/coupons/purchasable/user/' . $userId;
-    }
+   
+    const fixed_value_coupons = '/coupons/fixed_value';
+    const percentage_coupons  = '/coupons/percentage';
+    const delivery_coupons    = '/coupons/delivery';
+
     // Points
     public static function UserValidPoints()
     {
@@ -48,6 +48,13 @@ class RewardRoutes
         return '/points/expired/user/' . $userId;
     }
 
+    // Purchases
+    public static function UserPurchases()
+    {
+        $userId = AuthHelper::userAuth()->id;
+        return '/purchases/user/'. $userId;
+    }
+    
     // Ranks
     const Ranks   = '/ranks';
 }
