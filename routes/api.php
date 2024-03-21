@@ -144,6 +144,7 @@ Route::group(['middleware' => 'cors'], function () {
         'controller' => RewardController::class,
     ], function () {
         Route::get('/user-statistics', 'userStatistics');
+        Route::get('/purchases', 'userPurchases');
 
         Route::group([
             'prefix' => "achievements",
@@ -155,7 +156,9 @@ Route::group(['middleware' => 'cors'], function () {
             'prefix' => "coupons",
         ], function () {
             Route::get('/', 'coupons');
-            Route::get('/offers', 'offers');
+            Route::get('/fixed-value', 'fixedValueCoupons');
+            Route::get('/percentage', 'percentageCoupons');
+            Route::get('/delivery', 'deliveryCoupons');
         });
 
         Route::group([
