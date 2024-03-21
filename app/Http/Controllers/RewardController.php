@@ -14,6 +14,12 @@ class RewardController extends Controller
         return  $response ;
     }
 
+    // Purchases
+    public function userPurchases()
+    {
+        return $this->rewardGetRequest(RewardRoutes::UserPurchases());
+    }
+    
     // Achievements
     public function UserNotDoneAchievements()
     {
@@ -26,11 +32,20 @@ class RewardController extends Controller
         return  $this->rewardGetRequest(RewardRoutes::UserCoupons());
     }
 
-    public function offers()
+    public function fixedValueCoupons()
     {
-        return  $this->rewardGetRequest(RewardRoutes::UserPurchasableCoupons());
+        return  $this->rewardGetRequest(RewardRoutes::fixed_value_coupons);
     }
 
+    public function percentageCoupons()
+    {
+        return  $this->rewardGetRequest(RewardRoutes::percentage_coupons);
+    }
+    public function deliveryCoupons()
+    {
+        return  $this->rewardGetRequest(RewardRoutes::delivery_coupons);
+    }
+    
     // Points
     public function userValidPoints()
     {
