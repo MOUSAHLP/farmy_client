@@ -112,7 +112,7 @@ class ProductRequest extends FormRequest
             'products'              => 'required|array|min:1',
             'products.*' => [
                 'integer',
-                'exists:products,id',
+                // 'exists:products,id',
             ],
         ];
     }
