@@ -10,6 +10,7 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DeliveryAttributeController;
 use App\Http\Controllers\DeliveryMethodController;
 use App\Http\Controllers\DeliveryTimeInfoController;
@@ -93,6 +94,9 @@ Route::group(['middleware' => 'cors'], function () {
 
     //// search
     Route::get('search', [ProductController::class, 'search']);
+
+    //// contact us
+    Route::post('contact_us', [ContactUsController::class, 'contact_us']);
 
     Route::apiResource('attributes', AttributeController::class);
     Route::post('attributes/{id}/values', [AttributeController::class, 'addValues']);
