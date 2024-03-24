@@ -34,6 +34,7 @@ class OrderService
         }
         return $order->get();
     }
+
     public function getAllByUser()
     {
         $userId = AuthHelper::userAuth()->id;
@@ -46,6 +47,14 @@ class OrderService
 
         // return $user->orders;
         return $user->orders()->orderBy('id', 'desc')->get();
+    }
+
+
+    public function getUserAllInvoices()
+    {
+        $userId = AuthHelper::userAuth()->id;
+
+        return Order::where("user_id", $userId)->where("status", OrderStatus::Deliverd)->orderBy('id', 'desc')->get();
     }
 
     public function find($orderId)
@@ -141,6 +150,21 @@ class OrderService
 
         return true;
     }
+
+    public function updateRate($validatedData, $orderId)
+    {
+        $order = Order::find($orderId);
+        DB::beginTransaction();
+
+        $order->update([
+            'rate' => $validatedData['rate'],
+        ]);
+
+        DB::commit();
+
+        return true;
+    }
+
     public function prepareOrderData($data)
     {
         $data['user_id'] =  AuthHelper::userAuth()->id;

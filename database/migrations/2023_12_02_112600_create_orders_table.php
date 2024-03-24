@@ -33,6 +33,7 @@ return new class extends Migration
             $table->double('total')->default(0);
             $table->date('date');
             $table->text('notes')->nullable();
+            $table->integer('rate')->default(0);
             $table->text('change')->nullable();
             $table->softDeletes();
             $table->timestamps();
@@ -42,7 +43,6 @@ return new class extends Migration
             $table->foreign('user_address_id')->references('id')->on('user_addresses')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
-
         });
     }
 
