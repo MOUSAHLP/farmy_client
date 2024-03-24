@@ -51,7 +51,7 @@ class UserService
 
         DB::commit();
 
-        return true;
+        return $user;
     }
 
     public function delete($userId)

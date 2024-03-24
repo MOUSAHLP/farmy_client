@@ -28,12 +28,11 @@ class ProfileController extends Controller
     {
         $userId = auth('user')->user()->id;
         $validatedData = $request->validated();
-        $this->userService->update($validatedData, $userId);
+        $user = $this->userService->update($validatedData, $userId);
 
         return $this->successResponse(
             [
-                'user'  => auth('user')->user(),
-
+                'user'  => $user,
             ],
             'dataDeletedSuccessfully'
         );
