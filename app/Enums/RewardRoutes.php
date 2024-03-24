@@ -31,6 +31,13 @@ class RewardRoutes
     const percentage_coupons  = '/coupons/percentage';
     const delivery_coupons    = '/coupons/delivery';
 
+    // coupons usage
+    const can_use_coupon    = '/coupons/canUse';
+    const use_coupon    = '/coupons/use';
+
+   // coupons usage
+    const can_buy_coupon    = '/coupons/canBuy';
+    const buy_coupon    = '/coupons/buy';
     // Points
     public static function UserValidPoints()
     {

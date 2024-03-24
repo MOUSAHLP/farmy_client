@@ -137,6 +137,7 @@ Route::group(['middleware' => 'cors'], function () {
         Route::post('/related_products', 'addRelatedProducts');
     });
 
+    // Reward System
     Route::group([
         'middleware' => 'auth:user',
         'prefix' => 'reward',
@@ -144,13 +145,13 @@ Route::group(['middleware' => 'cors'], function () {
     ], function () {
         Route::get('/user-statistics', 'userStatistics');
         Route::get('/purchases', 'userPurchases');
-
+        // Achievements
         Route::group([
             'prefix' => "achievements",
         ], function () {
             Route::get('/not-done', 'UserNotDoneAchievements');
         });
-
+        // Coupons
         Route::group([
             'prefix' => "coupons",
         ], function () {
@@ -158,8 +159,10 @@ Route::group(['middleware' => 'cors'], function () {
             Route::get('/fixed-value', 'fixedValueCoupons');
             Route::get('/percentage', 'percentageCoupons');
             Route::get('/delivery', 'deliveryCoupons');
-        });
 
+            Route::post('/use', 'useCoupon');
+        });
+        // Points
         Route::group([
             'prefix' => "points",
         ], function () {
@@ -167,7 +170,7 @@ Route::group(['middleware' => 'cors'], function () {
             Route::get('/used', 'userUsedPoints');
             Route::get('/expired', 'userExpiredPoints');
         });
-
+        // Guides
         Route::group([
             'prefix' => "guide",
         ], function () {
