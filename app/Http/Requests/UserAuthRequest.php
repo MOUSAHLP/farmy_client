@@ -61,8 +61,8 @@ class UserAuthRequest extends FormRequest
     public function changePassword()
     {
         return [
-            'old_password'    => 'required|numeric|current_password:user',
-            'password'        => 'sometimes|string|confirmed|min:6|max:30',
+            'old_password'    => 'required|string|current_password:user',
+            'password'        => 'required|string|confirmed|min:6|max:30',
         ];
     }
 

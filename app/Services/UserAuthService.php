@@ -53,7 +53,7 @@ class UserAuthService
 
         DB::commit();
 
-        return true ;
+        return true;
     }
 
     public function logout()

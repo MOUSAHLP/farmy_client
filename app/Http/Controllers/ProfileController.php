@@ -24,7 +24,7 @@ class ProfileController extends Controller
         );
     }
 
-   public function updateProfile(UserRequest $request)
+    public function updateProfile(UserRequest $request)
     {
         $userId = auth('user')->user()->id;
         $validatedData = $request->validated();
@@ -33,7 +33,7 @@ class ProfileController extends Controller
         return $this->successResponse(
             [
                 'user'  => auth('user')->user(),
-                
+
             ],
             'dataDeletedSuccessfully'
         );
@@ -62,7 +62,7 @@ class ProfileController extends Controller
         $userId = auth('user')->user()->id;
 
         if (!$verified) {
-            return $this->successResponse(null,'wrong code');
+            return $this->successResponse(null, 'wrong code');
         }
 
         $this->userService->update($validatedData, $userId);
@@ -80,12 +80,12 @@ class ProfileController extends Controller
         $changed =  (new UserAuthService)->changePassword($validatedData);
 
         if (!$changed) {
-            return $this->successResponse(null,'some thing went wrong');
+            return $this->successResponse(null, 'some thing went wrong');
         }
 
         return $this->successResponse(
             null,
-            'password changed Successfully'
+            'passwordChangedSuccessfully'
         );
     }
 }
