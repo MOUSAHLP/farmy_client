@@ -19,6 +19,7 @@ use App\Http\Controllers\FavoritController;
 use App\Http\Controllers\FixedAttributesController;
 use App\Http\Controllers\GiftController;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\JoinOurTeamController;
 use App\Http\Controllers\ModelListController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
@@ -97,6 +98,18 @@ Route::group(['middleware' => 'cors'], function () {
 
     //// contact us
     Route::post('contact_us', [ContactUsController::class, 'contact_us']);
+
+    //// join our team
+    Route::group([
+        'prefix' => '/join-our-team',
+        'controller' => JoinOurTeamController::class,
+    ], function () {
+        Route::get('jobs', 'get_jobs');
+        Route::put('/', "update");
+    });
+
+    Route::resource('join-our-team', JoinOurTeamController::class);
+
 
     Route::apiResource('attributes', AttributeController::class);
     Route::post('attributes/{id}/values', [AttributeController::class, 'addValues']);
