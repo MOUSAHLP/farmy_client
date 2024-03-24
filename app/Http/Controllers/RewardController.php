@@ -9,9 +9,9 @@ class RewardController extends Controller
     public function userStatistics()
     {
         $response = $this->rewardGetRequest(RewardRoutes::UserStatistics());
-        $response->ranks = $this->rewardGetRequest(RewardRoutes::Ranks);
+        $response->ranks = $this->rewardGetRequest(RewardRoutes::Ranks)->data;
 
-        return  $response ;
+        return  $response;
     }
 
     // Purchases
@@ -19,7 +19,7 @@ class RewardController extends Controller
     {
         return $this->rewardGetRequest(RewardRoutes::UserPurchases());
     }
-    
+
     // Achievements
     public function UserNotDoneAchievements()
     {
@@ -45,7 +45,14 @@ class RewardController extends Controller
     {
         return  $this->rewardGetRequest(RewardRoutes::delivery_coupons);
     }
-    
+    public function useCoupon()
+    {
+        return  $this->rewardPostRequest(RewardRoutes::use_coupon, [
+            "user_id" => 16,
+            "coupon_code" => "HoycyNYj"
+        ]);
+    }
+
     // Points
     public function userValidPoints()
     {
@@ -79,10 +86,9 @@ class RewardController extends Controller
         return $this->successResponse(
             [
                 'html' => view('membership_guide')->render(),
-                "ranks" =>$ranks->data
+                "ranks" => $ranks->data
             ],
             'dataFetchedSuccessfully'
         );
     }
-
 }
