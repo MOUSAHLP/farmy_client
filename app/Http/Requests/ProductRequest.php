@@ -30,6 +30,7 @@ class ProductRequest extends FormRequest
             'update'               =>  $this->getUpdateRules(),
             'addRelatedProducts'   =>  $this->addRelatedProducts(),
             'deleteRelatedProducts' =>  $this->deleteRelatedProducts(),
+            'getCartProductsInfo'   =>  $this->getCartProductsInfoRules(),
         };
     }
 
@@ -69,26 +70,26 @@ class ProductRequest extends FormRequest
     public function getUpdateRules()
     {
         return [
-            'name'                  => 'sometimes|required|string',
-            'description'           => 'sometimes|required|string',
-            'price'                 => 'sometimes|required|numeric',
-            'tax'                   => 'required|numeric',
+            'name'                  => 'nullable|string',
+            'description'           => 'nullable|string',
+            'price'                 => 'nullable|numeric',
+            'tax'                   => 'nullable|numeric',
             'slug'                  => '',
-            'quantity'              => 'sometimes|required|numeric',
-            'status'                => 'sometimes|required|boolean',
-            'availability'          => 'sometimes|required|boolean',
-            'seller_id'             => 'sometimes|required|exists:sellers,id',
-            'subcategory_id'        => 'sometimes|required|exists:sub_categories,id',
-            'discount'              => 'sometimes|required|numeric',
-            'discount_status'       => 'sometimes|required|boolean',
-            'product_source'        => 'sometimes|required|boolean',
-            'commission_id'         => 'sometimes|required|exists:commissions,id',
-            'commission_value'      => 'sometimes|required|numeric',
-            'attributes'            => 'sometimes|required|array',
-            'attributes.*.id'       => 'required|exists:attributes,id',
-            'attributes.*.value'    => 'required|string',
-            'image'                 => 'sometimes|image',
-            // 'values'           => 'sometimes|required|array',
+            'quantity'              => 'nullable|numeric',
+            'status'                => 'nullable|boolean',
+            'availability'          => 'nullable|boolean',
+            'seller_id'             => 'nullable|exists:sellers,id',
+            'subcategory_id'        => 'nullable|exists:sub_categories,id',
+            'discount'              => 'nullable|numeric',
+            'discount_status'       => 'nullable|boolean',
+            'product_source'        => 'nullable|boolean',
+            'commission_id'         => 'nullable|exists:commissions,id',
+            'commission_value'      => 'nullable|numeric',
+            'attributes'            => 'nullable|array',
+            'attributes.*.id'       => 'nullable|exists:attributes,id',
+            'attributes.*.value'    => 'nullable|string',
+            'image'                 => 'nullable|image',
+            // 'values'           => 'nullable|array',
         ];
     }
     public function addRelatedProducts()
@@ -102,6 +103,17 @@ class ProductRequest extends FormRequest
     {
         return [
             'relation_id'      => 'required|integer',
+        ];
+    }
+
+    public function getCartProductsInfoRules()
+    {
+        return [
+            'products'              => 'required|array|min:1',
+            'products.*' => [
+                'integer',
+                // 'exists:products,id',
+            ],
         ];
     }
 }

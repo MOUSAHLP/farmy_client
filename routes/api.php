@@ -73,7 +73,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::group(['middleware' => 'auth:user', 'prefix' => 'orders'], function () {
         Route::post('/update-status/{id}', [OrderController::class, 'updateStatus']);
         Route::get('/order-details/{id}', [OrderController::class, 'show']);
-        Route::get('order-status/{id}',[OrderController::class, 'getorderstatus']);
+        Route::get('order-status/{id}', [OrderController::class, 'getorderstatus']);
     });
 
     Route::apiResource('users', UserController::class);
@@ -85,8 +85,15 @@ Route::group(['middleware' => 'cors'], function () {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('sub_categories', SubCategoryController::class);
     Route::post('fixed-attributes', [FixedAttributesController::class, 'updateAttribute']);
+
+    //// products
     Route::apiResource('products', ProductController::class);
+    Route::post('get-cart-products-info', [ProductController::class, 'getCartProductsInfo']); // for cart المسودة
     Route::get('web-product/{id}', [ProductController::class, 'webShow']);
+
+    //// search
+    Route::get('search', [ProductController::class, 'search']);
+
     Route::apiResource('attributes', AttributeController::class);
     Route::post('attributes/{id}/values', [AttributeController::class, 'addValues']);
     Route::apiResource('attribute_values', AttributeValueController::class);
@@ -108,6 +115,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::post('home-page-dynamic/create', [HomePageController::class, 'store']);
     Route::put('home-page-dynamic/edit', [HomePageController::class, 'update']);
     Route::delete('home-page-dynamic/delete', [HomePageController::class, 'destroy']);
+
 
     Route::apiResource('commissions', CommissionController::class);
     Route::get('profile', [ProfileController::class, 'getProfile']);

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\RelatedProductResource;
+use App\Models\Category;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -100,6 +102,44 @@ class ProductController extends Controller
         return $this->successResponse(
             null,
             'dataDeletedSuccessfully'
+        );
+    }
+    public function getCartProductsInfo(ProductRequest $request)
+    {
+        $validatedData = $request->validated();
+        return $this->successResponse(
+            $this->productService->findAllFromArray($validatedData),
+            'dataFetchedSuccessfully'
+        );
+    }
+
+    public function search(Request $request)
+    {
+
+        $listOfProducts = Product::select('*');
+        $listOfCategories = Category::select('*');
+
+        if (isset($request->q) && !empty($request->q)) {
+            $q = $request->q;
+            $listOfProducts = $listOfProducts->where('name', 'like', '%' . $q . '%')
+                ->orWhereHas('subCategory', function ($query) use ($q) {
+                    $query->where('name', 'like', '%' . $q . '%')
+                        ->orWhereHas('category', function ($query) use ($q) {
+                            $query->where('name', 'like', '%' . $q . '%');
+                        });
+                });
+
+            $listOfCategories = $listOfCategories->where('name', 'like', '%' . $q . '%')
+                ->orWhereHas('subcategories', function ($query) use ($q) {
+                    $query->where('name', 'like', '%' . $q . '%');
+                });
+        }
+
+        $listOfProducts = $listOfProducts->paginate(10);
+
+        return $this->successResponse(
+            ProductResource::collection($listOfProducts)->response()->getData(true),
+            'dataFetchedSuccessfully'
         );
     }
 }

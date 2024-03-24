@@ -22,7 +22,7 @@ class UserService
 
     public function find($userId)
     {
-        return $this->findByIdOrFail(User::class,'user', $userId);
+        return $this->findByIdOrFail(User::class, 'user', $userId);
     }
 
     public function create($validatedData)
@@ -43,7 +43,7 @@ class UserService
         $user = $this->find($userId);
 
         DB::beginTransaction();
-        if(array_key_exists('password',$validatedData)){
+        if (array_key_exists('password', $validatedData)) {
             $validatedData['password'] = Hash::make($validatedData['password']);
         }
 
@@ -68,7 +68,6 @@ class UserService
     }
     public function getUsersByIds($ids)
     {
-        return User::whereIn('id',$ids)->get();
+        return User::whereIn('id', $ids)->get();
     }
-
 }
