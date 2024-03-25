@@ -24,13 +24,14 @@ class PaymentProcessService
     }
     public function paymentProcess($request)
     {
+        
         $user = AuthHelper::userAuth();
         $user = $this->userService->find($user->id);
-
+        
         // check if there is a coupon
         [$coupon, $can_use, $message] = $this->getCoupon($request);
         //dd($this->getCoupon($request));
-        if ($coupon == null && !$can_use) {
+        if ($coupon == null && $can_use !=null && !$can_use) {
             return [
                 "error" => true,
                 "message" => $message
@@ -165,6 +166,7 @@ class PaymentProcessService
             $coupon["value"] = $coupon["value"] > 100 ? 100 : $coupon["value"];
             return (int)(($products_price / 100) * $coupon["value"]);
         } else if ($coupon["coupon_type"]->type == CouponTypes::DELIVERY) {
+            $coupon["value"] = $coupon["value"] > 100 ? 100 : $coupon["value"];
             return (int)(($deliveryPrice / 100) * $coupon["value"]);
         }
         return $coupon["value"];

@@ -35,7 +35,8 @@ class DeliveryMethodRequest extends FormRequest
     return [
       'name'  => 'required|string',
       'time'  => 'required|numeric',
-      'price' => 'required|numeric'
+      'price' => 'required|numeric',
+      'is_schedule' => 'required|boolean',
     ];
   }
 
@@ -44,7 +45,8 @@ class DeliveryMethodRequest extends FormRequest
     return [
       'name'  => 'sometimes|required|string',
       'time'  => 'sometimes|required|numeric',
-      'price' => 'sometimes|required|numeric'
+      'price' => 'sometimes|required|numeric',
+      'is_schedule' => 'required|boolean',
     ];
   }
 }

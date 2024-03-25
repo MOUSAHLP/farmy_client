@@ -28,6 +28,7 @@ class DeliveryMethodResource extends JsonResource
       'name' => $this->name,
       'time' => $this->time,
       'price' => $this->price,
+      'is_schedule' => $this->is_schedule,
       'created_at' => $this->created_at
     ];
   }
@@ -39,6 +40,7 @@ class DeliveryMethodResource extends JsonResource
       'name' => $this->name,
       'time' => $this->time,
       'price' => $this->price,
+      'is_schedule' => $this->is_schedule,
       'created_at' => $this->created_at
     ];
   }
