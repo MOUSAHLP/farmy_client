@@ -90,7 +90,6 @@ class OrderService
 
         // check if there is a coupon
         [$coupon, $message] = $this->getAndUseCoupon();
-        //dd($this->getCoupon($request));
         if ($coupon == null) {
             return [
                 "error" => true,
