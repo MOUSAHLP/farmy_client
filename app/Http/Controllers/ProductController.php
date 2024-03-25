@@ -119,19 +119,19 @@ class ProductController extends Controller
         $listOfProducts = Product::select('*');
         $listOfCategories = Category::select('*');
 
-        if (isset($request->q) && !empty($request->q)) {
-            $q = $request->q;
-            $listOfProducts = $listOfProducts->where('name', 'like', '%' . $q . '%')
-                ->orWhereHas('subCategory', function ($query) use ($q) {
-                    $query->where('name', 'like', '%' . $q . '%')
-                        ->orWhereHas('category', function ($query) use ($q) {
-                            $query->where('name', 'like', '%' . $q . '%');
+        if (isset($request->search) && !empty($request->search)) {
+            $searchValue = $request->search;
+            $listOfProducts = $listOfProducts->where('name', 'like', '%' . $searchValue . '%')
+                ->orWhereHas('subCategory', function ($query) use ($searchValue) {
+                    $query->where('name', 'like', '%' . $searchValue . '%')
+                        ->orWhereHas('category', function ($query) use ($searchValue) {
+                            $query->where('name', 'like', '%' . $searchValue . '%');
                         });
                 });
 
-            $listOfCategories = $listOfCategories->where('name', 'like', '%' . $q . '%')
-                ->orWhereHas('subcategories', function ($query) use ($q) {
-                    $query->where('name', 'like', '%' . $q . '%');
+            $listOfCategories = $listOfCategories->where('name', 'like', '%' . $searchValue . '%')
+                ->orWhereHas('subcategories', function ($query) use ($searchValue) {
+                    $query->where('name', 'like', '%' . $searchValue . '%');
                 });
         }
 

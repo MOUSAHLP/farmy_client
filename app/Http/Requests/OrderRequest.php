@@ -30,6 +30,7 @@ class OrderRequest extends FormRequest
             'store'   =>  $this->getCreateRules(),
             'update'   =>  $this->getUpdateRules(),
             'updateStatus'   =>  $this->getUpdateStatusRules(),
+            'updateRate'   =>  $this->getUpdateRateRules(),
             default   =>  $this->getUpdateRules(),
         };
     }
@@ -74,16 +75,24 @@ class OrderRequest extends FormRequest
             'status' => 'integer',
         ];
     }
+
+    public function getUpdateRateRules()
+    {
+        return [
+            'rate'                => 'required|numeric|between:0,5',
+        ];
+    }
+
     public function getUpdateRules()
     {
         return [
             'order_number'          => '',
             'user_id'               => '',
             'driver_id'             => '',
-            'status'                => ['sometimes', 'integer', Rule::in(OrderStatus::getValues())],
-            'delivery_method_id'    => 'sometimes|exists:delivery_methods,id',
-            'payment_method_id'     => 'sometimes|exists:payment_methods,id',
-            'user_address_id'       => 'sometimes|exists:user_addresses,id',
+            'status'                => ['', 'integer', Rule::in(OrderStatus::getValues())],
+            'delivery_method_id'    => 'exists:delivery_methods,id',
+            'payment_method_id'     => 'exists:payment_methods,id',
+            'user_address_id'       => 'exists:user_addresses,id',
             'city_id'               => '',
             'start_time'            => '',
             'end_time'              => '',
@@ -94,15 +103,14 @@ class OrderRequest extends FormRequest
             'date'                  => '',
             'notes'                 => '',
             'changes'              => '',
-            'products'              => 'sometimes|array|min:1',
+            'products'              => 'array|min:1',
             'products.*.product_id' => [
-                'sometimes',
                 'exists:products,id',
             ],
-            'products.*.quantity'   => 'sometimes|integer|min:1',
-            'delivery_attributes'   => 'sometimes|array|min:1',
+            'products.*.quantity'   => 'integer|min:1',
+            'delivery_attributes'   => 'array|min:1',
             'delivery_attributes.*.delivery_attribute_id' => [
-                'sometimes',
+                '',
                 'exists:delivery_attributes,id',
             ],
         ];

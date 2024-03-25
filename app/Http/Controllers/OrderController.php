@@ -22,9 +22,19 @@ class OrderController extends Controller
             'dataFetchedSuccessfully'
         );
     }
+
     public function getAllByUser()
     {
         $orders = $this->orderService->getAllByUser();
+        return $this->successResponse(
+            $this->resource($orders, OrderResource::class),
+            'dataFetchedSuccessfully'
+        );
+    }
+
+    public function getUserAllInvoices()
+    {
+        $orders = $this->orderService->getUserAllInvoices();
         return $this->successResponse(
             $this->resource($orders, OrderResource::class),
             'dataFetchedSuccessfully'
@@ -57,7 +67,7 @@ class OrderController extends Controller
     public function update(OrderRequest $request, $orderId)
     {
         $validatedData = $request->validated();
-        $this->orderService->update($validatedData, $orderId);
+        $this->orderService->update($validatedData, intVal($orderId));
 
         return $this->successResponse(
             null,
@@ -87,6 +97,19 @@ class OrderController extends Controller
         );
     }
 
+    public function updateRate(OrderRequest $request, $orderId)
+    {
+
+        $validatedData = $request->validated();
+        $this->orderService->updateRate($validatedData, $orderId);
+
+        return $this->successResponse(
+            null,
+            'dataUpdatedSuccessfully'
+        );
+    }
+
+
     public function getorderstatus($orderId)
     {
         $order = $this->orderService->find($orderId);
@@ -95,6 +118,18 @@ class OrderController extends Controller
         if ($order->driver_id != null) {
             $data["driver_phone"] = $this->driverService->find($order->driver_id)->phone;
         }
+        return $this->successResponse(
+            $data,
+            'dataFetchedSuccessfully'
+        );
+    }
+
+    public function getOrderRate($orderId)
+    {
+        $order = $this->orderService->find($orderId);
+        $data = [];
+        $data["rate"] = $order->rate;
+
         return $this->successResponse(
             $data,
             'dataFetchedSuccessfully'

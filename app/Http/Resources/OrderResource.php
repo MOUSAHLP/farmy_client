@@ -24,7 +24,8 @@ class OrderResource extends JsonResource
         $actionMethod = $request->route()->getActionMethod();
         return match ($actionMethod) {
             'index' => $this->getAllResource(),
-             default => $this->defaultResource(),
+            'getUserAllInvoices' => $this->getUserAllInvoicesResource(),
+            default => $this->defaultResource(),
         };
     }
 
@@ -48,8 +49,9 @@ class OrderResource extends JsonResource
             'total' => $this->total,
             'date' => $this->date,
             'notes' => $this->notes,
-            'changes' =>ChangeEnums::toArray($this->changes),
-             'expected_time'=>30,
+            'changes' => ChangeEnums::toArray($this->changes),
+            'expected_time' => 30,
+            'rate' => $this->rate,
             // 'order_details' => $this->orderDetails->map(function ($orderDetail) {
             //     return [
             //         'id' => $orderDetail->id,
@@ -65,6 +67,21 @@ class OrderResource extends JsonResource
         ];
     }
 
+
+    public function getUserAllInvoicesResource()
+    {
+        return [
+            'id' => $this->id,
+            'order_number' => $this->order_number,
+            'date' => $this->date,
+            'user_address' => $this->userAddress,
+            'city' => ($this->city_id ? $this->city : null),
+            'delivery_fee' => $this->delivery_fee,
+            'coupon_discount' => $this->coupon_discount,
+            'sub_total' => $this->sub_total,
+            'total' => $this->total,
+        ];
+    }
     public function defaultResource()
     {
         return [
@@ -88,7 +105,7 @@ class OrderResource extends JsonResource
             'total' => $this->total,
             'date' => $this->date,
             'notes' => $this->notes,
-            'changes' =>ChangeEnums::toArray($this->changes) ,
+            'changes' => ChangeEnums::toArray($this->changes),
             'order_details' => $this->orderDetails->map(function ($orderDetail) {
                 return [
                     'id' => $orderDetail->id,
@@ -99,18 +116,18 @@ class OrderResource extends JsonResource
                     'status' => OrderProductsStatus::getName($orderDetail->status),
                     'created_at' => $orderDetail->created_at,
                     'updated_at' => $orderDetail->updated_at,
-                     'expected_time'=>30,
+                    'expected_time' => 30,
                 ];
             }),
+            'rate' => $this->rate,
             'invoice' => $this->invoice
         ];
-
     }
 
-  public function productResource($product)
+    public function productResource($product)
     {
         $is_favorite = false;
-        if(isset( AuthHelper::userAuth()->id)){
+        if (isset(AuthHelper::userAuth()->id)) {
             $user_favorites = User::where('id', AuthHelper::userAuth()->id)->with("favorites")->get()->pluck("favorites")->first();
             foreach ($user_favorites as $favorite) {
                 if ($favorite->product_id == $product->id) {

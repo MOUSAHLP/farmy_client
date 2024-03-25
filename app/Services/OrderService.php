@@ -36,6 +36,7 @@ class OrderService
         }
         return $order->get();
     }
+
     public function getAllByUser()
     {
         $userId = AuthHelper::userAuth()->id;
@@ -48,6 +49,14 @@ class OrderService
 
         // return $user->orders;
         return $user->orders()->orderBy('id', 'desc')->get();
+    }
+
+
+    public function getUserAllInvoices()
+    {
+        $userId = AuthHelper::userAuth()->id;
+
+        return Order::where("user_id", $userId)->where("status", OrderStatus::Deliverd)->orderBy('id', 'desc')->get();
     }
 
     public function find($orderId)
@@ -79,17 +88,17 @@ class OrderService
     {
         DB::beginTransaction();
 
-         // check if there is a coupon
-         [$coupon, $message] = $this->getAndUseCoupon();
-         //dd($this->getCoupon($request));
-         if ($coupon == null ) {
-             return [
-                 "error" => true,
-                 "message" => $message
-             ];
-         }
+        // check if there is a coupon
+        [$coupon, $message] = $this->getAndUseCoupon();
+        //dd($this->getCoupon($request));
+        if ($coupon == null) {
+            return [
+                "error" => true,
+                "message" => $message
+            ];
+        }
 
-        $validatedData = $this->prepareOrderData($validatedData,$coupon);
+        $validatedData = $this->prepareOrderData($validatedData, $coupon);
         $order = Order::create($validatedData);
 
         $order->orderDetails()->createMany($validatedData['products']);
@@ -153,7 +162,22 @@ class OrderService
 
         return true;
     }
-    public function prepareOrderData($data,$coupon=null)
+
+    public function updateRate($validatedData, $orderId)
+    {
+        $order = Order::find($orderId);
+        DB::beginTransaction();
+
+        $order->update([
+            'rate' => $validatedData['rate'],
+        ]);
+
+        DB::commit();
+
+        return true;
+    }
+
+    public function prepareOrderData($data, $coupon = null)
     {
         $data['user_id'] =  AuthHelper::userAuth()->id;
         $data['status'] = OrderStatus::Pending;
@@ -171,7 +195,7 @@ class OrderService
 
         $selectedAddress = $this->userAddressService->find($data['user_address_id']);
 
-        
+
         $data2 = $this->paymentProcessService->calculateInvoice(
             $data['products'],
             $this->deliveryMethodService->getAll(),

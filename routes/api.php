@@ -10,6 +10,7 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DeliveryAttributeController;
 use App\Http\Controllers\DeliveryMethodController;
 use App\Http\Controllers\DeliveryTimeInfoController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\FavoritController;
 use App\Http\Controllers\FixedAttributesController;
 use App\Http\Controllers\GiftController;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\JoinOurTeamController;
 use App\Http\Controllers\ModelListController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
@@ -72,8 +74,14 @@ Route::group(['middleware' => 'cors'], function () {
     Route::apiResource('orders', OrderController::class);
     Route::group(['middleware' => 'auth:user', 'prefix' => 'orders'], function () {
         Route::post('/update-status/{id}', [OrderController::class, 'updateStatus']);
+        Route::post('/update-rate/{id}', [OrderController::class, 'updateRate']);
         Route::get('/order-details/{id}', [OrderController::class, 'show']);
         Route::get('order-status/{id}', [OrderController::class, 'getorderstatus']);
+        Route::get('order-rate/{id}', [OrderController::class, 'getOrderRate']);
+    });
+
+    Route::group(['middleware' => 'auth:user', 'prefix' => 'invoices'], function () {
+        Route::get('get_invoices', [OrderController::class, 'getUserAllInvoices']);
     });
 
     Route::apiResource('users', UserController::class);
@@ -93,6 +101,19 @@ Route::group(['middleware' => 'cors'], function () {
 
     //// search
     Route::get('search', [ProductController::class, 'search']);
+
+    //// contact us
+    Route::post('contact_us', [ContactUsController::class, 'contact_us']);
+
+    //// join our team
+    Route::group([
+        'prefix' => '/join-our-team',
+        'controller' => JoinOurTeamController::class,
+    ], function () {
+        Route::get('jobs', 'get_jobs');
+        Route::put('/', "update");
+    });
+    Route::resource('join-our-team', JoinOurTeamController::class);
 
     Route::apiResource('attributes', AttributeController::class);
     Route::post('attributes/{id}/values', [AttributeController::class, 'addValues']);
