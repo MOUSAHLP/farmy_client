@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('longitude')->nullable();
             $table->boolean('status')->default(true);
             $table->text('fcm_token')->nullable();
+            $table->text('delete_reason')->nullable();
             $table->unsignedBigInteger('city_id')->nullable();
             $table->rememberToken();
             $table->softDeletes();

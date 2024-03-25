@@ -78,7 +78,10 @@ Route::group(['middleware' => 'cors'], function () {
         Route::get('/order-details/{id}', [OrderController::class, 'show']);
         Route::get('order-status/{id}', [OrderController::class, 'getorderstatus']);
         Route::get('order-rate/{id}', [OrderController::class, 'getOrderRate']);
-        Route::get('orders/get-user-all-invoices', [OrderController::class, 'getUserAllInvoices']);
+    });
+
+    Route::group(['middleware' => 'auth:user', 'prefix' => 'invoices'], function () {
+        Route::get('get_invoices', [OrderController::class, 'getUserAllInvoices']);
     });
 
     Route::apiResource('users', UserController::class);

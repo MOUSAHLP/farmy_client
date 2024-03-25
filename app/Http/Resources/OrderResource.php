@@ -77,6 +77,7 @@ class OrderResource extends JsonResource
             'user_address' => $this->userAddress,
             'city' => ($this->city_id ? $this->city : null),
             'delivery_fee' => $this->delivery_fee,
+            'coupon_discount' => $this->coupon_discount,
             'sub_total' => $this->sub_total,
             'total' => $this->total,
         ];

@@ -69,7 +69,7 @@ class UserRequest extends FormRequest
             'status'              => 'sometimes|boolean',
             'fcm_token'           => 'nullable|string',
             'city_id'             => 'nullable|integer|exists:cities,id',
-            //    'birthday'            => 'sometimes|nullable|date',
+            'birthday'            => 'nullable|date',
 
         ];
 
@@ -84,7 +84,7 @@ class UserRequest extends FormRequest
             'last_name'           => 'sometimes|required|string|max:255',
             // 'email'               => ['sometimes', 'required', 'email', Rule::unique('users', 'email')->ignore($user_id)],
             'phone'               => ['sometimes', 'required', Rule::unique('users', 'phone')->ignore($user_id)],
-            // 'birthday'            => 'sometimes|required|date',
+            'birthday'            => 'sometimes|required|date',
         ];
     }
 
