@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RewardRoutes;
+use App\Helpers\AuthHelper;
+use App\Http\Requests\RewardRequest;
 
 class RewardController extends Controller
 {
@@ -40,7 +42,14 @@ class RewardController extends Controller
     {
         return  $this->rewardGetRequest(RewardRoutes::offers_coupons);
     }
-    
+    public function BuyCoupon(RewardRequest $request)
+    {
+        return $this->rewardPostRequest(RewardRoutes::buy_coupon, [
+            "user_id" => AuthHelper::userAuth()->id,
+            "coupon_id" => $request->coupon_id
+        ]);
+    }
+
     // Points
     public function userValidPoints()
     {

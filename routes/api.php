@@ -187,6 +187,7 @@ Route::group(['middleware' => 'cors'], function () {
             Route::get('/', 'coupons');
             Route::get('/fixed-value', 'fixedValueCoupons');
             Route::get('/offers', 'offersCoupons');
+            Route::post('/buy', 'BuyCoupon');
         });
         // Points
         Route::group([
