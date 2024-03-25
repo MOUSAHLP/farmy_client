@@ -135,16 +135,4 @@ class OrderController extends Controller
             'dataFetchedSuccessfully'
         );
     }
-
-    public function getOrderRate($orderId)
-    {
-        $order = $this->orderService->find($orderId);
-        $data = [];
-        $data["rate"] = $order->rate;
-
-        return $this->successResponse(
-            $data,
-            'dataFetchedSuccessfully'
-        );
-    }
 }
