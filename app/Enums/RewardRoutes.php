@@ -27,6 +27,7 @@ class RewardRoutes
         return '/coupons/user/' . $userId;
     }
    
+    const offers_coupons = '/coupons/offers';
     const fixed_value_coupons = '/coupons/fixed_value';
     const percentage_coupons  = '/coupons/percentage';
     const delivery_coupons    = '/coupons/delivery';
@@ -35,9 +36,10 @@ class RewardRoutes
     const can_use_coupon    = '/coupons/canUse';
     const use_coupon    = '/coupons/use';
 
-   // coupons usage
+   // coupons buy
     const can_buy_coupon    = '/coupons/canBuy';
     const buy_coupon    = '/coupons/buy';
+    const buy_and_use_coupon    = '/coupons/buy-and-use';
     // Points
     public static function UserValidPoints()
     {

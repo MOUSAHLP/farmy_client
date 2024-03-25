@@ -43,16 +43,15 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
-
         $validatedData = $request->validated();
         $order = $this->orderService->create($validatedData);
-
+        if(isset($order["error"])){
+            return $this->errorResponse($order["message"], 400);
+        }
         return $this->successResponse(
             $this->resource($order, OrderResource::class),
             'dataAddedSuccessfully'
         );
-        // return $order;
-
     }
 
     public function update(OrderRequest $request, $orderId)
@@ -96,8 +95,6 @@ class OrderController extends Controller
         if ($order->driver_id != null) {
             $data["driver_phone"] = $this->driverService->find($order->driver_id)->phone;
         }
-
-
         return $this->successResponse(
             $data,
             'dataFetchedSuccessfully'
