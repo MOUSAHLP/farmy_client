@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\NotificationsTypes;
 use App\Http\Requests\NotificationRequest;
 use App\Http\Resources\NotificationResource;
 use App\Services\NotificationService;
@@ -66,7 +67,7 @@ class NotificationController extends Controller
     {
         $validatedData = $request->validated();
 
-        $this->notificationService->sendPushNotification($validatedData);
+        $this->notificationService->sendPushNotification($validatedData, NotificationsTypes::PushNotifications);
 
         return $this->successResponse(
             null,
