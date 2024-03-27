@@ -28,6 +28,7 @@ return new class extends Migration
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
             $table->boolean('payment_status')->default(0);
+            $table->double('coupon_discount')->default(0);
             $table->double('delivery_fee')->default(0);
             $table->double('sub_total')->default(0);
             $table->double('total')->default(0);

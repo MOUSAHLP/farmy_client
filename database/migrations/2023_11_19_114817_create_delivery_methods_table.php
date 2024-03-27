@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('time');
             $table->double('price')->default(0);
+            $table->boolean('is_schedule')->default(0);
             $table->timestamps();
         });
     }

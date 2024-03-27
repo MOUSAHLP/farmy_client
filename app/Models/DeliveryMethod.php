@@ -11,16 +11,17 @@ class DeliveryMethod extends Model
 
     protected $fillable = [
         'name',
-        'price',
         'time',
+        'price',
+        'is_schedule',
         'total_price'
     ];
 
-    protected $cast = [
-        'name'  => 'string',
-        'price' => 'integer',
-        'time'  => 'integer',
-
+    protected $casts = [
+        'name'          => 'string',
+        'price'         => 'integer',
+        'time'          => 'integer',
+        'is_schedule'   => 'boolean',
     ];
 
     public function orders()

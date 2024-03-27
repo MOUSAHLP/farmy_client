@@ -4,16 +4,18 @@ namespace App\Services;
 
 use App\Enums\OrderProductsStatus;
 use App\Enums\OrderStatus;
+use App\Enums\RewardRoutes;
 use App\Exceptions\EditOrderException;
 use App\Helpers\AuthHelper;
 use App\Http\Resources\ProductResource;
+use App\Traits\RewardRequests;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ModelHelper;
 use App\Models\Order;
 
 class OrderService
 {
-    use ModelHelper;
+    use ModelHelper, RewardRequests;
 
     public function __construct(
         private ProductService $productService,
@@ -86,7 +88,16 @@ class OrderService
     {
         DB::beginTransaction();
 
-        $validatedData = $this->prepareOrderData($validatedData);
+        // check if there is a coupon
+        [$coupon, $message] = $this->getAndUseCoupon();
+        if ($coupon == null && $message != null) {
+            return [
+                "error" => true,
+                "message" => $message
+            ];
+        }
+
+        $validatedData = $this->prepareOrderData($validatedData, $coupon);
         $order = Order::create($validatedData);
 
         $order->orderDetails()->createMany($validatedData['products']);
@@ -165,7 +176,7 @@ class OrderService
         return true;
     }
 
-    public function prepareOrderData($data)
+    public function prepareOrderData($data, $coupon = null)
     {
         $data['user_id'] =  AuthHelper::userAuth()->id;
         $data['status'] = OrderStatus::Pending;
@@ -183,12 +194,16 @@ class OrderService
 
         $selectedAddress = $this->userAddressService->find($data['user_address_id']);
 
+
         $data2 = $this->paymentProcessService->calculateInvoice(
             $data['products'],
             $this->deliveryMethodService->getAll(),
             $selectedAddress->latitude,
-            $selectedAddress->longitude
+            $selectedAddress->longitude,
+            $data['delivery_method_id'],
+            $coupon
         );
+        $data['coupon_discount'] =  $data2[0]['coupon_price'];
         $data['delivery_fee'] =  $data2[0]['delivery_price'];
         $data['sub_total'] =  $data2[0]['subtotal'];
         $data['total'] =  $data2[0]['total'];
@@ -204,5 +219,35 @@ class OrderService
             $order->deliveryAttributes()->detach($deliveryAttributeIds);
         }
         $order->deliveryAttributes()->attach($validatedData['delivery_attributes']);
+    }
+
+    public function getAndUseCoupon()
+    {
+        if (request()->has('coupon_code')) {
+            $response = $this->rewardPostRequest(RewardRoutes::use_coupon, [
+                "user_id" => AuthHelper::userAuth()->id,
+                "coupon_code" => request()->coupon_code
+            ]);
+        } else if (request()->has('coupon_id')) {
+            $response = $this->rewardPostRequest(RewardRoutes::buy_and_use_coupon, [
+                "user_id" => AuthHelper::userAuth()->id,
+                "coupon_id" => request()->coupon_id
+            ]);
+        } else {
+            return null;
+        }
+        if ($response->statusCode == 400) {
+            return [
+                null,
+                $response->message,
+            ];
+        }
+        $message = $response->message;
+        $coupon = (array) $response->data->coupon;
+
+        return [
+            $coupon,
+            $message,
+        ];
     }
 }

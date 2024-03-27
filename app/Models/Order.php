@@ -25,6 +25,7 @@ class Order extends Model
         'latitude',
         'longitude',
         'payment_status',
+        'coupon_discount',
         'delivery_fee',
         'sub_total',
         'total',
@@ -47,6 +48,7 @@ class Order extends Model
         'latitude'           => 'integer',
         'longitude'          => 'integer',
         'payment_status'     => 'boolean',
+        'coupon_discount'       => 'double',
         'delivery_fee'       => 'double',
         'sub_total'          => 'double',
         'total'              => 'double',
@@ -55,7 +57,6 @@ class Order extends Model
         'changes'            => "array",
         'rate'       => 'integer',
     ];
-
     public function user()
     {
         return $this->belongsTo(User::class);

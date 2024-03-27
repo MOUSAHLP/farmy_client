@@ -15,23 +15,13 @@ class RewardRequest extends FormRequest
   {
 
     return match ($this->route()->getActionMethod()) {
-      'useCoupon'   =>  $this->getuseCouponRules(),
-      'buyCoupon'   =>  $this->getbuyCouponRules(),
+      'BuyCoupon'   =>  $this->getbuyCouponRules(),
     };
   }
   public function getbuyCouponRules()
   {
       return [
-          "user_id" => "required|integer|exists:users,id",
           "coupon_id" => "required|integer|exists:coupons,id"
       ];
   }
-  public function getuseCouponRules()
-  {
-      return [
-          "user_id" => "required|integer|exists:users,id",
-          "coupon_code" => "required|exists:coupons_users,coupon_code"
-      ];
-  }
-
 }

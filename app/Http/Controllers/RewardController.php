@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RewardRoutes;
+use App\Helpers\AuthHelper;
+use App\Http\Requests\RewardRequest;
 
 class RewardController extends Controller
 {
@@ -36,20 +38,15 @@ class RewardController extends Controller
     {
         return  $this->rewardGetRequest(RewardRoutes::fixed_value_coupons);
     }
-
-    public function percentageCoupons()
+    public function offersCoupons()
     {
-        return  $this->rewardGetRequest(RewardRoutes::percentage_coupons);
+        return  $this->rewardGetRequest(RewardRoutes::offers_coupons);
     }
-    public function deliveryCoupons()
+    public function BuyCoupon(RewardRequest $request)
     {
-        return  $this->rewardGetRequest(RewardRoutes::delivery_coupons);
-    }
-    public function useCoupon()
-    {
-        return  $this->rewardPostRequest(RewardRoutes::use_coupon, [
-            "user_id" => 16,
-            "coupon_code" => "HoycyNYj"
+        return $this->rewardPostRequest(RewardRoutes::buy_coupon, [
+            "user_id" => AuthHelper::userAuth()->id,
+            "coupon_id" => $request->coupon_id
         ]);
     }
 
