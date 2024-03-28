@@ -17,10 +17,12 @@ class NotificationService
     }
     public function getAll()
     {
+        $user = request()->user();
         if (request()->has('type')) {
-            return Notification::where('type', intVal(request()->type))->get();
+            $type = intval(request()->type);
+            return $user->notifications()->where('type', $type)->get();
         }
-        return Notification::all();
+        return $user->notifications;
     }
 
     public function find($notificationId)
