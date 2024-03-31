@@ -14,13 +14,12 @@ class NotificationService
 
     public function __construct(private UserService $userService)
     {
-
     }
     public function getAll()
     {
         $user = request()->user();
-        if(request()->has('type')){
-            $type = NotificationsTypes::getValue(request()->type);
+        if (request()->has('type')) {
+            $type = intval(request()->type);
             return $user->notifications()->where('type', $type)->get();
         }
         return $user->notifications;
@@ -67,16 +66,15 @@ class NotificationService
 
         return true;
     }
-    public function sendPushNotification($validatedData)
+    public function sendPushNotification($validatedData, $notificationsTypes)
     {
         DB::beginTransaction();
 
         $users = $this->userService->getUsersByIds($validatedData['user_ids']);
-        NotificationSender::sendPushNotification($users,$validatedData['data']['title'],$validatedData['data']['body']);
-        foreach($users as $user)
-        {
+        NotificationSender::sendPushNotification($users, $validatedData['data']['title'], $validatedData['data']['body']);
+        foreach ($users as $user) {
             $notificationData = [
-                'type' => NotificationsTypes::PushNotifications,
+                'type' => $notificationsTypes,
                 'notifiable_type' => get_class($user),
                 'notifiable_id' => $user->id,
                 'data' => [
