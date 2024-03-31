@@ -244,7 +244,7 @@ class OrderService
         } else {
             return null;
         }
-        if ($response->statusCode <= 400) {
+        if ($response->statusCode >= 400) {
             return [
                 null,   
                 $response->message,
