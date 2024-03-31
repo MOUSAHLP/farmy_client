@@ -231,12 +231,12 @@ class OrderService
 
     public function getAndUseCoupon()
     {
-        if (request()->has('coupon_code')) {
+        if (request()->has('coupon_code') && request()->coupon_code != "") {
             $response = $this->rewardPostRequest(RewardRoutes::use_coupon, [
                 "user_id" => AuthHelper::userAuth()->id,
                 "coupon_code" => request()->coupon_code
             ]);
-        } else if (request()->has('coupon_id')) {
+        } else if (request()->has('coupon_id')&& request()->coupon_id != "") {
             $response = $this->rewardPostRequest(RewardRoutes::buy_and_use_coupon, [
                 "user_id" => AuthHelper::userAuth()->id,
                 "coupon_id" => request()->coupon_id
