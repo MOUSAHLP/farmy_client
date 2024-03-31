@@ -39,18 +39,16 @@ class UserRequest extends FormRequest
         $rules = [
             'first_name'          => 'required|string|max:255',
             'last_name'           => 'required|string|max:255',
-            'email'               => 'required|email|unique:users,email',
+            'email'               => 'sometimes|required|email|unique:users,email',
             'password'            => 'required|confirmed|min:8',
-            'address'             => 'nullable|string',
+            'address'             => 'sometimes|nullable|string',
             'phone'               => 'required|numeric|unique:users,phone',
-            'role_id'             => 'required|exists:roles,id',
-            'status'              => 'boolean',
+            'role_id'             => 'sometimes|required|exists:roles,id',
+            'status'              => 'sometimes|boolean',
             'fcm_token'           => 'nullable|string',
-            'city_id'             => 'required|integer|exists:cities,id',
-            //'birthday'            => 'required|date',
-
+            'city_id'             => 'sometimes|required|integer|exists:cities,id',
+            //'birthday'            => 'required|date',\
         ];
-
 
         return $rules;
     }

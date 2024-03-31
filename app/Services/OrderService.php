@@ -175,6 +175,14 @@ class OrderService
 
         return true;
     }
+    public function getUserRates()
+    {
+        $userId = AuthHelper::userAuth()->id;
+        return  Order::where("user_id",$userId)
+        ->where("rate","!=",0)
+        ->select(["order_number","created_at","total","rate"])
+        ->get();
+    }
 
     public function prepareOrderData($data, $coupon = null)
     {
@@ -236,9 +244,9 @@ class OrderService
         } else {
             return null;
         }
-        if ($response->statusCode == 400) {
+        if ($response->statusCode <= 400) {
             return [
-                null,
+                null,   
                 $response->message,
             ];
         }

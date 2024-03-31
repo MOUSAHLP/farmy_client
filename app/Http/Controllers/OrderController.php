@@ -135,4 +135,14 @@ class OrderController extends Controller
             'dataFetchedSuccessfully'
         );
     }
+
+    public function getUserRates()
+    {
+        $ordersRate = $this->orderService->getUserRates();
+
+        return $this->successResponse(
+            $ordersRate,
+            'dataFetchedSuccessfully'
+        );
+    }
 }

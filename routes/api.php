@@ -83,6 +83,9 @@ Route::group(['middleware' => 'cors'], function () {
     Route::group(['middleware' => 'auth:user', 'prefix' => 'invoices'], function () {
         Route::get('get_invoices', [OrderController::class, 'getUserAllInvoices']);
     });
+    Route::group(['middleware' => 'auth:user'], function () {
+        Route::get('get-rates', [OrderController::class, 'getUserRates']);
+    });
 
     Route::apiResource('users', UserController::class);
 
