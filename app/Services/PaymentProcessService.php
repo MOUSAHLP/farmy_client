@@ -138,7 +138,11 @@ class PaymentProcessService
                 "coupon_id" => request()->coupon_id
             ]);
         } else {
-            return null;
+            return [
+                null,
+                false,
+                null,
+            ];
         }
         if ($response->statusCode >= 400) {
             return [
