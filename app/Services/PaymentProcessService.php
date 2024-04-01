@@ -31,7 +31,7 @@ class PaymentProcessService
         // check if there is a coupon
         [$coupon, $can_use, $message] = $this->getCoupon();
         //dd($this->getCoupon($request));
-        if ($coupon == null && $can_use !=null && !$can_use) {
+        if ($coupon == null && $can_use ==false) {
             return [
                 "error" => true,
                 "message" => $message
