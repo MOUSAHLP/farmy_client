@@ -7,7 +7,7 @@ use App\Http\Resources\OrderResource;
 use App\Services\DriverService;
 use App\Services\OrderService;
 use App\Services\PaymentProcessService;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 class OrderController extends Controller
 {
     public function __construct(private OrderService $orderService, private DriverService $driverService)
@@ -145,4 +145,15 @@ class OrderController extends Controller
             'dataFetchedSuccessfully'
         );
     }
+    public function getOrderPdf($orderId)
+    {
+            // $orders = Order::where('driver_id', $driver_id)->orderBy('created_at', "desc")->select('order_number', 'created_at', 'total')->get()->toArray();
+    
+            // $pdf = Pdf::loadView('who_we_are');
+            
+            $pdf = Pdf::loadView('rewards_guide');
+    
+            return $pdf->download('invoice.pdf');
+    }
+    
 }

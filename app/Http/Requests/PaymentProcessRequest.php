@@ -35,7 +35,6 @@ class PaymentProcessRequest extends FormRequest
       'products'     => 'required|array',
       'user_address_id'     => 'sometimes|numeric|exists:user_addresses,id',
       'delivery_method_id'     => 'sometimes|numeric|exists:delivery_methods,id',
-      'coupon_code'     => 'sometimes|string|exists:coupons_users,coupon_code',
     ];
   }
 
