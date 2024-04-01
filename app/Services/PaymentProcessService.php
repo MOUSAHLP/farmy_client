@@ -29,7 +29,7 @@ class PaymentProcessService
         $user = $this->userService->find($user->id);
         
         // check if there is a coupon
-        [$coupon, $can_use, $message] = $this->getCoupon($request);
+        [$coupon, $can_use, $message] = $this->getCoupon();
         //dd($this->getCoupon($request));
         if ($coupon == null && $can_use !=null && !$can_use) {
             return [
@@ -125,14 +125,14 @@ class PaymentProcessService
 
         return [$data, $deliveryMethods];
     }
-    public function getCoupon($request)
+    public function getCoupon()
     {
-        if (request()->has('coupon_code')) {
+        if (request()->has('coupon_code')&& request()->coupon_code != "") {
             $response = $this->rewardPostRequest(RewardRoutes::can_use_coupon, [
                 "user_id" => AuthHelper::userAuth()->id,
                 "coupon_code" => request()->coupon_code
             ]);
-        } else if (request()->has('coupon_id')) {
+        } else if (request()->has('coupon_id')&& request()->coupon_id != "") {
             $response = $this->rewardPostRequest(RewardRoutes::can_buy_coupon, [
                 "user_id" => AuthHelper::userAuth()->id,
                 "coupon_id" => request()->coupon_id
@@ -140,7 +140,7 @@ class PaymentProcessService
         } else {
             return null;
         }
-        if ($response->statusCode == 400) {
+        if ($response->statusCode >= 400) {
             return [
                 null,
                 false,
