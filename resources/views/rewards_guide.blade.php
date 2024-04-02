@@ -17,7 +17,7 @@
             direction: rtl
         }
 
-        @font-face {
+        @font-face {    
             font-family: 'DINNextLTArabic';
             src: url('DINNextLTArabic-Bold.ttf') format('truetype');
             font-weight: bold;

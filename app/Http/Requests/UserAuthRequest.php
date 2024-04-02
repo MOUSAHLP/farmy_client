@@ -41,7 +41,7 @@ class UserAuthRequest extends FormRequest
         return [
             'email'    => 'sometimes|email',
             'phone'    => 'required|numeric',
-            'fcm_token'    => 'required',
+            'fcm_token'    => '',
             'password' => 'required|string|min:6|max:30'
         ];
     }
