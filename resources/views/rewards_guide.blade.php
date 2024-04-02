@@ -11,17 +11,23 @@
         .page-break {
             page-break-after: always;
         }
+
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            direction: rtl
+        }
+
         @font-face {
-        font-family: 'DINNextLTArabic';
-        src: url('DINNextLTArabic-Bold.ttf') format('truetype');
-        font-weight: bold;
-        font-style: normal;
-      }
+            font-family: 'DINNextLTArabic';
+            src: url('DINNextLTArabic-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
     </style>
 </head>
 
 <body>
-   
+
     <h3>برنامج مكافآت العملاء “مرحبا”</h3>
     <p>تم تصميم برنامج المكافآت ”مرحباً“ لعملائنا الدائمين تقديراً و امتناناً لكونهم جزءاً أصيلاً من عائلة فارمي و جزءاً
         لا يتجزأ من قصة نجاحنا التي لم تكن لتكتب لولا عملائنا المميزين بمجرد تحميل التطبيق و التسجيل به ستبدأ رحلتك مع

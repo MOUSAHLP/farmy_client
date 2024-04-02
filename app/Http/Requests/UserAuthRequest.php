@@ -40,7 +40,8 @@ class UserAuthRequest extends FormRequest
     {
         return [
             'email'    => 'sometimes|email',
-            'phone'    => 'sometimes|numeric',
+            'phone'    => 'required|numeric',
+            'fcm_token'    => 'required',
             'password' => 'required|string|min:6|max:30'
         ];
     }
