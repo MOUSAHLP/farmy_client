@@ -34,7 +34,7 @@ class UserAddressRequest extends FormRequest
   public function getCreateRules()
   {
     return [
-      'name'            => 'required|string',
+      'name'            => 'sometimes|required|string',
       'address'         => 'sometimes|required|string',
       'latitude'        => 'required|numeric',
       'longitude'       => 'required|numeric',
