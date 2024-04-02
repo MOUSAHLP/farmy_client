@@ -11,7 +11,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Driver extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable , HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
 
     protected $fillable = [
@@ -20,6 +20,7 @@ class Driver extends Authenticatable implements JWTSubject
         'email',
         'password',
         'address',
+        'birthday',
         'phone',
         'status',
         'fcm_token',

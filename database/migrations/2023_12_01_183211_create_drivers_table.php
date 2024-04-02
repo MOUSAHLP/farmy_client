@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password')->min(8);
             $table->string('address')->nullable();
             $table->bigInteger('phone');
+            $table->time('birthday')->nullable();
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
             $table->boolean('status')->default(true);
