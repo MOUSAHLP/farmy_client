@@ -73,6 +73,7 @@ Route::group(['middleware' => 'cors'], function () {
 
     Route::apiResource('orders', OrderController::class);
     Route::group(['middleware' => 'auth:user', 'prefix' => 'orders'], function () {
+        Route::post('/all-orders', [OrderController::class, 'getAllOrders']);
         Route::post('/update-status/{id}', [OrderController::class, 'updateStatus']);
         Route::post('/update-rate/{id}', [OrderController::class, 'updateRate']);
         Route::get('/order-details/{id}', [OrderController::class, 'show']);
@@ -159,6 +160,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('conditions', [SettingsController::class, 'conditionsAndRules']);
     Route::get('faq_questions', [SettingsController::class, 'faqQuestions']);
     Route::get('who_we_are', [SettingsController::class, 'whoWeAre']);
+    Route::get('about_the_app', [SettingsController::class, 'aboutTheApp']);
 
 
     Route::group([

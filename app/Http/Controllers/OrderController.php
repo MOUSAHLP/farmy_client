@@ -8,10 +8,20 @@ use App\Services\DriverService;
 use App\Services\OrderService;
 use App\Services\PaymentProcessService;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 class OrderController extends Controller
 {
     public function __construct(private OrderService $orderService, private DriverService $driverService)
     {
+    }
+
+    public function getAllOrders()
+    {
+        $orders = $this->orderService->getAll();
+        return $this->successResponse(
+            $this->resource($orders, OrderResource::class),
+            'dataFetchedSuccessfully'
+        );
     }
 
     public function index()
@@ -55,7 +65,7 @@ class OrderController extends Controller
     {
         $validatedData = $request->validated();
         $order = $this->orderService->create($validatedData);
-        if(isset($order["error"])){
+        if (isset($order["error"])) {
             return $this->errorResponse($order["message"], 400);
         }
         return $this->successResponse(
@@ -147,13 +157,12 @@ class OrderController extends Controller
     }
     public function getOrderPdf($orderId)
     {
-            // $orders = Order::where('driver_id', $driver_id)->orderBy('created_at', "desc")->select('order_number', 'created_at', 'total')->get()->toArray();
-    
-            // $pdf = Pdf::loadView('who_we_are');
-            
-            $pdf = Pdf::loadView('rewards_guide');
-    
-            return $pdf->download('invoice.pdf');
+        // $orders = Order::where('driver_id', $driver_id)->orderBy('created_at', "desc")->select('order_number', 'created_at', 'total')->get()->toArray();
+
+        // $pdf = Pdf::loadView('who_we_are');
+
+        $pdf = Pdf::loadView('rewards_guide');
+
+        return $pdf->download('invoice.pdf');
     }
-    
 }

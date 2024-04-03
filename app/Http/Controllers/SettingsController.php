@@ -12,7 +12,7 @@ class SettingsController extends Controller
 
         $setting = Setting::firstOrFail();
         $opening_times = DeliveryTimeInfo::firstOrFail()
-        ->select(["start_time", "end_time", "before_message", "after_message"])->get()->first();
+            ->select(["start_time", "end_time", "before_message", "after_message"])->get()->first();
 
 
         return $this->successResponse(
@@ -58,6 +58,15 @@ class SettingsController extends Controller
         return $this->successResponse(
             [
                 'html' => view('who_we_are')->render(),
+            ],
+            'dataFetchedSuccefully'
+        );
+    }
+    public function aboutTheApp()
+    {
+        return $this->successResponse(
+            [
+                'html' => view('about_the_app')->render(),
             ],
             'dataFetchedSuccefully'
         );
