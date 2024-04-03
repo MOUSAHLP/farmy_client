@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class ContactUsController extends Controller
 {
+    public function get_contact_us()
+    {
+        return ContactUs::all();
+    }
     public function contact_us(ContactUsRequest $request)
     {
         ContactUs::create([

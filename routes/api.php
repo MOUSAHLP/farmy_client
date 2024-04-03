@@ -108,6 +108,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('search', [ProductController::class, 'search']);
 
     //// contact us
+    Route::get('contact_us', [ContactUsController::class, 'get_contact_us']);
     Route::post('contact_us', [ContactUsController::class, 'contact_us']);
 
     //// join our team
