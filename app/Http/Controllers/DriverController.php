@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
 use App\Http\Requests\DriverRequest;
 use App\Http\Resources\DriverResource;
+use App\Models\Driver;
+use App\Models\Order;
 use App\Services\DriverService;
 
 class DriverController extends Controller

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Models\Order;
 use App\Services\DriverService;
 use App\Services\OrderService;
 
@@ -19,6 +21,16 @@ class OrderController extends Controller
     public function getAllOrders()
     {
         $orders = $this->orderService->getAll();
+        return $this->successResponse(
+            $this->resource($orders, OrderResource::class),
+            'dataFetchedSuccessfully'
+        );
+    }
+
+    // for dashboard
+    public function getOrderDetail($orderId)
+    {
+        $orders = $this->orderService->find($orderId);
         return $this->successResponse(
             $this->resource($orders, OrderResource::class),
             'dataFetchedSuccessfully'
@@ -168,5 +180,32 @@ class OrderController extends Controller
         $pdf = PDF::loadView('rewards_guide', $data);
 
         return $pdf->stream('invoice.pdf');
+    }
+
+    public function asignOrderToDriver(OrderRequest $request)
+    {
+
+        $order = Order::find($request->order_id);
+        if (!$order) {
+            return $this->errorResponse(
+                'NotFound',
+                400
+            );
+        }
+
+        if ($order->driver_id != null || $order->status != OrderStatus::Pending) {
+            return $this->errorResponse(
+                'core.asignError',
+                400
+            );
+        }
+
+        $order->driver_id = $request->driver_id;
+        $order->save();
+
+        return $this->successResponse(
+            null,
+            'dataUpdatedSuccessfully'
+        );
     }
 }

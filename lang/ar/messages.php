@@ -2,7 +2,7 @@
 
 return [
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Messages Language Lines
     |--------------------------------------------------------------------------
@@ -13,40 +13,47 @@ return [
     |
     */
 
-    //Auth msgs
-    'passwordChangedSuccessfully'    => 'تم تغيير كلمة المرور بنجاح',
-    'userSuccessfullyRegistered'     => 'تم تسجيل المستخدم بنجاح',
-    'userSuccessfullySignedIn'       => 'تم تسجيل الدخول بنجاح',
-    'userSuccessfullySignedOut'      => 'تم تسجيل الخروج بنجاح',
-    'newPasswordError'               => 'كلمة المرور الجديدة لا يمكن ان تكون مماثلة للقديمة . يرجى إعادة المحاولة',
-    'currentPasswordIncorrect'       => 'كلمة المرور الحالية لا تتطابق مع التي تم ادخالها. يرجى إعادة المحاولة',
-    'passwordConfirmationNotMatch'   => 'تأكيد كلمة المرور غير متطابقة. يرجى إعادة المحاولة',
-    'credentialsError'               => 'خطأ في الرقم الوطني او كلمة المرور',
+  //Auth msgs
+  'passwordChangedSuccessfully'    => 'تم تغيير كلمة المرور بنجاح',
+  'userSuccessfullyRegistered'     => 'تم تسجيل المستخدم بنجاح',
+  'userSuccessfullySignedIn'       => 'تم تسجيل الدخول بنجاح',
+  'userSuccessfullySignedOut'      => 'تم تسجيل الخروج بنجاح',
+  'newPasswordError'               => 'كلمة المرور الجديدة لا يمكن ان تكون مماثلة للقديمة . يرجى إعادة المحاولة',
+  'currentPasswordIncorrect'       => 'كلمة المرور الحالية لا تتطابق مع التي تم ادخالها. يرجى إعادة المحاولة',
+  'passwordConfirmationNotMatch'   => 'تأكيد كلمة المرور غير متطابقة. يرجى إعادة المحاولة',
+  'credentialsError'               => 'خطأ في الرقم الوطني او كلمة المرور',
 
-    'Unauthorized'                   => 'لا تملك صلاحيات للقيام بهذا الإجراء',
-    'Unauthenticated'                => 'الرجاء تسجيل الدخول اولاً',
-
-
-    // General msgs
-    'dataAddedSuccessfully'          => 'تمت إضافة البيانات بنجاح',
-    'dataUpdatedSuccessfully'        => 'تم تعديل البيانات بنجاح',
-    'dataFetchedSuccessfully'        => 'تم جلب البيانات بنجاح',
-    'mediaFetchedSuccessfully'       => 'تم جلب الميديا بنجاح',
-    'dataDeletedSuccessfully'        => 'تم حذف البيانات بنجاح',
-
-    'objectNotFoundF'                => ':object غير موجودة',
-    'objectNotFound'                 => ':object غير موجود',
+  'Unauthorized'                   => 'لا تملك صلاحيات للقيام بهذا الإجراء',
+  'Unauthenticated'                => 'الرجاء تسجيل الدخول اولاً',
 
 
-    //General errors
+  // General msgs
+  'dataAddedSuccessfully'          => 'تمت إضافة البيانات بنجاح',
+  'dataUpdatedSuccessfully'        => 'تم تعديل البيانات بنجاح',
+  'dataFetchedSuccessfully'        => 'تم جلب البيانات بنجاح',
+  'mediaFetchedSuccessfully'       => 'تم جلب الميديا بنجاح',
+  'dataDeletedSuccessfully'        => 'تم حذف البيانات بنجاح',
 
-    'routeNotFound'                  => 'الرابط غير موجود',
+  'objectNotFoundF'                => ':object غير موجودة',
+  'objectNotFound'                 => ':object غير موجود',
+  'NotFound'                       => 'غير موجود',
 
-    'VerificationCompletedSuccessfully' => 'تم التحقق بنجاح',
-    'ThephoneNumberOrEmailAlreadyExists' => 'رقم الهاتف او الأيميل موجود مسبقا',
 
-    //Home Page Dynamic errors
-    'not_found' => 'غير موجود',
-    'no_products' => 'هذه العنصر ليس لديه منتجات',
+
+  //General errors
+
+  'routeNotFound'                  => 'الرابط غير موجود',
+
+  'VerificationCompletedSuccessfully' => 'تم التحقق بنجاح',
+  'ThephoneNumberOrEmailAlreadyExists' => 'رقم الهاتف او الأيميل موجود مسبقا',
+
+  //Home Page Dynamic errors
+  'not_found' => 'غير موجود',
+  'no_products' => 'هذه العنصر ليس لديه منتجات',
+
+  // core asign order to driverd
+  'core'  => [
+    "asignError"  => 'لا يمكنك اسناد سائق لهذا الطلب',
+  ],
 
 ];
