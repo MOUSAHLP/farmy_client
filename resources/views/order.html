@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+  <body>
+    <div class="conatiner">
+      <img class="title" src="./logo.png" alt="" />
+      <!-- s1 -->
+      <div class="title2">
+        <!-- Date || NumberOfOrder || NumberOfInvoice -->
+        <div class="table2">
+          <table>
+            <thead>
+              <tr>
+                <!-- Date -->
+                <td class="p_table1">{Date}</td>
+                <!-- Date -->
+                <td>
+                  <span id="t7_1" class="t s5">: اﻟﺘﺎرﻳﺦ</span>
+                </td>
+              </tr>
+              <tr>
+                <!-- Order Number -->
+                <td class="p_table1">{orderNumber}</td>
+                <!-- Order Number -->
+                <td>: <span id="t9_1" class="t s5"> رﻗﻢ اﻟﻄﻠﺐ</span></td>
+              </tr>
+              <tr>
+                <!-- Invoice Number -->
+                <td class="p_table1">{invoiceNumber}</td>
+                <!-- Invoice Number -->
+                <td>: <span id="ta_1" class="t s5"> رﻗﻢ اﻟﻔﺎﺗﻮرة</span></td>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <!-- Date || NumberOfOrder || NumberOfInvoice -->
+
+        <!-- To || Address || PhoneNumber -->
+        <div class="table2" style="background-color: #eff0f0">
+          <table>
+            <thead>
+              <tr>
+                <!-- TO -->
+                <td class="p_table1">{TO}</td>
+                <!-- TO -->
+                <td>:<span id="t8_1" class="t s5"> إﻟﻰ</span></td>
+              </tr>
+              <tr>
+                <!-- address -->
+                <td class="p_table1">{address}</td>
+                <!-- address -->
+                <td>: <span id="tb_1" class="t s5"> اﻟﻌﻨﻮان</span></td>
+              </tr>
+              <tr>
+                <!-- phone -->
+                <td class="p_table1">{phone}</td>
+                <!-- phone -->
+                <td>: <span id="tc_1" class="t s5"> رﻗﻢ اﻟﻤﻮﺑﺎﻳﻞ</span></td>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <!-- To || Address || PhoneNumber -->
+      </div>
+      <!-- s1 -->
+
+      <!-- S2 -->
+      <div class="title2">
+        <div class="table2">
+          <!-- MainTable -->
+          <table id="t">
+            <thead class="main_table">
+              <tr>
+                <td id="titleThead">
+                  <span id="tk_1" class="t s9"> اﻟﺴﻌﺮ اﻹﺟﻤﺎﻟﻲ ل.س</span>
+                </td>
+                <td id="titleThead">
+                  <span id="th_1" class="t s9"> اﻟﺴﻌﺮ اﻹﻓﺮادي</span>
+                </td>
+                <td id="titleThead">الوحدة</td>
+                <td id="titleThead">
+                  <span id="ti_1" class="t s9"> اﻟﻜﻤﻴﺔ</span>
+                </td>
+                <td id="titleThead">
+                  <span id="tg_1" class="t s9"> اﻟﻤﺎدة</span>
+                </td>
+                <td id="titleThead" style="text-align: center">#</td>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- forEach -->
+              <tr>
+                <td>assdds</td>
+                <td>assdds</td>
+                <td>assdds</td>
+                <td>assdds</td>
+                <td>assdds</td>
+                <td>assdds</td>
+              </tr>
+              <!-- forEach -->
+            </tbody>
+          </table>
+          <!-- MainTable -->
+
+          <!-- SecendTable -->
+          <div style="display: flex; justify-content: space-around">
+            <div class="table3" style="background-color: #eff0f0">
+              <table>
+                <thead>
+                  <tr>
+                    <td class="p_table1">{Date}</td>
+                    <td>:<span id="tl_1" class="t s2"> اﻟﻤﺠﻤﻮع اﻷوﻟﻲ</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p_table1">{orderNumber}</td>
+                    <td>
+                      : <span id="tm_1" class="t s2"> اﻟﺤﺴﻢ اﻟﻤﻤﻨﻮح</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p_table1">{invoiceNumber}</td>
+                    <td>:<span id="tn_1" class="t s2"> أﺟﻮر اﻟﺘﻮﺻﻴﻞ</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p_table1">{invoiceNumber}</td>
+                    <td>
+                      :
+                      <span id="tp_1" class="t sa">1 </span>
+                      <span id="tq_1" class="t s2"> ﺿﺮﻳﺒﺔ</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p_table1">{invoiceNumber}</td>
+                    <td>
+                      :
+                      <span id="tp_1" class="t sa">2 </span>
+                      <span id="tq_1" class="t s2"> ﺿﺮﻳﺒﺔ</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p_table1">{invoiceNumber}</td>
+                    <td>
+                      :
+                      <span id="tp_1" class="t sa">3 </span>
+                      <span id="tq_1" class="t s2"> ﺿﺮﻳﺒﺔ</span>
+                    </td>
+                  </tr>
+                  <tr style="background-color: #4f894a">
+                    <td class="p_table1" style="color: white">
+                      {invoiceNumber}
+                    </td>
+                    <td>
+                      :
+                      <span id="tu_1" class="t s9"> اﻟﻤﺠﻤﻮع اﻟﻜﻠﻲ</span>
+                    </td>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+            <div style="width: 92%">
+              <img src="./qr.png" width="200px" />
+            </div>
+          </div>
+          <!-- SecendTable -->
+        </div>
+      </div>
+      <!-- S2 -->
+
+      <!-- footer -->
+      <div>
+        <img width="99%" src="./footer.png" alt="" />
+      </div>
+      <!-- footer -->
+    </div>
+  </body>
+</html>

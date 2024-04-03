@@ -6,8 +6,8 @@ use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Services\DriverService;
 use App\Services\OrderService;
-use App\Services\PaymentProcessService;
-use Barryvdh\DomPDF\Facade\Pdf;
+
+use PDF;
 
 class OrderController extends Controller
 {
@@ -160,9 +160,12 @@ class OrderController extends Controller
         // $orders = Order::where('driver_id', $driver_id)->orderBy('created_at', "desc")->select('order_number', 'created_at', 'total')->get()->toArray();
 
         // $pdf = Pdf::loadView('who_we_are');
+        $data = [
+            'foo' => 'bar'
+        ];
 
-        $pdf = Pdf::loadView('rewards_guide');
+        $pdf = PDF::loadView('rewards_guide', $data);
 
-        return $pdf->download('invoice.pdf');
+        return $pdf->stream('invoice.pdf');
     }
 }
