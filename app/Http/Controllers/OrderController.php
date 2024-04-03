@@ -15,6 +15,7 @@ class OrderController extends Controller
     {
     }
 
+    // for dashboard
     public function getAllOrders()
     {
         $orders = $this->orderService->getAll();
