@@ -31,8 +31,17 @@ class OrderRequest extends FormRequest
             'update'   =>  $this->getUpdateRules(),
             'updateStatus'   =>  $this->getUpdateStatusRules(),
             'updateRate'   =>  $this->getUpdateRateRules(),
+            'asignOrderToDriver'   =>  $this->getasignOrderToDriverRules(),
             default   =>  $this->getUpdateRules(),
         };
+    }
+
+    public function getasignOrderToDriverRules()
+    {
+        return [
+            'driver_id'                  => 'required|integer|exists:drivers,id',
+            'order_id'                  => 'required|integer|exists:orders,id',
+        ];
     }
 
     public function getCreateRules()

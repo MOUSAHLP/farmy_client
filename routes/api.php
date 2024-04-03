@@ -49,9 +49,15 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'cors'], function () {
     Route::get('/list-models', [ModelListController::class, 'listModels']);
 
+    Route::group(['middleware' => 'auth:user'], function () {
+        Route::post('/asign-order-to-driver', [OrderController::class, 'asignOrderToDriver']); // core request
+    });
+
+
     Route::group([
         'prefix' => '/auth',
     ], function () {
+
         Route::post('/login', [UserAuthController::class, 'login']);
         Route::post('/generate-otp', [UserAuthController::class, 'generateOTP']);
         Route::post('/verify-otp', [UserAuthController::class, 'verifyOTP']);
@@ -71,7 +77,9 @@ Route::group(['middleware' => 'cors'], function () {
         Route::post('payment-process', [PaymentProcessController::class, 'paymentProcess']);
     });
 
+    // Orders
     Route::apiResource('orders', OrderController::class);
+    Route::get('/all-orders', [OrderController::class, 'getAllOrders']);
     Route::group(['middleware' => 'auth:user', 'prefix' => 'orders'], function () {
         Route::post('/update-status/{id}', [OrderController::class, 'updateStatus']);
         Route::post('/update-rate/{id}', [OrderController::class, 'updateRate']);
@@ -107,6 +115,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('search', [ProductController::class, 'search']);
 
     //// contact us
+    Route::get('contact_us', [ContactUsController::class, 'get_contact_us']);
     Route::post('contact_us', [ContactUsController::class, 'contact_us']);
 
     //// join our team
@@ -159,6 +168,8 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('conditions', [SettingsController::class, 'conditionsAndRules']);
     Route::get('faq_questions', [SettingsController::class, 'faqQuestions']);
     Route::get('who_we_are', [SettingsController::class, 'whoWeAre']);
+    Route::get('use_terms', [SettingsController::class, 'useTerms']);
+    Route::get('about_the_app', [SettingsController::class, 'aboutTheApp']);
 
 
     Route::group([

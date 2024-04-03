@@ -36,6 +36,7 @@ return [
 
     'objectNotFoundF'                => ':object Not Found',
     'objectNotFound'                 => ':object Not Found',
+    'NotFound'                       => 'Not Found',
 
 
     //General errors
@@ -47,4 +48,10 @@ return [
     //Home Page Dynamic errors
     'not_found' => 'Not Found',
     'no_products' => 'This Record Has No Products',
+
+
+    // core asign order to driverd
+    'core'  => [
+        "asignError"  => 'Can Not Asign Driver To This Order',
+    ],
 ];

@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Helpers\AuthHelper;
 use App\Models\User;
 use App\Enums\MediaCollectionsNames;
-
+use Carbon\Carbon;
 
 class OrderResource extends JsonResource
 {
@@ -25,6 +25,8 @@ class OrderResource extends JsonResource
         return match ($actionMethod) {
             'index' => $this->getAllResource(),
             'getUserAllInvoices' => $this->getUserAllInvoicesResource(),
+            'getAllOrders' => $this->getAllOrdersResource(),
+
             default => $this->defaultResource(),
         };
     }
@@ -67,7 +69,20 @@ class OrderResource extends JsonResource
         ];
     }
 
-
+    public function getAllOrdersResource()
+    {
+        return [
+            'id' => $this->id,
+            'order_number' => $this->order_number,
+            'user_name' => $this->user->first_name . " " . $this->user->last_name,
+            'total' => $this->total,
+            'driver' => ($this->driver ? $this->driver->username : null),
+            'on_time' =>  Carbon::parse($this->date)->format('Y/m/d h:m:s'),
+            'payment_method' => $this->deliveryMethod->name,
+            // 'delivery_method' => $this->paymentMethod->name,
+            'status' => OrderStatus::getName($this->status),
+        ];
+    }
     public function getUserAllInvoicesResource()
     {
         return [

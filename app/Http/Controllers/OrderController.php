@@ -2,17 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Setting;
+use App\Models\Order;
 use App\Services\DriverService;
 use App\Services\OrderService;
+
 use PDF;
 
 class OrderController extends Controller
 {
     public function __construct(private OrderService $orderService, private DriverService $driverService)
     {
+    }
+
+    // for dashboard
+    public function getAllOrders()
+    {
+        $orders = $this->orderService->getAll();
+        return $this->successResponse(
+            $this->resource($orders, OrderResource::class),
+            'dataFetchedSuccessfully'
+        );
+    }
+
+    // for dashboard
+    public function getOrderDetail($orderId)
+    {
+        $orders = $this->orderService->find($orderId);
+        return $this->successResponse(
+            $this->resource($orders, OrderResource::class),
+            'dataFetchedSuccessfully'
+        );
     }
 
     public function index()
@@ -152,5 +175,31 @@ class OrderController extends Controller
         $data['contact_us_phone'] = Setting::first()->phone;
 
         return view('order_invoice', $data);
+    }
+
+    public function asignOrderToDriver(OrderRequest $request)
+    {
+        $order = Order::find($request->order_id);
+        if (!$order) {
+            return $this->errorResponse(
+                'NotFound',
+                400
+            );
+        }
+
+        if ($order->driver_id != null || $order->status != OrderStatus::Pending) {
+            return $this->errorResponse(
+                'core.asignError',
+                400
+            );
+        }
+
+        $order->driver_id = $request->driver_id;
+        $order->save();
+
+        return $this->successResponse(
+            null,
+            'dataUpdatedSuccessfully'
+        );
     }
 }
