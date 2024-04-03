@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Models\Setting;
 use App\Services\DriverService;
 use App\Services\OrderService;
 use PDF;
+
 class OrderController extends Controller
 {
     public function __construct(private OrderService $orderService, private DriverService $driverService)
@@ -54,7 +56,7 @@ class OrderController extends Controller
     {
         $validatedData = $request->validated();
         $order = $this->orderService->create($validatedData);
-        if(isset($order["error"])){
+        if (isset($order["error"])) {
             return $this->errorResponse($order["message"], 400);
         }
         return $this->successResponse(
@@ -146,16 +148,9 @@ class OrderController extends Controller
     }
     public function getOrderPdf($orderId)
     {
-            // $orders = Order::where('driver_id', $driver_id)->orderBy('created_at', "desc")->select('order_number', 'created_at', 'total')->get()->toArray();
-    
-            // $pdf = Pdf::loadView('who_we_are');
-            $data = [
-                'foo' => 'bar'
-            ];
-    
-            $pdf = PDF::loadView('rewards_guide', $data);
-    
-            return $pdf->stream('invoice.pdf');
+        $data['order'] = $this->orderService->find($orderId);
+        $data['contact_us_phone'] = Setting::first()->phone;
+
+        return view('order_invoice', $data);
     }
-    
 }

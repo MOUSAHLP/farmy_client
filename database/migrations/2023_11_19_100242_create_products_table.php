@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name',191);
             $table->text('description')->nullable();
             $table->double('price')->default(0);
+            $table->string('unit')->default(null);
             $table->string('slug')->default(null);
             $table->integer('quantity')->default(0);
             $table->boolean('status')->default(true);
