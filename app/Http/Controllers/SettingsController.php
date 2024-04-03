@@ -62,6 +62,15 @@ class SettingsController extends Controller
             'dataFetchedSuccefully'
         );
     }
+    public function useTerms()
+    {
+        return $this->successResponse(
+            [
+                'html' => view('use_terms')->render(),
+            ],
+            'dataFetchedSuccefully'
+        );
+    }
     public function aboutTheApp()
     {
         return $this->successResponse(

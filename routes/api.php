@@ -168,6 +168,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('conditions', [SettingsController::class, 'conditionsAndRules']);
     Route::get('faq_questions', [SettingsController::class, 'faqQuestions']);
     Route::get('who_we_are', [SettingsController::class, 'whoWeAre']);
+    Route::get('use_terms', [SettingsController::class, 'useTerms']);
     Route::get('about_the_app', [SettingsController::class, 'aboutTheApp']);
 
 
