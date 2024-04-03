@@ -71,6 +71,7 @@ class OrderResource extends JsonResource
 
     public function getAllOrdersResource()
     {
+
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
@@ -81,6 +82,16 @@ class OrderResource extends JsonResource
             'payment_method' => $this->deliveryMethod->name,
             // 'delivery_method' => $this->paymentMethod->name,
             'status' => OrderStatus::getName($this->status),
+            'order_details' => $this->orderDetails->map(function ($orderDetail) {
+                return [
+                    'quantity' => $orderDetail->quantity,
+                    'price' => $orderDetail->price,
+                    'total' => $orderDetail->price * $orderDetail->quantity,
+                    'status' => OrderProductsStatus::getName($orderDetail->status),
+                    'product' => $this->productResourceDetailed($orderDetail->product),
+                ];
+            }),
+
         ];
     }
     public function getUserAllInvoicesResource()
@@ -178,6 +189,18 @@ class OrderResource extends JsonResource
                     'value' =>  $attribute->pivot->value,
                 ];
             }),
+        ];
+    }
+    public function productResourceDetailed($product)
+    {
+
+        return [
+            'id'               => $product->id,
+            'name'             => $product->name,
+            'price'            => $product->price,
+            'tax'              => $product->tax,
+            'discount'         => $product->discount,
+            'commission'       => $product->commission?->only('id', 'name') + ['commission_value' => $product->commission_value],
         ];
     }
 }

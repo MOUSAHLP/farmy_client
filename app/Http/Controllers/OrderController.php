@@ -22,6 +22,7 @@ class OrderController extends Controller
     public function getAllOrders()
     {
         $orders = $this->orderService->getAll();
+        
         return $this->successResponse(
             $this->resource($orders, OrderResource::class),
             'dataFetchedSuccessfully'
