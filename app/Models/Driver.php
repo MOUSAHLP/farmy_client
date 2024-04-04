@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -57,5 +58,12 @@ class Driver extends Authenticatable implements JWTSubject
     public function notifications()
     {
         return $this->morphMany(Notification::class, 'notifiable');
+    }
+
+    public function scopeAsignable($query)
+    {
+        $orders = Order::whereNot("driver_id", null)->where("status", OrderStatus::Pending)->pluck("driver_id");
+
+        return  $query->whereNotIn('id', $orders->toArray())->get();
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ModelHelper;
 use App\Models\Driver;
+use App\Models\Order;
 
 class DriverService
 {
@@ -12,6 +14,9 @@ class DriverService
 
     public function getAll()
     {
+        if (request()->has('asign'))
+            return Driver::asignable();
+
         return Driver::all();
     }
 
