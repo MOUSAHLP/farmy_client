@@ -84,6 +84,7 @@ class OrderResource extends JsonResource
             'status' => OrderStatus::getName($this->status),
             'order_details' => $this->orderDetails->map(function ($orderDetail) {
                 return [
+                    "id" => $orderDetail->id,
                     'quantity' => $orderDetail->quantity,
                     'price' => $orderDetail->price,
                     'total' => $orderDetail->price * $orderDetail->quantity,
