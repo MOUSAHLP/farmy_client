@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Helpers\AuthHelper;
 use App\Models\User;
 use App\Enums\MediaCollectionsNames;
+use App\Enums\OrderDetailsEnums;
 use Carbon\Carbon;
 
 class OrderResource extends JsonResource
@@ -88,7 +89,7 @@ class OrderResource extends JsonResource
                     'quantity' => $orderDetail->quantity,
                     'price' => $orderDetail->price,
                     'total' => $orderDetail->price * $orderDetail->quantity,
-                    'status' => OrderProductsStatus::getName($orderDetail->status),
+                    'status' => OrderDetailsEnums::getName($orderDetail->status),
                     'product' => $this->productResourceDetailed($orderDetail->product),
                 ];
             }),
