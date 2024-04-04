@@ -83,14 +83,12 @@ class OrderResource extends JsonResource
             // 'delivery_method' => $this->paymentMethod->name,
             'status' => OrderStatus::getName($this->status),
             'order_details' => $this->orderDetails->map(function ($orderDetail) {
-                dump($orderDetail->status);
-
                 return [
                     "id" => $orderDetail->id,
                     'quantity' => $orderDetail->quantity,
                     'price' => $orderDetail->price,
                     'total' => $orderDetail->price * $orderDetail->quantity,
-                    'status' => OrderDetailsEnums::getName($orderDetail->status) ?? OrderDetailsEnums::getName(OrderDetailsEnums::NotDelivered),
+                    'status' => OrderDetailsEnums::getName(intVal($orderDetail->status)) ?? OrderDetailsEnums::getName(OrderDetailsEnums::NotDelivered),
                     'product' => $this->productResourceDetailed($orderDetail->product),
                 ];
             }),
