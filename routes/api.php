@@ -79,7 +79,8 @@ Route::group(['middleware' => 'cors'], function () {
 
     // Orders
     Route::apiResource('orders', OrderController::class);
-    Route::get('/all-orders', [OrderController::class, 'getAllOrders']);
+    Route::get('/all-orders', [OrderController::class, 'getAllOrders']); // Dashboard
+    Route::post('/change-product-status', [OrderController::class, 'changeOrderDetailStatus']);  // Dashboard
     Route::group(['middleware' => 'auth:user', 'prefix' => 'orders'], function () {
         Route::post('/update-status/{id}', [OrderController::class, 'updateStatus']);
         Route::post('/update-rate/{id}', [OrderController::class, 'updateRate']);

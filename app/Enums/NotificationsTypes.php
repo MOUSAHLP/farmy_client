@@ -17,5 +17,12 @@ class NotificationsTypes
     {
         return defined('self::' . $name) ? constant('self::' . $name) : null;
     }
+    public static function getValues()
+    {
+        return [
+            self::Orders,
+            self::Offers,
+            self::PushNotifications,
+        ];
+    }
 }
-

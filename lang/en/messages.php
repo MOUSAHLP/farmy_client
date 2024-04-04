@@ -28,6 +28,7 @@ return [
 
 
     // General msgs
+    'dataSendSuccessfully'          => 'Data Sended Successfully',
     'dataAddedSuccessfully'          => 'Data added successfully',
     'dataUpdatedSuccessfully'        => 'Data updated successfully',
     'dataFetchedSuccessfully'        => 'Data fetched successfully',

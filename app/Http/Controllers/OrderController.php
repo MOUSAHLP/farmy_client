@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\OrderStatus;
+use App\Http\Requests\OrderDetailsRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Setting;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Services\DriverService;
 use App\Services\OrderService;
 
@@ -22,7 +24,7 @@ class OrderController extends Controller
     public function getAllOrders()
     {
         $orders = $this->orderService->getAll();
-        
+
         return $this->successResponse(
             $this->resource($orders, OrderResource::class),
             'dataFetchedSuccessfully'
@@ -30,12 +32,23 @@ class OrderController extends Controller
     }
 
     // for dashboard
-    public function getOrderDetail($orderId)
+    public function changeOrderDetailStatus(OrderDetailsRequest $request)
     {
-        $orders = $this->orderService->find($orderId);
+        $orderDetail = OrderDetail::find($request->order_detail_id);
+
+        if (!$orderDetail) {
+            return $this->errorResponse(
+                "NotFound",
+                400
+            );
+        }
+
+        $orderDetail->status = $request->status;
+        $orderDetail->save();
+
         return $this->successResponse(
-            $this->resource($orders, OrderResource::class),
-            'dataFetchedSuccessfully'
+            null,
+            'dataUpdatedSuccessfully'
         );
     }
 
