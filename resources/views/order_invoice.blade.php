@@ -658,7 +658,7 @@
                     orientation: 'portrait'
                 }
             };
-            html2pdf().set(opt).from(html).save("{{ $order->id }}");
+            html2pdf().set(opt).from(html).save("{{ $filename }}");
             printButton.style.right="20px";
 
         };

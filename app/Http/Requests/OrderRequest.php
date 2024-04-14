@@ -70,7 +70,7 @@ class OrderRequest extends FormRequest
                 'exists:products,id',
             ],
             'products.*.quantity'   => 'required|integer|min:1',
-            'delivery_attributes'   => 'required|array|min:1',
+            'delivery_attributes'   => 'array',
             'delivery_attributes.*.delivery_attribute_id' => [
                 'required',
                 'exists:delivery_attributes,id',

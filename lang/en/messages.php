@@ -54,4 +54,13 @@ return [
     'core'  => [
         "asignError"  => 'Can Not Asign Driver To This Order',
     ],
+    // reward notifications
+    'reward_notifications'  => [
+        "user_created"  => "for signing up in our app",
+        "user_birthday_added"  => "for adding your birthday in your account",
+        "order_rated"  => "for rating an order",
+        "order_created"  => "for creating an order",
+        
+    ],
+
 ];

@@ -9,8 +9,7 @@ use App\Models\Setting;
 use App\Models\Order;
 use App\Services\DriverService;
 use App\Services\OrderService;
-
-use PDF;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -174,6 +173,7 @@ class OrderController extends Controller
     {
         $data['order'] = $this->orderService->find($orderId);
         $data['contact_us_phone'] = Setting::first()->phone;
+        $data['filename'] = $data['order']->user->first_name."_". $data['order']->user->last_name ."_". Carbon::now()->format("Y_m_d_h_i_s");
 
         return view('order_invoice', $data);
     }

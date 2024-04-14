@@ -193,7 +193,7 @@ Route::group(['middleware' => 'cors'], function () {
         Route::group([
             'prefix' => "achievements",
         ], function () {
-            Route::get('/not-done', 'UserNotDoneAchievements');
+            Route::get('/not-done', 'UserAchievements');
         });
         // Coupons
         Route::group([

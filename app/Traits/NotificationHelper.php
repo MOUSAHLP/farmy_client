@@ -97,4 +97,17 @@ class NotificationHelper
         ];
         return json_encode($payload);
     }
+    public static function getTranslatedData(int $points , string $reason): array
+    {
+        if(app()->getLocale() == "ar"){
+            return [
+                "title" => "تم اضافة " .  $points . " نقطة لحسابك",
+                "body" => "تم اضافة " .  $points . " نقطة لحسابك ".__($reason),
+            ];
+        }
+        return [
+            "title" => $points ." points have been added to your account",
+            "body" => __($reason),
+        ];
+    }
 }

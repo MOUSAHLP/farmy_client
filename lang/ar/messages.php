@@ -56,4 +56,12 @@ return [
     "asignError"  => 'لا يمكنك اسناد سائق لهذا الطلب',
   ],
 
+  // reward notifications
+  'reward_notifications'  => [
+    "user_created"  =>"لانشائك حساب بتطبيقنا",
+    "user_birthday_added"  =>"لاضافة تاريخ ميلادك على حسابك",
+    "order_rated"  => "لتقييمك طلب",
+    "order_created"  => "لانشائك طلب",
+    
+  ],
 ];

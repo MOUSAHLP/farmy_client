@@ -53,7 +53,7 @@ class OrderResource extends JsonResource
             'notes' => $this->notes,
             'changes' => ChangeEnums::toArray($this->changes),
             'expected_time' => 30,
-            'rate' => $this->rate,
+            'rate' => $this->rate ?? 0,
             // 'order_details' => $this->orderDetails->map(function ($orderDetail) {
             //     return [
             //         'id' => $orderDetail->id,
@@ -104,6 +104,7 @@ class OrderResource extends JsonResource
             'city' => ($this->city_id ? $this->city : null),
             'delivery_fee' => $this->delivery_fee,
             'coupon_discount' => $this->coupon_discount,
+            'tax' => $this->tax,
             'sub_total' => $this->sub_total,
             'total' => $this->total,
         ];
@@ -126,6 +127,7 @@ class OrderResource extends JsonResource
             'longitude' => $this->longitude,
             'payment_status' => $this->payment_status,
             'coupon_discount' => $this->coupon_discount,
+            'tax' => $this->tax,
             'delivery_fee' => $this->delivery_fee,
             'sub_total' => $this->sub_total,
             'total' => $this->total,
@@ -145,7 +147,7 @@ class OrderResource extends JsonResource
                     'expected_time' => 30,
                 ];
             }),
-            'rate' => $this->rate,
+            'rate' => $this->rate ?? 0,
             'invoice' => $this->invoice
         ];
     }

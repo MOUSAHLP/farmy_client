@@ -24,10 +24,10 @@ class PaymentProcessService
     }
     public function paymentProcess($request)
     {
-        
+
         $user = AuthHelper::userAuth();
         $user = $this->userService->find($user->id);
-        
+
         // check if there is a coupon
         [$coupon, $can_use, $message] = $this->getCoupon();
         if ($coupon == null && $can_use == false) {
@@ -84,6 +84,11 @@ class PaymentProcessService
                 $sellerLocations[] = ['lat' => $seller->latitude, 'lon' => $seller->longitude];
             }
             $productTotal = $currentProduct->price * $product['quantity'];
+            
+            if($currentProduct['discount_status']){
+                $productTotal =$productTotal - (int)(($productTotal / 100) * $currentProduct['discount']);
+            }
+
             $total = $total + $productTotal;
 
             $taxPercentage = $currentProduct->tax ?? 0;
@@ -91,7 +96,7 @@ class PaymentProcessService
             $totalTax = $totalTax + $productTax;
         }
         $userLocation = ['lat' => $latitude, 'lon' => $longitude];
-        $totalDistance = $this->calculateTotalDistance($userLocation, $sellerLocations) ;
+        $totalDistance = $this->calculateTotalDistance($userLocation, $sellerLocations);
         $seletedDeliveryMethod = null;
 
         if ($deliveryMethods != null) {
@@ -108,8 +113,7 @@ class PaymentProcessService
                 }
             }
         }
-
-        $deliveryPrice = ($seletedDeliveryMethod ? $seletedDeliveryMethod->total_price : 0);
+        $deliveryPrice = ($seletedDeliveryMethod ? $this->getDeliveryPrice($seletedDeliveryMethod->total_price) : 0);
         $coupon_price = $coupon != null ? $this->getCouponValue($coupon, $total, (int)$deliveryPrice) : 0;
         $total_sum = (int)($total + $totalTax + $deliveryPrice - $coupon_price);
         if ($total_sum < 0) $total_sum = 0;
@@ -124,14 +128,23 @@ class PaymentProcessService
 
         return [$data, $deliveryMethods];
     }
+    public function getDeliveryPrice($deliveryPrice)
+    {
+        $response = $this->rewardGetRequest(RewardRoutes::UserCurrentRank());
+        foreach ($response->data->features as $feature) {
+            if ($feature->name == "discount_on_deliver") {
+                return $deliveryPrice - (int)(($deliveryPrice / 100) * $feature->value);
+            }
+        }
+    }
     public function getCoupon()
     {
-        if (request()->has('coupon_code')&& request()->coupon_code != "") {
+        if (request()->has('coupon_code') && request()->coupon_code != "") {
             $response = $this->rewardPostRequest(RewardRoutes::can_use_coupon, [
                 "user_id" => AuthHelper::userAuth()->id,
                 "coupon_code" => request()->coupon_code
             ]);
-        } else if (request()->has('coupon_id')&& request()->coupon_id != "") {
+        } else if (request()->has('coupon_id') && request()->coupon_id != "") {
             $response = $this->rewardPostRequest(RewardRoutes::can_buy_coupon, [
                 "user_id" => AuthHelper::userAuth()->id,
                 "coupon_id" => request()->coupon_id
@@ -167,7 +180,7 @@ class PaymentProcessService
             return $coupon["value"];
         } else if ($coupon["coupon_type"]->type == CouponTypes::PERCENTAGE) {
             $coupon["value"] = $coupon["value"] > 100 ? 100 : $coupon["value"];
-            return (int)(($products_price / 100) * $coupon["value"]);
+            return  (int)(($products_price / 100) * $coupon["value"]);
         } else if ($coupon["coupon_type"]->type == CouponTypes::DELIVERY) {
             $coupon["value"] = $coupon["value"] > 100 ? 100 : $coupon["value"];
             return (int)(($deliveryPrice / 100) * $coupon["value"]);
