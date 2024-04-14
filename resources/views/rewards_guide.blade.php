@@ -35,11 +35,6 @@
             color: #4F8640;
         }
 
-        .red {
-            color: #BF0000;
-            font-size: 14px;
-        }
-
         .gray {
             background-color: #e4e4e4;
             border-radius: 6px;
@@ -83,7 +78,7 @@
         <li>كل <span class="green">1000</span> نقطة تحصل على <span class="green">35,000</span> ل.س</li>
     </ul>
 
-    <h3 class="red">ملاحظة:</h3>
+    <h3 style="color: #BF0000;font-size: 14px;">ملاحظة:</h3>
     <p class="gray">تنتهي صلاحية جميع النقاط <span class="red">خلال مدة / 90 / يوماً</span> من
         تاريخ الحصول عليها و سيكون من غير الممكن استبدال النقاط بعد انتهاء مدة صلاحيتها.</p>
 
