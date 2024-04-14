@@ -28,6 +28,7 @@ return [
 
 
   // General msgs
+  'dataSendSuccessfully'          => 'تم إرسال البيانات بنجاح',
   'dataAddedSuccessfully'          => 'تمت إضافة البيانات بنجاح',
   'dataUpdatedSuccessfully'        => 'تم تعديل البيانات بنجاح',
   'dataFetchedSuccessfully'        => 'تم جلب البيانات بنجاح',

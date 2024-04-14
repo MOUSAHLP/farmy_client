@@ -67,7 +67,9 @@ class NotificationController extends Controller
     {
         $validatedData = $request->validated();
 
-        $this->notificationService->sendPushNotification($validatedData, NotificationsTypes::PushNotifications);
+        $notificationsType = isset($request->type) ? $request->type : NotificationsTypes::PushNotifications;
+
+        $this->notificationService->sendPushNotification($validatedData, $notificationsType);
 
         return $this->successResponse(
             null,

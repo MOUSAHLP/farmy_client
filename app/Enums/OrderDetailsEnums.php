@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-class NotificationsTypes
+class OrderDetailsEnums
 {
-    const Orders            = 1;
-    const Offers            = 2;
-    const PushNotifications = 3;
+    const Delivered    = 1;
+    const NotDelivered  = 2;
+
     public static function getName($value)
     {
         $constants = array_flip((new \ReflectionClass(self::class))->getConstants());
@@ -16,13 +16,5 @@ class NotificationsTypes
     public static function getValue($name)
     {
         return defined('self::' . $name) ? constant('self::' . $name) : null;
-    }
-    public static function getValues()
-    {
-        return [
-            self::Orders,
-            self::Offers,
-            self::PushNotifications,
-        ];
     }
 }
