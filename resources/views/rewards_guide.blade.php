@@ -30,11 +30,11 @@
     <p style="font-weight: 400;font-size: 14px;">يمكنك الحصول على النقاط و استبدالها في أي وقت ترغب به عند القيام بواحدة أو أكثر من النشطة
         التالية:</p>
     <ul style="font-weight: 400;font-size: 14px;">
-        <li> تحميل التطبيق و الاشتراك به <spanstyle="color: #4F8640;">100</span> نقطة.</li>
-        <li>مشاركة رابط التطبيق مع الصدقاء <spanstyle="color: #4F8640;">50</span> نقطة.</li>
-        <li>تقييم عملية الشراء عبر التطبيق عند استلام الطلب <spanstyle="color: #4F8640;">5</span> نقطة.</li>
-        <li>إضافة تاريخ ميلادك لملفك الشخصي على التطبيق <spanstyle="color: #4F8640;">10</span> نقاط.</li>
-        <li>الشراء و الطلبات <spanstyle="color: #4F8640;">1</span> نقطة مقابل كل <spanstyle="color: #4F8640;">1000</span> ليرة سورية يتم
+        <li> تحميل التطبيق و الاشتراك به <span style="color: #4F8640;">100</span> نقطة.</li>
+        <li>مشاركة رابط التطبيق مع الصدقاء <span style="color: #4F8640;">50</span> نقطة.</li>
+        <li>تقييم عملية الشراء عبر التطبيق عند استلام الطلب <span style="color: #4F8640;">5</span> نقطة.</li>
+        <li>إضافة تاريخ ميلادك لملفك الشخصي على التطبيق <span style="color: #4F8640;">10</span> نقاط.</li>
+        <li>الشراء و الطلبات <span style="color: #4F8640;">1</span> نقطة مقابل كل <span style="color: #4F8640;">1000</span> ليرة سورية يتم
             إنفاقها عن طريق التطبيق.</li>
     </ul>
     <h3 style="font-weight: 700;font-size: 14px;">كيف يمكنني استبدال النقاط ؟</h3>
@@ -44,11 +44,11 @@
         وفقاً لمتغيرات السوق. بشكل عام و في الوقت الحالي فإن عملية استبدال النقاط ستخولك الحصول على الحسومات التالية:
     </p>
     <ul>
-        <li>كل <spanstyle="color: #4F8640;">100</span> نقطة تحصل على <spanstyle="color: #4F8640;">3500</span> ل.س</li>
-        <li>كل <spanstyle="color: #4F8640;">200</span> نقطة تحصل على <spanstyle="color: #4F8640;">7000</span> ل.س</li>
-        <li>كل <spanstyle="color: #4F8640;">300</span> نقطة تحصل على <spanstyle="color: #4F8640;">10,500</span> ل.س</li>
-        <li>كل <spanstyle="color: #4F8640;">500</span> نقطة تحصل على <spanstyle="color: #4F8640;">17,500</span> ل.س</li>
-        <li>كل <spanstyle="color: #4F8640;">1000</span> نقطة تحصل على <spanstyle="color: #4F8640;">35,000</span> ل.س</li>
+        <li>كل <span style="color: #4F8640;">100</span> نقطة تحصل على <span style="color: #4F8640;">3500</span> ل.س</li>
+        <li>كل <span style="color: #4F8640;">200</span> نقطة تحصل على <span style="color: #4F8640;">7000</span> ل.س</li>
+        <li>كل <span style="color: #4F8640;">300</span> نقطة تحصل على <span style="color: #4F8640;">10,500</span> ل.س</li>
+        <li>كل <span style="color: #4F8640;">500</span> نقطة تحصل على <span style="color: #4F8640;">17,500</span> ل.س</li>
+        <li>كل <span style="color: #4F8640;">1000</span> نقطة تحصل على <span style="color: #4F8640;">35,000</span> ل.س</li>
     </ul>
 
     <h3 style="color: #BF0000;font-size: 14px;">ملاحظة:</h3>
