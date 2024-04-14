@@ -79,7 +79,7 @@
     </ul>
 
     <h3 style="color: #BF0000;font-size: 14px;">ملاحظة:</h3>
-    <p class="gray">تنتهي صلاحية جميع النقاط <span class="red">خلال مدة / 90 / يوماً</span> من
+    <p style="background-color: #e4e4e4;border-radius: 6px;font-size: 14px;padding: 15px;text-align: center;">تنتهي صلاحية جميع النقاط <span class="red">خلال مدة / 90 / يوماً</span> من
         تاريخ الحصول عليها و سيكون من غير الممكن استبدال النقاط بعد انتهاء مدة صلاحيتها.</p>
 
 </body>
