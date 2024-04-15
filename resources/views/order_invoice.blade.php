@@ -467,6 +467,7 @@
             color: white;
             font-size: 20px;
             border-radius: 5px;
+            cursor: pointer;
             z-index: 100;
         }
     </style>
@@ -646,6 +647,7 @@
         let printButton = document.querySelector("#print");
         printButton.onclick = () => {
             printButton.style.right="-4000px";
+            printButton.style.display="none";
             window.scrollTo(0, 0);
             let html = document.querySelector("html");
             console.log(html);
@@ -661,6 +663,7 @@
             };
             html2pdf().set(opt).from(html).save("{{ $filename }}");
             printButton.style.right="20px";
+            printButton.style.display="block";
 
         };
     </script>
