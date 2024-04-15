@@ -182,6 +182,16 @@ class OrderController extends Controller
             'dataFetchedSuccessfully'
         );
     }
+
+    public function getOrderTrackingUrl($orderId)
+    {
+        $trackingUrl =env("TRACKING_URL")."?order_id=".$orderId;
+
+        return $this->successResponse(
+            $trackingUrl,
+            'dataFetchedSuccessfully'
+        );
+    }
     public function getOrderPdf($orderId)
     {
         $data['order'] = $this->orderService->find($orderId);
