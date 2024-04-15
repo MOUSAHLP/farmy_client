@@ -478,7 +478,9 @@
 <body>
     <div class="conatiner">
         <button id="print">طباعة الفاتورة</button>
-        <img class="title" src="{{ asset('images/logo.png') }}" alt="" />
+        <div style="width: 100%;text-align: center;">
+            <img class="title" src="{{ asset('images/logo.png') }}" style="max-width: 1000px;margin:0px auto;" alt="logo" />
+        </div>
         <!-- s1 -->
         <div class="title2">
             <!-- Date || NumberOfOrder || NumberOfInvoice -->
@@ -570,13 +572,12 @@
                         @foreach ($order->orderDetails as $order_detail)
                             <tr>
                                 <td>{{ $order_detail->quantity * $order_detail->price }}</td>
-                                <td>{{ $order_detail->price }}</td>
+                                <td>{{ intval($order_detail->price) }}</td>
                                 <td>{{ $order_detail->product->unit ?? "لايوجد" }}</td>
                                 <td>{{ $order_detail->quantity }}</td>
                                 <td>{{ $order_detail->product->name }}</td>
                                 <td>{{ $i }}</td>
                             </tr>
-
                             @php
                                 $i++;
                             @endphp
@@ -644,8 +645,8 @@
     <script>
         let printButton = document.querySelector("#print");
         printButton.onclick = () => {
-            printButton.style.right="-400px";
-
+            printButton.style.right="-4000px";
+            window.scrollTo(0, 0);
             let html = document.querySelector("html");
             console.log(html);
             var opt = {
