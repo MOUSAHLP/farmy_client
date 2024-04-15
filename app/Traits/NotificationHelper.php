@@ -102,7 +102,7 @@ class NotificationHelper
         if(app()->getLocale() == "ar"){
             return [
                 "title" => "تم اضافة " .  $points . " نقطة لحسابك",
-                "body" => "تم اضافة " .  $points . " نقطة لحسابك ".__($reason),
+                "body" => "تم اضافة " .  $points . " نقطة لحسابك ".__("messages.reward_notifications.".$reason),
             ];
         }
         return [
