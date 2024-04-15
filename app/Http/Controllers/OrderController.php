@@ -185,10 +185,23 @@ class OrderController extends Controller
 
     public function getOrderTrackingUrl($orderId)
     {
+        if(Order::find($orderId) ==null){
+            return $this->errorResponse(
+                'NotFound',
+                400
+            );
+        }
         $trackingUrl =env("TRACKING_URL")."?order_id=".$orderId;
 
         return $this->successResponse(
             $trackingUrl,
+            'dataFetchedSuccessfully'
+        );
+    }
+    public function getOrderTrackingUrlBase()
+    {
+        return $this->successResponse(
+            env("TRACKING_URL"),
             'dataFetchedSuccessfully'
         );
     }

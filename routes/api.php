@@ -90,7 +90,8 @@ Route::group(['middleware' => 'cors'], function () {
         Route::get('order-tracking/{id}', [OrderController::class, 'getOrderTrackingUrl']);
     });
     Route::get('order-pdf/{id}', [OrderController::class, 'getOrderPdf']);
-
+    Route::get('order-tracking-base', [OrderController::class, 'getOrderTrackingUrlBase']);
+    
     Route::group(['middleware' => 'auth:user', 'prefix' => 'invoices'], function () {
         Route::get('get_invoices', [OrderController::class, 'getUserAllInvoices']);
     });
