@@ -9,6 +9,7 @@ use App\Traits\LocationTrait;
 use App\Traits\ModelHelper;
 use App\Enums\RewardRoutes;
 use App\Traits\RewardRequests;
+use Exception;
 
 class PaymentProcessService
 {
@@ -130,7 +131,12 @@ class PaymentProcessService
     }
     public function getDeliveryPrice($deliveryPrice)
     {
-        $response = $this->rewardGetRequest(RewardRoutes::UserCurrentRank());
+        try{
+            $response = $this->rewardGetRequest(RewardRoutes::UserCurrentRank());
+        }
+        catch(Exception $e){
+            return $deliveryPrice;
+        }
         foreach ($response->data->features as $feature) {
             if ($feature->name == "discount_on_deliver") {
                 return $deliveryPrice - (int)(($deliveryPrice / 100) * $feature->value);
