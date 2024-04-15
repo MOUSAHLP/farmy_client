@@ -11,7 +11,7 @@
             padding: 0;
         }
 
-        .conatiner {
+        .container {
             height: auto;
             border: 1px solid #333;
             /* display: flex;F
@@ -19,6 +19,16 @@
             align-items: center;
             flex-direction: column; */
 
+        }
+
+        .img-holder {
+            width: 100%;
+            text-align: center;
+        }
+
+        .img-holder img {
+            max-width: 1000px;
+            margin: 0px auto;
         }
 
         .title {
@@ -470,6 +480,33 @@
             cursor: pointer;
             z-index: 100;
         }
+
+        .downloaded {
+            display: none;
+        }
+        .success-download {
+            width: 100%;
+            text-align: center;
+            padding: 20px 0px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .success-img {
+            width: 150px;
+        }
+
+        .success-download .success-title {
+            color: #4f894a;
+            font-size: 35px;
+            margin: 20px 0px;
+        }
+
+        .success-download .success-content {
+            font-size: 20px;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
         integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
@@ -477,10 +514,10 @@
 </head>
 
 <body>
-    <div class="conatiner">
+    <div class="container">
         <button id="print">طباعة الفاتورة</button>
-        <div style="width: 100%;text-align: center;">
-            <img class="title" src="{{ asset('images/logo.png') }}" style="max-width: 1000px;margin:0px auto;" alt="logo" />
+        <div class="img-holder">
+            <img class="title" src="{{ asset('images/logo.png') }}" alt="logo" />
         </div>
         <!-- s1 -->
         <div class="title2">
@@ -574,7 +611,7 @@
                             <tr>
                                 <td>{{ $order_detail->quantity * $order_detail->price }}</td>
                                 <td>{{ intval($order_detail->price) }}</td>
-                                <td>{{ $order_detail->product->unit ?? "لايوجد" }}</td>
+                                <td>{{ $order_detail->product->unit ?? 'لايوجد' }}</td>
                                 <td>{{ $order_detail->quantity }}</td>
                                 <td>{{ $order_detail->product->name }}</td>
                                 <td>{{ $i }}</td>
@@ -600,7 +637,7 @@
                                 <tr>
                                     <td class="p_table1">{{ $order->coupon_discount }}</td>
                                     <td>
-                                         <span id="tm_1" class="t s2">: اﻟﺤﺴﻢ اﻟﻤﻤﻨﻮح</span>
+                                        <span id="tm_1" class="t s2">: اﻟﺤﺴﻢ اﻟﻤﻤﻨﻮح</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -610,7 +647,7 @@
 
 
                                 <tr>
-                                    <td class="p_table1">{{ $order->invoice['tax']}}</td>
+                                    <td class="p_table1">{{ $order->invoice['tax'] }}</td>
                                     <td>
                                         <span id="tq_1" class="t s2"> :ﺿﺮﻳﺒﺔ</span>
                                     </td>
@@ -620,7 +657,7 @@
                                         {{ $order->total }}
                                     </td>
                                     <td>
-                                        <span id="tu_1" class="t s9">  :اﻟﻤﺠﻤﻮع اﻟﻜﻠﻲ</span>
+                                        <span id="tu_1" class="t s9"> :اﻟﻤﺠﻤﻮع اﻟﻜﻠﻲ</span>
                                     </td>
                                 </tr>
                             </thead>
@@ -643,11 +680,48 @@
         </div>
         <!-- footer -->
     </div>
+    <div class="downloaded">
+        <div class="success-download">
+            <svg class="success-img" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-5 -5 60.00 60.00" xml:space="preserve"
+                fill="#4f894a">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC"
+                    stroke-width="0.3"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <circle style="fill:#4f894a;" cx="25" cy="25" r="25"></circle>
+                    <polyline
+                        style="fill:none;stroke:#FFFFFF;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"
+                        points=" 38,15 22,33 12,25 "></polyline>
+                </g>
+            </svg>
+            <h2 class="success-title">نجاح</h2>
+            <p class="success-content">تم تحميل الفاتورة بنجاح يمكنك اغلاق المتصفح</p>
+        </div>
+    </div>
     <script>
-        let printButton = document.querySelector("#print");
-        printButton.onclick = () => {
-            printButton.style.right="-4000px";
-            printButton.style.display="none";
+        const printButton = document.querySelector("#print");
+        const container = document.querySelector(".container");
+        const downloadedDiv = document.querySelector(".downloaded");
+        window.onload = async function() {
+            if (window.innerWidth <= 600) {
+                printButton.style.right = "-4000px";
+                await print();
+                container.style.display = "none";
+                downloadedDiv.style.display = "block";
+
+            }
+        };
+
+        printButton.onclick = async () => {
+            printButton.style.right = "-4000px";
+            printButton.style.display = "none";
+            await print();
+            printButton.style.right = "20px";
+            printButton.style.display = "block";
+
+        };
+        async function print() {
             window.scrollTo(0, 0);
             let html = document.querySelector("html");
             console.log(html);
@@ -662,10 +736,7 @@
                 }
             };
             html2pdf().set(opt).from(html).save("{{ $filename }}");
-            printButton.style.right="20px";
-            printButton.style.display="block";
-
-        };
+        }
     </script>
 </body>
 
