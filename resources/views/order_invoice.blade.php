@@ -709,7 +709,6 @@
                 await print();
                 container.style.display = "none";
                 downloadedDiv.style.display = "block";
-
             }
         };
 
