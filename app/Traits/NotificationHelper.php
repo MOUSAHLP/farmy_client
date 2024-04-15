@@ -107,7 +107,7 @@ class NotificationHelper
         }
         return [
             "title" => $points ." points have been added to your account",
-            "body" => __("reward_notifications.".$reason),
+            "body" => __("messages.reward_notifications.".$reason),
         ];
     }
 }
