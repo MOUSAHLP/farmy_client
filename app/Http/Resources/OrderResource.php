@@ -27,6 +27,7 @@ class OrderResource extends JsonResource
             'index' => $this->getAllResource(),
             'getUserAllInvoices' => $this->getUserAllInvoicesResource(),
             'getAllOrders' => $this->getAllOrdersResource(),
+            'show' => $this->showResource(),
 
             default => $this->defaultResource(),
         };
@@ -54,7 +55,7 @@ class OrderResource extends JsonResource
             'notes' => $this->notes,
             'changes' => ChangeEnums::toArray($this->changes),
             'expected_time' => 30,
-            'rate' => $this->rate,
+            'rate' => $this->rate ?? 0,
             // 'order_details' => $this->orderDetails->map(function ($orderDetail) {
             //     return [
             //         'id' => $orderDetail->id,
@@ -105,10 +106,56 @@ class OrderResource extends JsonResource
             'city' => ($this->city_id ? $this->city : null),
             'delivery_fee' => $this->delivery_fee,
             'coupon_discount' => $this->coupon_discount,
+            'tax' => $this->tax,
             'sub_total' => $this->sub_total,
             'total' => $this->total,
+            'pdf_url' => env("APP_URL") . "/api/order-pdf/" . $this->id
         ];
     }
+    public function showResource()
+    {
+        return [
+            'id' => $this->id,
+            'order_number' => $this->order_number,
+            'user' => $this->user->only(['id', 'username', 'phone', 'email']),
+            'driver' => ($this->driver ? $this->driver->only(['id', 'username', 'phone', 'email']) : null),
+            'status' => OrderStatus::getName($this->status),
+            'delivery_method' => $this->deliveryMethod->only(['id', 'name']),
+            'payment_method' => $this->paymentMethod->only(['id', 'name']),
+            'user_address' => $this->userAddress,
+            'city' => ($this->city_id ? $this->city : null),
+            'start_time' => $this->start_time,
+            'end_time' => $this->end_time,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
+            'payment_status' => $this->payment_status,
+            'coupon_discount' => $this->coupon_discount,
+            'tax' => $this->tax,
+            'delivery_fee' => $this->delivery_fee,
+            'sub_total' => $this->sub_total,
+            'total' => $this->total,
+            'date' => $this->date,
+            'notes' => $this->notes,
+            'changes' => ChangeEnums::toArray($this->changes),
+            'pdf_url' => env("APP_URL") . "/api/order-pdf/" . $this->id,
+            'order_details' => $this->orderDetails->map(function ($orderDetail) {
+                return [
+                    'id' => $orderDetail->id,
+                    'order_id' => $orderDetail->order_id,
+                    'product' => $this->productResource($orderDetail->product),
+                    'quantity' => $orderDetail->quantity,
+                    'price' => $orderDetail->price,
+                    'status' => OrderProductsStatus::getName($orderDetail->status),
+                    'created_at' => $orderDetail->created_at,
+                    'updated_at' => $orderDetail->updated_at,
+                    'expected_time' => 30,
+                ];
+            }),
+            'rate' => $this->rate ?? 0,
+            'invoice' => $this->invoice
+        ];
+    }
+
     public function defaultResource()
     {
         return [
@@ -127,6 +174,7 @@ class OrderResource extends JsonResource
             'longitude' => $this->longitude,
             'payment_status' => $this->payment_status,
             'coupon_discount' => $this->coupon_discount,
+            'tax' => $this->tax,
             'delivery_fee' => $this->delivery_fee,
             'sub_total' => $this->sub_total,
             'total' => $this->total,
@@ -146,7 +194,7 @@ class OrderResource extends JsonResource
                     'expected_time' => 30,
                 ];
             }),
-            'rate' => $this->rate,
+            'rate' => $this->rate ?? 0,
             'invoice' => $this->invoice
         ];
     }

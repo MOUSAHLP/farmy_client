@@ -36,6 +36,9 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->integer('rate')->default(0);
             $table->text('change')->nullable();
+            $table->time('confirmed_at')->nullable();
+            $table->time('delivered_at')->nullable();
+
             $table->softDeletes();
             $table->timestamps();
 

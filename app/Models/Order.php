@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\changeEnums;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -33,6 +31,8 @@ class Order extends Model
         'notes',
         'changes',
         'rate',
+        'confirmed_at',
+        'delivered_at'
     ];
     protected $casts = [
         'order_number'       => 'integer',
@@ -48,14 +48,14 @@ class Order extends Model
         'latitude'           => 'integer',
         'longitude'          => 'integer',
         'payment_status'     => 'boolean',
-        'coupon_discount'       => 'double',
+        'coupon_discount'    => 'double',
         'delivery_fee'       => 'double',
         'sub_total'          => 'double',
         'total'              => 'double',
         'date'               => 'datetime',
         'notes'              => 'string',
         'changes'            => "array",
-        'rate'       => 'integer',
+        'rate'               => 'integer',
     ];
     public function user()
     {

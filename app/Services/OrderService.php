@@ -12,6 +12,7 @@ use App\Traits\RewardRequests;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ModelHelper;
 use App\Models\Order;
+use Carbon\Carbon;
 
 class OrderService
 {
@@ -30,11 +31,17 @@ class OrderService
     {
         $order =  Order::with([
             'user', 'deliveryMethod', 'paymentMethod', 'userAddress', 'city', 'orderDetails'
-        ]);
+        ])->orderby("id", "DESC");
+
         if (request()->has('status')) {
-            $order->where('status', request()->status);
+            $order->where('status',  OrderStatus::getValue(request()->status));
         }
-        return $order->get();
+
+        if (request()->has('start_date') && request()->has('end_date')) {
+            $order->whereBetween('created_at', [request()->start_date, request()->end_date]);
+        }
+
+        return $order->paginate(10)->appends(request()->input());
     }
 
     public function getAllByUser()
@@ -178,10 +185,10 @@ class OrderService
     public function getUserRates()
     {
         $userId = AuthHelper::userAuth()->id;
-        return  Order::where("user_id",$userId)
-        ->where("rate","!=",0)
-        ->select(["order_number","created_at","total","rate"])
-        ->get();
+        return  Order::where("user_id", $userId)
+            ->where("rate", "!=", 0)
+            ->select(["order_number", "created_at", "total", "rate"])
+            ->get();
     }
 
     public function prepareOrderData($data, $coupon = null)
@@ -236,7 +243,7 @@ class OrderService
                 "user_id" => AuthHelper::userAuth()->id,
                 "coupon_code" => request()->coupon_code
             ]);
-        } else if (request()->has('coupon_id')&& request()->coupon_id != "") {
+        } else if (request()->has('coupon_id') && request()->coupon_id != "") {
             $response = $this->rewardPostRequest(RewardRoutes::buy_and_use_coupon, [
                 "user_id" => AuthHelper::userAuth()->id,
                 "coupon_id" => request()->coupon_id
@@ -246,7 +253,7 @@ class OrderService
         }
         if ($response->statusCode >= 400) {
             return [
-                null,   
+                null,
                 $response->message,
             ];
         }

@@ -12,8 +12,6 @@ use App\Models\OrderDetail;
 use App\Services\DriverService;
 use App\Services\OrderService;
 
-use PDF;
-
 class OrderController extends Controller
 {
     public function __construct(private OrderService $orderService, private DriverService $driverService)
@@ -24,9 +22,10 @@ class OrderController extends Controller
     public function getAllOrders()
     {
         $orders = $this->orderService->getAll();
-
+        $orders->data =   OrderResource::collection($orders)->response()->getData(true);
         return $this->successResponse(
-            $this->resource($orders, OrderResource::class),
+            $orders,
+            // $this->resource($orders->data->data, OrderResource::class),
             'dataFetchedSuccessfully'
         );
     }
