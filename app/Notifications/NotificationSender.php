@@ -8,7 +8,7 @@ use App\Traits\NotificationHelper;
 class NotificationSender
 {
 
-    public static function sendPushNotification($users , $title , $body)
+    public static function sendPushNotification($users , $title , $body,$type=NotificationsTypes::PushNotifications)
     {
 
 
@@ -22,12 +22,12 @@ class NotificationSender
 
         $fcmTokens = $users->pluck('fcm_token');
 
-        NotificationHelper::sendPushNotification($fcmTokens->toArray(), $data , NotificationsTypes::PushNotifications);
+        NotificationHelper::sendPushNotification($fcmTokens->toArray(), $data ,$type);
 
         return $data = [
             'title'   => $title,
             'body'    => $body,
-            'type' => NotificationsTypes::PushNotifications,
+            'type'    => $type,
         ];
     }
 }

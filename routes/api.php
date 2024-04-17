@@ -87,9 +87,11 @@ Route::group(['middleware' => 'cors'], function () {
         Route::get('/order-details/{id}', [OrderController::class, 'show']);
         Route::get('order-status/{id}', [OrderController::class, 'getorderstatus']);
         Route::get('order-rate/{id}', [OrderController::class, 'getOrderRate']);
+        Route::get('order-tracking/{id}', [OrderController::class, 'getOrderTrackingUrl']);
     });
     Route::get('order-pdf/{id}', [OrderController::class, 'getOrderPdf']);
-
+    Route::get('order-tracking-base', [OrderController::class, 'getOrderTrackingUrlBase']);
+    
     Route::group(['middleware' => 'auth:user', 'prefix' => 'invoices'], function () {
         Route::get('get_invoices', [OrderController::class, 'getUserAllInvoices']);
     });
@@ -194,7 +196,7 @@ Route::group(['middleware' => 'cors'], function () {
         Route::group([
             'prefix' => "achievements",
         ], function () {
-            Route::get('/not-done', 'UserNotDoneAchievements');
+            Route::get('/not-done', 'UserAchievements');
         });
         // Coupons
         Route::group([

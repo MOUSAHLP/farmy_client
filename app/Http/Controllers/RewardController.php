@@ -23,9 +23,9 @@ class RewardController extends Controller
     }
 
     // Achievements
-    public function UserNotDoneAchievements()
+    public function UserAchievements()
     {
-        return  $this->rewardGetRequest(RewardRoutes::UserNotDoneAchievements());
+        return  $this->rewardGetRequest(RewardRoutes::UserAchievements());
     }
 
     // Coupons
@@ -40,7 +40,7 @@ class RewardController extends Controller
     }
     public function offersCoupons()
     {
-        return  $this->rewardGetRequest(RewardRoutes::offers_coupons);
+        return  $this->rewardGetRequest(RewardRoutes::coupons);
     }
     public function BuyCoupon(RewardRequest $request)
     {

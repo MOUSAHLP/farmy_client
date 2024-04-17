@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Services\DriverService;
 use App\Services\OrderService;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -182,10 +183,34 @@ class OrderController extends Controller
             'dataFetchedSuccessfully'
         );
     }
+
+    public function getOrderTrackingUrl($orderId)
+    {
+        if (Order::find($orderId) == null) {
+            return $this->errorResponse(
+                'NotFound',
+                400
+            );
+        }
+        $trackingUrl = env("TRACKING_URL") . "?order_id=" . $orderId;
+
+        return $this->successResponse(
+            $trackingUrl,
+            'dataFetchedSuccessfully'
+        );
+    }
+    public function getOrderTrackingUrlBase()
+    {
+        return $this->successResponse(
+            env("TRACKING_URL"),
+            'dataFetchedSuccessfully'
+        );
+    }
     public function getOrderPdf($orderId)
     {
         $data['order'] = $this->orderService->find($orderId);
         $data['contact_us_phone'] = Setting::first()->phone;
+        $data['filename'] = $data['order']->user->first_name . "_" . $data['order']->user->last_name . "_" . Carbon::now()->format("Y_m_d_h_i_s");
 
         return view('order_invoice', $data);
     }
