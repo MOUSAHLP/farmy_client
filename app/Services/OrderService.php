@@ -54,7 +54,6 @@ class OrderService
             ])->where('status', request()->status)->orderBy('id', 'asc');
         }
 
-        // return $user->orders;
         return $user->orders()->orderBy('id', 'desc')->get();
     }
 

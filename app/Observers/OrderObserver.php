@@ -23,7 +23,7 @@ class OrderObserver
         $fcm_token = User::where("id", $order->user_id)->get()->first()->fcm_token;
         $data = NotificationHelper::getTranslatedData((int) floor($order->total / 1000), "order_created");
 
-        NotificationHelper::sendPushNotification([$fcm_token], $data, NotificationsTypes::PushNotifications);
+        NotificationHelper::sendPushNotification([$fcm_token], $data, NotificationsTypes::Offers);
     }
     public function updated(Order $order): void
     {
@@ -34,9 +34,9 @@ class OrderObserver
             ]);
 
             $fcm_token = User::where("id", $order->user_id)->get()->first()->fcm_token;
-            $data = NotificationHelper::getTranslatedData($res->added_points, "order_rated");
+            $data = NotificationHelper::getTranslatedData($res->data->added_points, "order_rated");
 
-            NotificationHelper::sendPushNotification([$fcm_token], $data, NotificationsTypes::PushNotifications);
+            NotificationHelper::sendPushNotification([$fcm_token], $data, NotificationsTypes::Offers);
         }
     }
 }

@@ -19,8 +19,8 @@ class UserObserver
             "achievement_id" => 1
         ]);
         $fcm_token = User::where("id",  $user->id)->get()->first()->fcm_token;
-        $data = NotificationHelper::getTranslatedData($res->added_points, "user_created");
-        NotificationHelper::sendPushNotification([$fcm_token], $data, NotificationsTypes::PushNotifications);
+        $data = NotificationHelper::getTranslatedData($res->data->added_points, "user_created");
+        NotificationHelper::sendPushNotification([$fcm_token], $data, NotificationsTypes::Offers);
     }
     public function updated(User $user): void
     {
@@ -30,9 +30,9 @@ class UserObserver
                 "achievement_id" => 4
             ]);
             $fcm_token = User::where("id", $user->id)->get()->first()->fcm_token;
-            $data = NotificationHelper::getTranslatedData($res->added_points, "user_birthday_added");
+            $data = NotificationHelper::getTranslatedData($res->data->added_points, "user_birthday_added");
 
-            NotificationHelper::sendPushNotification([$fcm_token], $data, NotificationsTypes::PushNotifications);
+            NotificationHelper::sendPushNotification([$fcm_token], $data, NotificationsTypes::Offers);
         }
     }
 }

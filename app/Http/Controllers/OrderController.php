@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\NotificationsTypes;
 use App\Enums\OrderStatus;
 use App\Http\Requests\OrderDetailsRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Models\Driver;
 use App\Models\Setting;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Services\DriverService;
 use App\Services\OrderService;
+use App\Traits\NotificationHelper;
 use Carbon\Carbon;
 
 class OrderController extends Controller
@@ -218,18 +221,19 @@ class OrderController extends Controller
     public function asignOrderToDriver(OrderRequest $request)
     {
         $order = Order::find($request->order_id);
-        if (!$order) {
-            return $this->errorResponse(
-                'NotFound',
-                400
-            );
-        }
+        $driver = Driver::find($request->driver_id);
 
-        if ($order->driver_id != null || $order->status != OrderStatus::Pending) {
+        // if the order in not in pending you cant assign
+        if ($order->status != OrderStatus::Pending) {
             return $this->errorResponse(
                 'core.asignError',
                 400
             );
+        }
+
+        // if the order has already been taken by another driver then notify him that the order is no longer assigned to him
+        if ($order->driver_id != null && $order->driver_id !=  $request->driver_id) {
+            NotificationHelper::sendPushNotification([$driver->fcm_token], $data, NotificationsTypes::Offers);
         }
 
         $order->driver_id = $request->driver_id;

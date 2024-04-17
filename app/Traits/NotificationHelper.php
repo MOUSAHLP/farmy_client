@@ -6,7 +6,7 @@ use App\Enums\NotificationsTypes;
 
 class NotificationHelper
 {
-    public static function sendPushNotification(array $fcmTokens, array $data, $type): string
+    public static function sendPushNotification(array $fcmTokens, array $data, $type = NotificationsTypes::PushNotifications): string
     {
         $url = "https://fcm.googleapis.com/fcm/send";
         $apiKey = 'AAAA70MPwxg:APA91bEDUrpXu_tLoLEfHtHZMPzf2D7ii4KwXs7QdFN-54pE8Hrm26bNeYL08H9015QFyo_m4mMvFW6Gfh9kcbG5qMwOFjBpaFc_5NszVdcYr3wyeDvHaxD5HfvJjP8M1TWxgX_F_N8w';
@@ -14,8 +14,7 @@ class NotificationHelper
             "authorization: key=" . $apiKey,
             "content-type: application/json",
         ];
-        $value = NotificationsTypes::PushNotifications;
-        $type = NotificationsTypes::getName($value);
+        $type = NotificationsTypes::getName($type);
 
         $payloads = [];
         foreach ($fcmTokens as $token) {
