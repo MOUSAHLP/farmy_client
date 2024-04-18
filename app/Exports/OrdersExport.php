@@ -39,6 +39,7 @@ class OrdersExport implements FromCollection, WithHeadings
             'changes',
             'rate',
             'pdf url',
+            'order_details',
             'confirmed at',
             'delivered at'
         ];

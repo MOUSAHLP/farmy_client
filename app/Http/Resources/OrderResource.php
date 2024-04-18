@@ -84,6 +84,7 @@ class OrderResource extends JsonResource
             'payment_method' => $this->deliveryMethod->name,
             // 'delivery_method' => $this->paymentMethod->name,
             'status' => OrderStatus::getName($this->status),
+            'rate' => $this->rate ?? 0,
             'order_details' => $this->orderDetails->map(function ($orderDetail) {
                 return [
                     "id" => $orderDetail->id,
@@ -179,6 +180,14 @@ class OrderResource extends JsonResource
             'changes' => ChangeEnums::toArray($this->changes),
             'rate' => $this->rate ?? 0,
             'pdf_url' => env("APP_URL") . "/api/order-pdf/" . $this->id,
+            'order_details' => $this->orderDetails->map(function ($orderDetail) {
+                return $orderDetail->product->name;
+                // [
+                //     'product' => $orderDetail->product->name,
+                //     'quantity' => $orderDetail->quantity,
+                //     'price' => $orderDetail->price,
+                // ];
+            }),
             'confirmed_at' => $this->confirmed_at ?? "not confirmed yet",
             'delivered_at' => $this->delivered_at ?? "not delivered yet",
         ];
