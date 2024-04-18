@@ -10,6 +10,7 @@ use App\Helpers\AuthHelper;
 use App\Models\User;
 use App\Enums\MediaCollectionsNames;
 use App\Enums\OrderDetailsEnums;
+use App\Helpers\OrderResourceHelper;
 use Carbon\Carbon;
 
 class OrderResource extends JsonResource
@@ -111,7 +112,7 @@ class OrderResource extends JsonResource
             'tax' => $this->tax,
             'sub_total' => $this->sub_total,
             'total' => $this->total,
-            'pdf_url' => env("APP_URL") . "/api/order-pdf/" . $this->id
+            'pdf_url' => OrderResourceHelper::getPdfUrl($this->id)
         ];
     }
     public function showResource()
@@ -139,7 +140,7 @@ class OrderResource extends JsonResource
             'date' => $this->date,
             'notes' => $this->notes,
             'changes' => ChangeEnums::toArray($this->changes),
-            'pdf_url' => env("APP_URL") . "/api/order-pdf/" . $this->id,
+            'pdf_url' => OrderResourceHelper::getPdfUrl($this->id),
             'order_details' => $this->orderDetails->map(function ($orderDetail) {
                 return [
                     'id' => $orderDetail->id,
@@ -169,7 +170,7 @@ class OrderResource extends JsonResource
             'status' => OrderStatus::getName($this->status),
             'delivery_method' => $this->deliveryMethod->name,
             'payment_method' => $this->paymentMethod->name,
-            'user_address' => $this->getAddressDetailed($this->userAddress),
+            'user_address' => OrderResourceHelper::getAddressDetailed($this->userAddress),
             'payment_status' => $this->payment_status ? "paid" : "not paid",
             'coupon_discount' => $this->coupon_discount,
             'tax' => $this->tax,
@@ -179,15 +180,13 @@ class OrderResource extends JsonResource
             'notes' => $this->notes ?? "",
             'changes' => ChangeEnums::toArray($this->changes),
             'rate' => $this->rate ?? 0,
-            'pdf_url' => env("APP_URL") . "/api/order-pdf/" . $this->id,
-            'order_details' => $this->orderDetails->map(function ($orderDetail) {
-                return $orderDetail->product->name;
-                // [
-                //     'product' => $orderDetail->product->name,
-                //     'quantity' => $orderDetail->quantity,
-                //     'price' => $orderDetail->price,
-                // ];
-            }),
+            'pdf_url' => OrderResourceHelper::getPdfUrl($this->id),
+            'order_details' => OrderResourceHelper::getOrderDetailForExcel($this->orderDetails),
+            // [
+            //     'product' => $orderDetail->product->name,
+            //     'quantity' => $orderDetail->quantity,
+            //     'price' => $orderDetail->price,
+            // ];
             'confirmed_at' => $this->confirmed_at ?? "not confirmed yet",
             'delivered_at' => $this->delivered_at ?? "not delivered yet",
         ];
@@ -289,9 +288,5 @@ class OrderResource extends JsonResource
             'discount'         => $product->discount,
             'commission'       => $product->commission?->only('id', 'name') + ['commission_value' => $product->commission_value],
         ];
-    }
-    public static function getAddressDetailed($userAddress)
-    {
-        return $userAddress->area . "," . __("messages.street") . " (" . $userAddress->street . ") , " . __("messages.building") .  " (" . $userAddress->building . ") , " . __("messages.building_number") .  " (" . $userAddress->building_number . ")," . __("messages.floor") .  " (" . $userAddress->floor . ")";
     }
 }
