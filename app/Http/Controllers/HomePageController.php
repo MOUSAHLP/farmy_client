@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\AuthHelper;
+use App\Helpers\PaginationHelper;
 use App\Http\Requests\HomePageDynamicRequest;
 use App\Http\Resources\HomePageDynamicResource;
-use App\Http\Resources\HomePageResource;
 use App\Http\Resources\ProductResource;
 use App\Models\HomePageDynamic;
 use App\Models\HomePageDynamicContent;
 use App\Services\HomePageService;
 use App\Services\UserService;
-use Illuminate\Http\Request;
+
 
 class HomePageController extends Controller
 {
@@ -21,7 +20,6 @@ class HomePageController extends Controller
 
     public function homePage()
     {
-
         $homePage = $this->homePageService->getAll();
         return $this->successResponse(
             $homePage,
@@ -31,13 +29,18 @@ class HomePageController extends Controller
 
     public function index()
     {
-        $homePageDynamic = HomePageDynamic::with(["content"])->orderBy("order")->paginate(3);
-
-        return HomePageDynamicResource::collection($homePageDynamic)->response()->getData(true);
+        $homePageDynamic = HomePageDynamic::with(["content"])->orderBy("order")->get();
+        $homePageDynamic->push($this->homePageService->getSuggestedProductSection());
+        return $homePageDynamic->sortBy("order")->values();
+        $response = PaginationHelper::paginate($homePageDynamic, 3, request()->page, ['path' => request()->url()]);
+        return HomePageDynamicResource::collection($response)->response()->getData(true);
     }
 
     public function show($id)
     {
+        if ($id == -1) {
+            return $this->getProducts($this->homePageService->getSuggestedProductSection()->content);
+        }
         $homePageDynamic = HomePageDynamic::with(["content"])->find($id);
 
         if (!$homePageDynamic) {

@@ -16,6 +16,7 @@ class HomePageDynamic extends Model
 
 
     protected $fillable = [
+        'id',
         'type',
         'order',
         'title_ar',

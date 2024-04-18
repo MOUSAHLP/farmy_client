@@ -36,7 +36,6 @@ class HomePageDynamicResource extends JsonResource
             $favorite_address = UserAddress::where('user_id', $id)->first();
         }
 
-
         return [
             'id'               => $this->id,
             'type'             => $this->type,

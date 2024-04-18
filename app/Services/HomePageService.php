@@ -7,8 +7,13 @@ use App\Http\Resources\BannerResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductResource;
 use App\Models\DeliveryTimeInfo;
+use App\Models\HomePageDynamic;
+use App\Models\HomePageDynamicContent;
+use App\Models\Order;
+use App\Models\SubCategory;
 use App\Traits\ModelHelper;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class HomePageService
 {
@@ -47,5 +52,37 @@ class HomePageService
             return $deliveryTimeInfo->before_message . ' من الساعة ' . $deliveryTimeInfo->start_time . ' حتى الساعة ' . $deliveryTimeInfo->end_time . ' ' . $deliveryTimeInfo->after_message;
         }
         return null;
+    }
+    public function getSuggestedProductSection()
+    {
+        $homePageDynamic =  new HomePageDynamic([
+            'id' => -1,
+            'type' => "section",
+            'order' => "4",
+            'title_ar' => "منتجات مقترحة خصيصا لك",
+            'title_en' => "Suggested Product Just For You",
+        ]);
+
+        $homePageDynamicContent = [];
+        if (AuthHelper::userAuth()) {
+            $lastOrders = Order::where("user_id", AuthHelper::userAuth()->id)->latest()->limit(5)->get();
+            foreach ($lastOrders as $lastOrder) {
+                foreach ($lastOrder->orderDetails as $orderDetail) {
+                    $homePageDynamicContent[] = new HomePageDynamicContent([
+                        'home_page_dynamic_id' => "-1",
+                        'product_id' => $orderDetail->product->id
+                    ]);
+                    $homePageDynamicContent[] =
+                        new HomePageDynamicContent([
+                            'home_page_dynamic_id' => "-1",
+                            'product_id' => SubCategory::find($orderDetail->product->subcategory_id)->get()->first()->products->first()->id
+                        ]);
+                }
+            }
+        }
+        $homePageDynamicContent = array_unique($homePageDynamicContent);
+        $homePageDynamicContent = new Collection($homePageDynamicContent);
+        $homePageDynamic->content = $homePageDynamicContent;
+        return $homePageDynamic;
     }
 }
