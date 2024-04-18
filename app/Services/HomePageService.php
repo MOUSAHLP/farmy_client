@@ -82,7 +82,7 @@ class HomePageService
         }
         $homePageDynamicContent = array_unique($homePageDynamicContent);
         $homePageDynamicContent = new Collection($homePageDynamicContent);
-        $homePageDynamic->content = $homePageDynamicContent;
+        $homePageDynamic->content = $homePageDynamicContent->values();
         return $homePageDynamic;
     }
 }
