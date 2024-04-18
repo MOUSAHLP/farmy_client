@@ -58,7 +58,7 @@ class HomePageService
         $homePageDynamic =  new HomePageDynamic([
             'id' => -1,
             'type' => "section",
-            'order' => "4",
+            'order' => "3",
             'title_ar' => "منتجات مقترحة خصيصا لك",
             'title_en' => "Suggested Product Just For You",
         ]);

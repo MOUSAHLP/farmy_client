@@ -31,7 +31,7 @@ class HomePageController extends Controller
     {
         $homePageDynamic = HomePageDynamic::with(["content"])->orderBy("order")->get();
         $homePageDynamic->push($this->homePageService->getSuggestedProductSection());
-        return $homePageDynamic->sortBy("order")->values();
+        $homePageDynamic = $homePageDynamic->sortBy("order")->values();
         $response = PaginationHelper::paginate($homePageDynamic, 3, request()->page, ['path' => request()->url()]);
         return HomePageDynamicResource::collection($response)->response()->getData(true);
     }
