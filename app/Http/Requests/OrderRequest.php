@@ -32,6 +32,7 @@ class OrderRequest extends FormRequest
             'updateStatus'   =>  $this->getUpdateStatusRules(),
             'updateRate'   =>  $this->getUpdateRateRules(),
             'asignOrderToDriver'   =>  $this->getasignOrderToDriverRules(),
+            'cancelOrder'   =>  $this->getCancelOrderRules(),
             default   =>  $this->getUpdateRules(),
         };
     }
@@ -89,7 +90,7 @@ class OrderRequest extends FormRequest
     public function getUpdateRateRules()
     {
         return [
-            'rate'                => 'required|numeric|between:0,5',
+            'rate'    => 'required|numeric|between:0,5',
         ];
     }
 
@@ -123,6 +124,11 @@ class OrderRequest extends FormRequest
                 '',
                 'exists:delivery_attributes,id',
             ],
+        ];
+    }
+    public function getCancelOrderRules(){
+        return [
+            "reason_for_cancel"=>"required"
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Requests\OrderDetailsRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Driver;
+use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -221,23 +222,51 @@ class OrderController extends Controller
     public function asignOrderToDriver(OrderRequest $request)
     {
         $order = Order::find($request->order_id);
-        $driver = Driver::find($request->driver_id);
-
         // if the order in not in pending you cant assign
         if ($order->status != OrderStatus::Pending) {
             return $this->errorResponse(
-                'core.asignError',
+                'core.assignError',
                 400
             );
         }
 
         // if the order has already been taken by another driver then notify him that the order is no longer assigned to him
         if ($order->driver_id != null && $order->driver_id !=  $request->driver_id) {
-            NotificationHelper::sendPushNotification([$driver->fcm_token], $data, NotificationsTypes::Offers);
+            $old_driver = Driver::find($order->driver_id);
+            $data = [
+                "title" => __("messages.core.assignChangeTitle"),
+                "body" => __("messages.core.assignChangeBody"),
+            ];
+            NotificationHelper::sendPushNotification([$old_driver->fcm_token], $data, NotificationsTypes::PushNotifications);
+            Notification::create([
+                'type'            =>  NotificationsTypes::PushNotifications,
+                'notifiable_type' => 'App\Models\Driver',
+                'notifiable_id'   => $order->driver_id,
+                'data'            => $data,
+            ]);
         }
 
         $order->driver_id = $request->driver_id;
         $order->save();
+
+        return $this->successResponse(
+            null,
+            'dataUpdatedSuccessfully'
+        );
+    }
+    public function cancelOrder($order_id, OrderRequest $request)
+    {
+        $order = Order::find($order_id);
+        if ($order->status == OrderStatus::Cancelled) {
+            return $this->errorResponse(
+                'core.orderAlreadyCancelled',
+                400
+            );
+        }
+        $order->update([
+            "status" =>  OrderStatus::Cancelled,
+            "reason_for_cancel" => $request->reason_for_cancel,
+        ]);
 
         return $this->successResponse(
             null,

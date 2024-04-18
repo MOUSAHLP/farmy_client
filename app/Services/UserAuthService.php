@@ -23,10 +23,10 @@ class UserAuthService
         if (array_key_exists('email', $validatedData)) {
             $user = User::where('email', $validatedData['email'])->first();
         }
-        if (array_key_exists('fcm_token', $validatedData)) {
+        if (isset($user) && array_key_exists('fcm_token', $validatedData)) {
             $user->update([
-                "fcm_token"=> $validatedData['fcm_token']
-            ]); 
+                "fcm_token" => $validatedData['fcm_token']
+            ]);
         }
 
         // dd($user);

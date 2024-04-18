@@ -25,7 +25,7 @@ return [
 
   'Unauthorized'                   => 'لا تملك صلاحيات للقيام بهذا الإجراء',
   'Unauthenticated'                => 'الرجاء تسجيل الدخول اولاً',
-
+  "incorrect_password"=>"كلمة مرور خاطئة",
 
   // General msgs
   'dataSendSuccessfully'          => 'تم إرسال البيانات بنجاح',
@@ -54,15 +54,21 @@ return [
 
   // core asign order to driverd
   'core'  => [
-    "asignError"  => 'لا يمكنك اسناد سائق لهذا الطلب',
+    "assignError"  => 'لا يمكنك اسناد سائق لهذا الطلب',
+    "assignChangeTitle" => 'تم تعيين طلب مسند اليك لسائق اخر',
+    "assignChangeBody"  => 'اذهب لتبويبة طلباتي لرؤية اي طلب تم سحبه منك',
+    
+    "orderAlreadyCancelled" => 'الطلب مرفوض بالفعل',
+    "cancelOrderTitle" => 'تم رفض طلبك ',
+    "reason"  => 'السبب : ',
   ],
 
   // reward notifications
   'reward_notifications'  => [
-    "user_created"  =>"لانشائك حساب بتطبيقنا",
-    "user_birthday_added"  =>"لاضافة تاريخ ميلادك على حسابك",
+    "user_created"  => "لانشائك حساب بتطبيقنا",
+    "user_birthday_added"  => "لاضافة تاريخ ميلادك على حسابك",
     "order_rated"  => "لتقييمك طلب",
     "order_created"  => "لانشائك طلب",
-    
+
   ],
 ];

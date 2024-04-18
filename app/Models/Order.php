@@ -30,6 +30,7 @@ class Order extends Model
         'total',
         'date',
         'notes',
+        'reason_for_cancel',
         'changes',
         'rate',
         'confirmed_at',

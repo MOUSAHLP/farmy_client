@@ -25,6 +25,7 @@ return [
 
     'Unauthorized'                   => 'You do not have permissions to perform this action',
     'Unauthenticated'                => 'PLease login first',
+    "incorrect_password" => "incorrect password",
 
 
     // General msgs
@@ -53,7 +54,14 @@ return [
 
     // core asign order to driverd
     'core'  => [
-        "asignError"  => 'Can Not Asign Driver To This Order',
+        "assignError"  => 'Can Not Asign Driver To This Order',
+        "assignChangeTitle" => 'your order has been assigned to another driver',
+        "assignChangeBody"  => 'go to my orders tab to check which order',
+
+        "orderAlreadyCancelled" => 'order already cancelled',
+        "cancelOrderTitle" => 'your order has been canceled',
+        "reason"  => 'reason : ',
+
     ],
     // reward notifications
     'reward_notifications'  => [
@@ -61,7 +69,7 @@ return [
         "user_birthday_added"  => "for adding your birthday in your account",
         "order_rated"  => "for rating an order",
         "order_created"  => "for creating an order",
-        
+
     ],
 
 ];

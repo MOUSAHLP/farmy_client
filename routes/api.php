@@ -51,6 +51,7 @@ Route::group(['middleware' => 'cors'], function () {
 
     Route::group(['middleware' => 'auth:user'], function () {
         Route::post('/asign-order-to-driver', [OrderController::class, 'asignOrderToDriver']); // core request
+        Route::post('/cancel-order/{id}', [OrderController::class, 'cancelOrder']); // core request
     });
 
 

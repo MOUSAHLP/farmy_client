@@ -35,6 +35,7 @@ return new class extends Migration
             $table->double('total')->default(0);
             $table->date('date');
             $table->text('notes')->nullable();
+            $table->text('reason_for_cancel')->nullable();
             $table->integer('rate')->default(0);
             $table->text('change')->nullable();
             $table->time('confirmed_at')->nullable();
