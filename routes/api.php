@@ -82,6 +82,8 @@ Route::group(['middleware' => 'cors'], function () {
     Route::apiResource('orders', OrderController::class);
     Route::get('/all-orders', [OrderController::class, 'getAllOrders']); // Dashboard
     Route::post('/change-product-status', [OrderController::class, 'changeOrderDetailStatus']);  // Dashboard
+    Route::get('export-orders-excel', [OrderController::class, 'exportExcel']); // Dashboard
+
     Route::group(['middleware' => 'auth:user', 'prefix' => 'orders'], function () {
         Route::post('/update-status/{id}', [OrderController::class, 'updateStatus']);
         Route::post('/update-rate/{id}', [OrderController::class, 'updateRate']);
@@ -92,7 +94,7 @@ Route::group(['middleware' => 'cors'], function () {
     });
     Route::get('order-pdf/{id}', [OrderController::class, 'getOrderPdf']);
     Route::get('order-tracking-base', [OrderController::class, 'getOrderTrackingUrlBase']);
-    
+
     Route::group(['middleware' => 'auth:user', 'prefix' => 'invoices'], function () {
         Route::get('get_invoices', [OrderController::class, 'getUserAllInvoices']);
     });

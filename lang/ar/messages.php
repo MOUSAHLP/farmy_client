@@ -39,7 +39,11 @@ return [
   'objectNotFound'                 => ':object غير موجود',
   'NotFound'                       => 'غير موجود',
 
-
+  "area" => "المنطقة",
+  "street" => "الشارع",
+  "building" => "اسم البناء",
+  "building_number" => "رقم البناء",
+  "floor" => "الطابق",
 
   //General errors
 

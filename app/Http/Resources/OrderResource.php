@@ -28,6 +28,7 @@ class OrderResource extends JsonResource
             'getUserAllInvoices' => $this->getUserAllInvoicesResource(),
             'getAllOrders' => $this->getAllOrdersResource(),
             'show' => $this->showResource(),
+            'exportExcel' => $this->exportExcelResource(),
 
             default => $this->defaultResource(),
         };
@@ -155,7 +156,33 @@ class OrderResource extends JsonResource
             'invoice' => $this->invoice
         ];
     }
-
+    public function exportExcelResource()
+    {
+        return [
+            'id' => $this->id,
+            'order_number' => $this->order_number,
+            'user_name' => $this->user->username,
+            'user_phone' => $this->user->phone,
+            'driver_name' => $this->driver->username ?? "",
+            'driver_phone' => $this->driver->phone ?? "",
+            'status' => OrderStatus::getName($this->status),
+            'delivery_method' => $this->deliveryMethod->name,
+            'payment_method' => $this->paymentMethod->name,
+            'user_address' => $this->getAddressDetailed($this->userAddress),
+            'payment_status' => $this->payment_status ? "paid" : "not paid",
+            'coupon_discount' => $this->coupon_discount,
+            'tax' => $this->tax,
+            'delivery_fee' => $this->delivery_fee,
+            'sub_total' => $this->sub_total,
+            'total' => $this->total,
+            'notes' => $this->notes ?? "",
+            'changes' => ChangeEnums::toArray($this->changes),
+            'rate' => $this->rate ?? 0,
+            'pdf_url' => env("APP_URL") . "/api/order-pdf/" . $this->id,
+            'confirmed_at' => $this->confirmed_at ?? "not confirmed yet",
+            'delivered_at' => $this->delivered_at ?? "not delivered yet",
+        ];
+    }
     public function defaultResource()
     {
         return [
@@ -240,6 +267,8 @@ class OrderResource extends JsonResource
             }),
         ];
     }
+
+
     public function productResourceDetailed($product)
     {
 
@@ -251,5 +280,9 @@ class OrderResource extends JsonResource
             'discount'         => $product->discount,
             'commission'       => $product->commission?->only('id', 'name') + ['commission_value' => $product->commission_value],
         ];
+    }
+    public static function getAddressDetailed($userAddress)
+    {
+        return $userAddress->area . "," . __("messages.street") . " (" . $userAddress->street . ") , " . __("messages.building") .  " (" . $userAddress->building . ") , " . __("messages.building_number") .  " (" . $userAddress->building_number . ")," . __("messages.floor") .  " (" . $userAddress->floor . ")";
     }
 }

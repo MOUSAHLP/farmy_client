@@ -40,6 +40,11 @@ return [
     'objectNotFound'                 => ':object Not Found',
     'NotFound'                       => 'Not Found',
 
+    "area" => "area",
+    "street" => "street",
+    "building" => "building",
+    "building_number" => "building number",
+    "floor" => "floor",
 
     //General errors
 

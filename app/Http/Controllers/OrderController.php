@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\NotificationsTypes;
 use App\Enums\OrderStatus;
+use App\Exports\OrdersExport;
 use App\Http\Requests\OrderDetailsRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
@@ -16,6 +17,7 @@ use App\Services\DriverService;
 use App\Services\OrderService;
 use App\Traits\NotificationHelper;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -272,5 +274,10 @@ class OrderController extends Controller
             null,
             'dataUpdatedSuccessfully'
         );
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new OrdersExport, 'orders.xlsx');
     }
 }

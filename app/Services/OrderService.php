@@ -34,7 +34,7 @@ class OrderService
         ])->orderby("id", "DESC");
 
         if (request()->has('status')) {
-            $order->where('status',  OrderStatus::getValue(request()->status));
+            $order->where('status',  request()->status);
         }
 
         if (request()->has('start_date') && request()->has('end_date')) {
