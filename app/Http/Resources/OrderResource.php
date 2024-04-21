@@ -87,6 +87,7 @@ class OrderResource extends JsonResource
             // 'delivery_method' => $this->paymentMethod->name,
             'status' => OrderStatus::getName($this->status),
             'rate' => $this->rate ?? 0,
+            'reason_for_cancel' => $this->reason_for_cancel,
             'order_details' => $this->orderDetails->map(function ($orderDetail) {
                 return [
                     "id" => $orderDetail->id,
