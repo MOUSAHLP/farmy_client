@@ -13,11 +13,11 @@ class OrderRateAttributeEnums
     public static function getAllValues()
     {
         $all_values = [];
-        foreach (self::getValues() as $case) {
+        foreach (self::getValues() as $id) {
             $all_values[] = [
-                "id" => $case,
-                "value" => self::getAttribute($case),
-                "has_input" =>  $case == self::other,
+                "id" => $id,
+                "value" => self::getAttribute($id),
+                "has_input" =>  $id == self::other,
             ];
         }
         return $all_values;
@@ -28,22 +28,10 @@ class OrderRateAttributeEnums
 
         return $constants[$value] ?? null;
     }
-    // public static function toArray($array): array
-    // {
-    //     if ($array == null) return [];
-    //     $names_array = [];
-    //     foreach (self::getValues() as $case) {
-    //         for ($j = 0; $j < count($array); $j++) {
-    //             if ($array[$j] == $case) {
-    //                 $names_array[] = self::getInPounds(self::getName($case));
-    //             }
-    //         }
-    //     }
-    //     return $names_array;
-    // }
-    public static function getAttribute($name)
+ 
+    public static function getAttribute($id)
     {
-        switch ($name) {
+        switch ($id) {
             case self::delivery_time:
                 return __("orders.delivery_time");
             case self::delivery_style:
