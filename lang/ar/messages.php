@@ -25,7 +25,7 @@ return [
 
   'Unauthorized'                   => 'لا تملك صلاحيات للقيام بهذا الإجراء',
   'Unauthenticated'                => 'الرجاء تسجيل الدخول اولاً',
-  "incorrect_password"=>"كلمة مرور خاطئة",
+  "incorrect_password" => "كلمة مرور خاطئة",
 
   // General msgs
   'dataSendSuccessfully'          => 'تم إرسال البيانات بنجاح',
@@ -61,7 +61,7 @@ return [
     "assignError"  => 'لا يمكنك اسناد سائق لهذا الطلب',
     "assignChangeTitle" => 'تم تعيين طلب مسند اليك لسائق اخر',
     "assignChangeBody"  => 'اذهب لتبويبة طلباتي لرؤية اي طلب تم سحبه منك',
-    
+
     "orderAlreadyCancelled" => 'الطلب مرفوض بالفعل',
     "cancelOrderTitle" => 'تم رفض طلبك ',
     "reason"  => 'السبب : ',

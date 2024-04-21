@@ -171,7 +171,7 @@ class OrderResource extends JsonResource
             'delivery_method' => $this->deliveryMethod->name,
             'payment_method' => $this->paymentMethod->name,
             'user_address' => OrderResourceHelper::getAddressDetailed($this->userAddress),
-            'payment_status' => $this->payment_status ? "paid" : "not paid",
+            'payment_status' => $this->payment_status ? __("orders.paid") :  __("orders.notPaid"),
             'coupon_discount' => $this->coupon_discount,
             'tax' => $this->tax,
             'delivery_fee' => $this->delivery_fee,
@@ -182,13 +182,8 @@ class OrderResource extends JsonResource
             'rate' => $this->rate ?? 0,
             'pdf_url' => OrderResourceHelper::getPdfUrl($this->id),
             'order_details' => OrderResourceHelper::getOrderDetailForExcel($this->orderDetails),
-            // [
-            //     'product' => $orderDetail->product->name,
-            //     'quantity' => $orderDetail->quantity,
-            //     'price' => $orderDetail->price,
-            // ];
-            'confirmed_at' => $this->confirmed_at ?? "not confirmed yet",
-            'delivered_at' => $this->delivered_at ?? "not delivered yet",
+            'confirmed_at' => $this->confirmed_at ?? __("orders.notConfirmedYet"),
+            'delivered_at' => $this->delivered_at ??  __("orders.notDeliveredYet"),
         ];
     }
     public function defaultResource()

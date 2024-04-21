@@ -64,20 +64,18 @@ class HomePageService
         ]);
 
         $homePageDynamicContent = [];
-        if (AuthHelper::userAuth()) {
-            $lastOrders = Order::where("user_id", AuthHelper::userAuth()->id)->latest()->limit(5)->get();
-            foreach ($lastOrders as $lastOrder) {
-                foreach ($lastOrder->orderDetails as $orderDetail) {
-                    $homePageDynamicContent[] = new HomePageDynamicContent([
+        $lastOrders = Order::where("user_id", AuthHelper::userAuth()->id)->latest()->limit(5)->get();
+        foreach ($lastOrders as $lastOrder) {
+            foreach ($lastOrder->orderDetails as $orderDetail) {
+                $homePageDynamicContent[] = new HomePageDynamicContent([
+                    'home_page_dynamic_id' => "-1",
+                    'product_id' => $orderDetail->product->id
+                ]);
+                $homePageDynamicContent[] =
+                    new HomePageDynamicContent([
                         'home_page_dynamic_id' => "-1",
-                        'product_id' => $orderDetail->product->id
+                        'product_id' => SubCategory::find($orderDetail->product->subcategory_id)->get()->first()->products->first()->id
                     ]);
-                    $homePageDynamicContent[] =
-                        new HomePageDynamicContent([
-                            'home_page_dynamic_id' => "-1",
-                            'product_id' => SubCategory::find($orderDetail->product->subcategory_id)->get()->first()->products->first()->id
-                        ]);
-                }
             }
         }
         $homePageDynamicContent = array_unique($homePageDynamicContent);
