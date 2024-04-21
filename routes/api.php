@@ -94,6 +94,7 @@ Route::group(['middleware' => 'lang'], function () {
             Route::get('order-rate/{id}', [OrderController::class, 'getOrderRate']);
             Route::get('order-tracking/{id}', [OrderController::class, 'getOrderTrackingUrl']);
         });
+        Route::get('/get-order-rate-attributes', [OrderController::class, 'getOrderRateAttributes']);
         Route::get('order-pdf/{id}', [OrderController::class, 'getOrderPdf']);
         Route::get('order-tracking-base', [OrderController::class, 'getOrderTrackingUrlBase']);
 

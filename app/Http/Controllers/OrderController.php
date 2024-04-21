@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\NotificationsTypes;
+use App\Enums\OrderRateAttributeEnums;
 use App\Enums\OrderStatus;
 use App\Exports\OrdersExport;
 use App\Http\Requests\OrderDetailsRequest;
@@ -162,6 +163,16 @@ class OrderController extends Controller
         if ($order->driver_id != null) {
             $data["driver_phone"] = $this->driverService->find($order->driver_id)->phone;
         }
+        return $this->successResponse(
+            $data,
+            'dataFetchedSuccessfully'
+        );
+    }
+
+    public function getOrderRateAttributes()
+    {
+        $data = OrderRateAttributeEnums::getAllValues();
+
         return $this->successResponse(
             $data,
             'dataFetchedSuccessfully'

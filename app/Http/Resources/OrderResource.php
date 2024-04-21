@@ -56,6 +56,7 @@ class OrderResource extends JsonResource
             'date' => $this->date,
             'notes' => $this->notes,
             'changes' => ChangeEnums::toArray($this->changes),
+            'reason_for_cancel' => $this->reason_for_cancel,
             'expected_time' => 30,
             'rate' => $this->rate ?? 0,
             // 'order_details' => $this->orderDetails->map(function ($orderDetail) {
