@@ -67,7 +67,7 @@ class HomePageService
         $lastOrders = Order::where("user_id", AuthHelper::userAuth()->id)->latest()->limit(5)->get();
         foreach ($lastOrders as $lastOrder) {
             foreach ($lastOrder->orderDetails as $orderDetail) {
-                if ($orderDetail->product) {
+                if ($orderDetail->product != null) {
                     $homePageDynamicContent[] = new HomePageDynamicContent([
                         'home_page_dynamic_id' => "-1",
                         'product_id' => $orderDetail->product->id
@@ -75,7 +75,7 @@ class HomePageService
                     $homePageDynamicContent[] =
                         new HomePageDynamicContent([
                             'home_page_dynamic_id' => "-1",
-                            'product_id' => SubCategory::find($orderDetail->product->subcategory_id)->get()->first()->products->first()->id
+                            'product_id' => SubCategory::find($orderDetail->product->subcategory_id)->products->first()->id
                         ]);
                 }
             }
