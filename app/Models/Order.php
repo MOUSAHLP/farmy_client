@@ -75,6 +75,11 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
+    public function rateAttributes()
+    {
+        return $this->hasMany(OrderRateAttribute::class);
+    }
+
     public function deliveryMethod()
     {
         return $this->belongsTo(DeliveryMethod::class);

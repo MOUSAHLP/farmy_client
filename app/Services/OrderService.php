@@ -12,6 +12,7 @@ use App\Traits\RewardRequests;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ModelHelper;
 use App\Models\Order;
+use App\Models\OrderRateAttribute;
 use Carbon\Carbon;
 
 class OrderService
@@ -176,7 +177,16 @@ class OrderService
         $order->update([
             'rate' => $validatedData['rate'],
         ]);
-
+        $order->rateAttributes()->delete();
+        if(isset($validatedData["rate_attributes"])){
+            foreach ($validatedData["rate_attributes"] as $rate_attributes) {
+                OrderRateAttribute::create([
+                    'rate_attribute_id' => $rate_attributes["id"],
+                    'input' => $rate_attributes["input"],
+                    'order_id' => $orderId,
+                ]);
+            }
+        }
         DB::commit();
 
         return true;

@@ -17,6 +17,7 @@ class OrderRateAttributeEnums
             $all_values[] = [
                 "id" => $case,
                 "value" => self::getAttribute($case),
+                "has_input" =>  $case == self::other,
             ];
         }
         return $all_values;

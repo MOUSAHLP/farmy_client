@@ -7,6 +7,9 @@ return [
     'notDeliveredYet' => "لم يتم التوصيل بعد",
     'delivery_time' => 'زمن التوصيل',
     'delivery_style' => 'اسلوب التوصيل',
+    'driver' => 'اختيار السائق',
+    'packing' => 'التغليف و التوضيب',
+    'other' => 'ملاحظات اخرى',
 
 
 ];

@@ -59,6 +59,7 @@ class OrderResource extends JsonResource
             'reason_for_cancel' => $this->reason_for_cancel,
             'expected_time' => 30,
             'rate' => $this->rate ?? 0,
+            'rate_attributes' => $this->rateAttributes,
             // 'order_details' => $this->orderDetails->map(function ($orderDetail) {
             //     return [
             //         'id' => $orderDetail->id,

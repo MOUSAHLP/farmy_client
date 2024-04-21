@@ -144,7 +144,12 @@ class OrderController extends Controller
 
     public function updateRate(OrderRequest $request, $orderId)
     {
-
+        if (Order::find($orderId) == null) {
+            return $this->errorResponse(
+                'NotFound',
+                400
+            );
+        }
         $validatedData = $request->validated();
         $this->orderService->updateRate($validatedData, $orderId);
 

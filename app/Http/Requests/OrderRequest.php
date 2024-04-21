@@ -91,6 +91,10 @@ class OrderRequest extends FormRequest
     {
         return [
             'rate'    => 'required|numeric|between:0,5',
+            'rate_attributes'    => 'sometimes|array',
+            'rate_attributes.*.id'    => 'required|integer',
+            'rate_attributes.*.input'    => 'nullable|string',
+
         ];
     }
 
@@ -126,9 +130,10 @@ class OrderRequest extends FormRequest
             ],
         ];
     }
-    public function getCancelOrderRules(){
+    public function getCancelOrderRules()
+    {
         return [
-            "reason_for_cancel"=>"required"
+            "reason_for_cancel" => "required"
         ];
     }
 }
