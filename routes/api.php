@@ -156,8 +156,9 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('home-page-dynamic', [HomePageController::class, 'index']);
         Route::get('home-page-dynamic/{id}', [HomePageController::class, 'show']);
         Route::post('home-page-dynamic/create', [HomePageController::class, 'store']);
+        Route::get('home-page-dynamic/show/{id}', [HomePageController::class, 'showHomePage']);
         Route::put('home-page-dynamic/edit', [HomePageController::class, 'update']);
-        Route::delete('home-page-dynamic/delete', [HomePageController::class, 'destroy']);
+        Route::delete('home-page-dynamic/delete/{id}', [HomePageController::class, 'destroy']);
 
 
         Route::apiResource('commissions', CommissionController::class);

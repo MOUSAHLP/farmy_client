@@ -85,4 +85,21 @@ class HomePageService
         $homePageDynamic->content = $homePageDynamicContent->values();
         return $homePageDynamic;
     }
+    public function createHomePageDynamicContent($homePageDynamic, $content)
+    {
+        $create_content = [];
+        if ($homePageDynamic->type == HomePageDynamic::TYPE_PRODUCT) {
+            $create_content["product_id"] = $content;
+        } else if ($homePageDynamic->type == HomePageDynamic::TYPE_CATEGORY) {
+            $create_content["category_id"] = $content;
+        } else if ($homePageDynamic->type == HomePageDynamic::TYPE_BANNER) {
+            $create_content["banner_id"] = $content;
+        }
+        HomePageDynamicContent::create([
+            'home_page_dynamic_id' => $homePageDynamic->id,
+            'product_id' => $create_content["product_id"] ?? null,
+            'category_id' => $create_content["category_id"] ?? null,
+            'banner_id' => $create_content["banner_id"] ?? null,
+        ]);
+    }
 }

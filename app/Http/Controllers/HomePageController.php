@@ -35,7 +35,7 @@ class HomePageController extends Controller
             $homePageDynamic->push($this->homePageService->getSuggestedProductSection());
             $homePageDynamic = $homePageDynamic->sortBy("order")->values();
         }
-        $response = PaginationHelper::paginate($homePageDynamic, 3, request()->page, ['path' => request()->url()]);
+        $response = PaginationHelper::paginate($homePageDynamic, request()->paginate ?? 3, request()->page, ['path' => request()->url()]);
         return HomePageDynamicResource::collection($response)->response()->getData(true);
     }
 
@@ -74,6 +74,7 @@ class HomePageController extends Controller
 
     public function store(HomePageDynamicRequest $request)
     {
+        HomePageDynamic::orderBy("order")->where("order", ">=", $request->order)->increment("order");
         $homePageDynamic =  HomePageDynamic::create([
             'type' => $request->type,
             'order' => $request->order,
@@ -82,12 +83,7 @@ class HomePageController extends Controller
         ]);
 
         foreach ($request->content as $content) {
-            HomePageDynamicContent::create([
-                'home_page_dynamic_id' => $homePageDynamic->id,
-                'product_id' => $content["product_id"] ?? null,
-                'category_id' => $content["category_id"] ?? null,
-                'banner_id' => $content["banner_id"] ?? null,
-            ]);
+            $this->homePageService->createHomePageDynamicContent($homePageDynamic, $content);
         }
 
         return $this->successResponse(
@@ -95,7 +91,21 @@ class HomePageController extends Controller
             'dataAddedSuccessfully'
         );
     }
+    public function showHomePage($id)
+    {
+        $homePageDynamic = HomePageDynamic::with(["content"])->find($id);
 
+        if (!$homePageDynamic) {
+            return $this->errorResponse(
+                'not_found',
+                404
+            );
+        }
+        return $this->successResponse(
+            new HomePageDynamicResource($homePageDynamic),
+            'dataFetchedSuccessfully'
+        );
+    }
     public function update(HomePageDynamicRequest $request)
     {
         $homePageDynamic =  HomePageDynamic::find($request->id);
@@ -110,12 +120,7 @@ class HomePageController extends Controller
             $homePageDynamic->content()->delete();
 
             foreach ($request->content as $content) {
-                HomePageDynamicContent::create([
-                    'home_page_dynamic_id' => $homePageDynamic->id,
-                    'product_id' => $content["product_id"] ?? null,
-                    'category_id' => $content["category_id"] ?? null,
-                    'banner_id' => $content["banner_id"] ?? null,
-                ]);
+                $this->homePageService->createHomePageDynamicContent($homePageDynamic, $content);
             }
         }
 
@@ -127,9 +132,17 @@ class HomePageController extends Controller
         );
     }
 
-    public function destroy(HomePageDynamicRequest $request)
+    public function destroy($id)
     {
-        HomePageDynamic::destroy($request->id);
+        $homePageDynamic = HomePageDynamic::find($id);
+
+        if (!$homePageDynamic) {
+            return $this->errorResponse(
+                'not_found',
+                404
+            );
+        }
+        HomePageDynamic::destroy($id);
         return $this->successResponse(
             null,
             'dataDeletedSuccessfully'
