@@ -11,6 +11,7 @@ class RewardController extends Controller
     public function userStatistics()
     {
         $response = $this->rewardGetRequest(RewardRoutes::UserStatistics());
+    
         $response->ranks = $this->rewardGetRequest(RewardRoutes::Ranks)->data;
 
         return  $response;
