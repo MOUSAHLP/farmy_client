@@ -76,27 +76,28 @@ class PaymentProcessService
         $sellerLocations = [];
 
         foreach ($products as $product) {
-            if ($product['status']) {
-
-                $currentProduct = $this->productService->find($product['product_id']);
-
-                $seller = $currentProduct->seller;
-
-                if ($seller && isset($seller->latitude) && isset($seller->longitude) && !in_array(['lat' => $seller->latitude, 'lon' => $seller->longitude], $sellerLocations)) {
-                    $sellerLocations[] = ['lat' => $seller->latitude, 'lon' => $seller->longitude];
-                }
-                $productTotal = $currentProduct->price * $product['quantity'];
-
-                if ($currentProduct['discount_status']) {
-                    $productTotal = $productTotal - (int)(($productTotal / 100) * $currentProduct['discount']);
-                }
-
-                $total = $total + $productTotal;
-
-                $taxPercentage = $currentProduct->tax ?? 0;
-                $productTax = ($taxPercentage / 100) * $productTotal;
-                $totalTax = $totalTax + $productTax;
+            if (isset($product['status']) && $product['status'] == 0) {
+                continue;
             }
+
+            $currentProduct = $this->productService->find($product['product_id']);
+
+            $seller = $currentProduct->seller;
+
+            if ($seller && isset($seller->latitude) && isset($seller->longitude) && !in_array(['lat' => $seller->latitude, 'lon' => $seller->longitude], $sellerLocations)) {
+                $sellerLocations[] = ['lat' => $seller->latitude, 'lon' => $seller->longitude];
+            }
+            $productTotal = $currentProduct->price * $product['quantity'];
+
+            if ($currentProduct['discount_status']) {
+                $productTotal = $productTotal - (int)(($productTotal / 100) * $currentProduct['discount']);
+            }
+
+            $total = $total + $productTotal;
+
+            $taxPercentage = $currentProduct->tax ?? 0;
+            $productTax = ($taxPercentage / 100) * $productTotal;
+            $totalTax = $totalTax + $productTax;
         }
         $userLocation = ['lat' => $latitude, 'lon' => $longitude];
         $totalDistance = $this->calculateTotalDistance($userLocation, $sellerLocations);

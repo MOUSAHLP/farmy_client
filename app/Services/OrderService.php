@@ -12,6 +12,7 @@ use App\Traits\RewardRequests;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ModelHelper;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\OrderRateAttribute;
 use Carbon\Carbon;
 
@@ -162,6 +163,12 @@ class OrderService
             'status' => $validatedData['status'],
         ]);
 
+        if($validatedData['product_status']){
+        $order = OrderDetail::find($orderId)->update([
+            
+        ]);
+
+        }
         DB::commit();
 
         return true;
