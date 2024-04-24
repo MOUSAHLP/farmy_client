@@ -136,7 +136,7 @@ class PaymentProcessService
     public function getDeliveryPrice($deliveryPrice)
     {
         $response = $this->rewardGetRequest(RewardRoutes::UserCurrentRank());
-        if ($response == null || $response->returnedCode >= 400) {
+        if ($response == null) {
             return $deliveryPrice;
         }
 
