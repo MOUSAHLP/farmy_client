@@ -84,6 +84,8 @@ class OrderRequest extends FormRequest
     {
         return [
             'status' => 'integer',
+            'product_id' => 'integer',
+            'product_status' => 'integer',
         ];
     }
 

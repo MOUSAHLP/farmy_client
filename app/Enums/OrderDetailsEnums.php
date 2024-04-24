@@ -5,7 +5,7 @@ namespace App\Enums;
 class OrderDetailsEnums
 {
     const Delivered    = 1;
-    const NotDelivered  = 2;
+    const NotDelivered  = 0;
 
     public static function getName($value)
     {
@@ -13,6 +13,7 @@ class OrderDetailsEnums
 
         return $constants[$value] ?? null;
     }
+
     public static function getValue($name)
     {
         return defined('self::' . $name) ? constant('self::' . $name) : null;
