@@ -166,7 +166,7 @@ class OrderService
         }
 
         if (isset($validatedData['product_status']) && isset($validatedData['product_id'])) {
-            $order = OrderDetail::find($validatedData['product_id'])->update([
+             OrderDetail::find($validatedData['product_id'])->update([
                 "status" => $validatedData['product_status']
             ]);
         }
