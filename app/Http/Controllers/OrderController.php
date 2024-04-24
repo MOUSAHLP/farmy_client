@@ -163,7 +163,15 @@ class OrderController extends Controller
     public function getorderstatus($orderId)
     {
         $order = $this->orderService->find($orderId);
+
+        if ($order == null) {
+            return $this->errorResponse(
+                'NotFound',
+                400
+            );
+        }
         $data = [];
+        $data["expected_time"] =  $order->deliveryMethod->time;
         $data["order_status"] = $order->status;
         if ($order->driver_id != null) {
             $data["driver_phone"] = $this->driverService->find($order->driver_id)->phone;

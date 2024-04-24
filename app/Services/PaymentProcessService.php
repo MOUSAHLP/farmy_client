@@ -76,25 +76,27 @@ class PaymentProcessService
         $sellerLocations = [];
 
         foreach ($products as $product) {
+            if ($product['status']) {
 
-            $currentProduct = $this->productService->find($product['product_id']);
+                $currentProduct = $this->productService->find($product['product_id']);
 
-            $seller = $currentProduct->seller;
+                $seller = $currentProduct->seller;
 
-            if ($seller && isset($seller->latitude) && isset($seller->longitude) && !in_array(['lat' => $seller->latitude, 'lon' => $seller->longitude], $sellerLocations)) {
-                $sellerLocations[] = ['lat' => $seller->latitude, 'lon' => $seller->longitude];
+                if ($seller && isset($seller->latitude) && isset($seller->longitude) && !in_array(['lat' => $seller->latitude, 'lon' => $seller->longitude], $sellerLocations)) {
+                    $sellerLocations[] = ['lat' => $seller->latitude, 'lon' => $seller->longitude];
+                }
+                $productTotal = $currentProduct->price * $product['quantity'];
+
+                if ($currentProduct['discount_status']) {
+                    $productTotal = $productTotal - (int)(($productTotal / 100) * $currentProduct['discount']);
+                }
+
+                $total = $total + $productTotal;
+
+                $taxPercentage = $currentProduct->tax ?? 0;
+                $productTax = ($taxPercentage / 100) * $productTotal;
+                $totalTax = $totalTax + $productTax;
             }
-            $productTotal = $currentProduct->price * $product['quantity'];
-            
-            if($currentProduct['discount_status']){
-                $productTotal =$productTotal - (int)(($productTotal / 100) * $currentProduct['discount']);
-            }
-
-            $total = $total + $productTotal;
-
-            $taxPercentage = $currentProduct->tax ?? 0;
-            $productTax = ($taxPercentage / 100) * $productTotal;
-            $totalTax = $totalTax + $productTax;
         }
         $userLocation = ['lat' => $latitude, 'lon' => $longitude];
         $totalDistance = $this->calculateTotalDistance($userLocation, $sellerLocations);
@@ -114,7 +116,9 @@ class PaymentProcessService
                 }
             }
         }
+
         $deliveryPrice = ($seletedDeliveryMethod ? $this->getDeliveryPrice($seletedDeliveryMethod->total_price) : 0);
+
         $coupon_price = $coupon != null ? $this->getCouponValue($coupon, $total, (int)$deliveryPrice) : 0;
         $total_sum = (int)($total + $totalTax + $deliveryPrice - $coupon_price);
         if ($total_sum < 0) $total_sum = 0;
@@ -131,12 +135,11 @@ class PaymentProcessService
     }
     public function getDeliveryPrice($deliveryPrice)
     {
-        try{
-            $response = $this->rewardGetRequest(RewardRoutes::UserCurrentRank());
-        }
-        catch(Exception $e){
+        $response = $this->rewardGetRequest(RewardRoutes::UserCurrentRank());
+        if ($response == null || $response->returnedCode >= 400) {
             return $deliveryPrice;
         }
+
         foreach ($response->data->features as $feature) {
             if ($feature->name == "discount_on_deliver") {
                 return $deliveryPrice - (int)(($deliveryPrice / 100) * $feature->value);

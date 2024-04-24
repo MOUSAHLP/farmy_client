@@ -34,8 +34,11 @@ class FavoritController extends Controller
     }
     function getFavorit()
     {
-
-        $favorit = Favorit::with('course')->where('user_id',  AuthHelper::userAuth()->id)->pluck('product_id');
+        $user_id = AuthHelper::userAuth()->id;
+        if (request()->user_id) {
+            $user_id = request()->user_id;
+        }
+        $favorit = Favorit::with('course')->where('user_id',  $user_id)->pluck('product_id');
         $courses = Product::whereIn('id', $favorit)->get();
 
         return $this->successResponse(

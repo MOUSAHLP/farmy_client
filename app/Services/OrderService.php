@@ -120,11 +120,9 @@ class OrderService
     {
         $order = Order::findOrFail($orderId);
 
-        // if ($order->stats == OrderStatus::Pending) {
-        //     throw new EditOrderException();
-        // }
-        DB::beginTransaction();
 
+        DB::beginTransaction();
+        $validatedData["order"] = $order;
         $validatedData = $this->prepareOrderData($validatedData);
 
         $order->orderDetails()->delete();
@@ -178,7 +176,7 @@ class OrderService
             'rate' => $validatedData['rate'],
         ]);
         $order->rateAttributes()->delete();
-        if(isset($validatedData["rate_attributes"])){
+        if (isset($validatedData["rate_attributes"])) {
             foreach ($validatedData["rate_attributes"] as $rate_attributes) {
                 OrderRateAttribute::create([
                     'rate_attribute_id' => $rate_attributes["id"],
@@ -215,7 +213,10 @@ class OrderService
             return $product;
         }, $data['products']);
 
-
+        if (!isset($data['user_address_id'])) {
+            $data['user_address_id'] = $data["order"]->user_address_id;
+            $data['delivery_method_id'] = $data["order"]->delivery_method_id;
+        }
         $selectedAddress = $this->userAddressService->find($data['user_address_id']);
 
 
