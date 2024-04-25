@@ -20,9 +20,9 @@ class NotificationService
         $user = request()->user();
         if (request()->has('type')) {
             $type = intval(request()->type);
-            return $user->notifications()->where('type', $type)->get();
+            return $user->notifications()->where('type', $type)->orderBy("created_at", "DESC")->get();
         }
-        return $user->notifications;
+        return $user->notifications()->orderBy("created_at", "DESC")->get();
     }
 
     public function find($notificationId)
