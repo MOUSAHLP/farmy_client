@@ -166,7 +166,7 @@ class OrderService
         }
 
         if (isset($validatedData['product_status']) && isset($validatedData['product_id'])) {
-             OrderDetail::find($validatedData['product_id'])->update([
+            OrderDetail::find($validatedData['product_id'])->update([
                 "status" => $validatedData['product_status']
             ]);
         }
@@ -239,6 +239,7 @@ class OrderService
         $data['coupon_discount'] =  $data2[0]['coupon_price'];
         $data['tax'] =  $data2[0]['tax'];
         $data['delivery_fee'] =  $data2[0]['delivery_price'];
+        $data['extra_discount'] =  $data2[0]['extra_discount'];
         $data['sub_total'] =  $data2[0]['subtotal'];
         $data['total'] =  $data2[0]['total'];
 

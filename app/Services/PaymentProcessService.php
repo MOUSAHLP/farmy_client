@@ -8,8 +8,10 @@ use App\Helpers\AuthHelper;
 use App\Traits\LocationTrait;
 use App\Traits\ModelHelper;
 use App\Enums\RewardRoutes;
+use App\Models\DeliveryMethod;
+use App\Models\DeliveryTimeInfo;
 use App\Traits\RewardRequests;
-use Exception;
+use Carbon\Carbon;
 
 class PaymentProcessService
 {
@@ -23,9 +25,15 @@ class PaymentProcessService
         private UserService $userService,
     ) {
     }
+
     public function paymentProcess($request)
     {
-
+        if (!$this->checkIfOrderInOpeningTime($request)) {
+            return [
+                "error" => true,
+                "message" => __("orders.outsideOpeningTime")
+            ];
+        }
         $user = AuthHelper::userAuth();
         $user = $this->userService->find($user->id);
 
@@ -122,13 +130,17 @@ class PaymentProcessService
 
         $coupon_price = $coupon != null ? $this->getCouponValue($coupon, $total, (int)$deliveryPrice) : 0;
         $total_sum = (int)($total + $totalTax + $deliveryPrice - $coupon_price);
+        $total_order = floor($total_sum / 100) * 100;
+        $extra_discount = $total_sum - $total_order;
+
         if ($total_sum < 0) $total_sum = 0;
         $data = [
             'subtotal'       => $total,
             'coupon_price'   => $coupon_price,
             'delivery_price' => (int)$deliveryPrice,
             'tax'            => $totalTax,
-            'total'          => $total_sum,
+            'extra_discount' => $extra_discount,
+            'total'          => $total_order,
             // 'totalDistance'  => $totalDistance,
         ];
 
@@ -196,5 +208,18 @@ class PaymentProcessService
             return (int)(($deliveryPrice / 100) * $coupon["value"]);
         }
         return $coupon["value"];
+    }
+
+    public function checkIfOrderInOpeningTime($request)
+    {
+        $now = Carbon::now();
+        $is_schedule = DeliveryMethod::find($request->delivery_method_id)->is_schedule ?? false;
+        $deliveryTimeInfo = DeliveryTimeInfo::first();
+        $start_time = $deliveryTimeInfo->start_time;
+        $end_time = $deliveryTimeInfo->end_time;
+        if ($now <= $start_time && $now >= $end_time && !$is_schedule) {
+            return false;
+        }
+        return true;
     }
 }

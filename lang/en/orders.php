@@ -10,5 +10,6 @@ return [
     'driver' => 'Driver Selection',
     'packing' => 'Packing',
     'other' => 'Other',
+    'outsideOpeningTime' => 'Order Outside Opening Time',
 
 ];
