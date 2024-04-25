@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name',191);
+            $table->string('name', 191);
             $table->text('description')->nullable();
+            $table->double('real_price')->default(0);
             $table->double('price')->default(0);
             $table->string('unit')->default(null);
             $table->string('slug')->default(null);
