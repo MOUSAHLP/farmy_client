@@ -11,7 +11,7 @@ class RewardController extends Controller
     public function userStatistics()
     {
         $response = $this->rewardGetRequest(RewardRoutes::UserStatistics());
-    
+
         $response->ranks = $this->rewardGetRequest(RewardRoutes::Ranks)->data;
 
         return  $response;
@@ -47,6 +47,20 @@ class RewardController extends Controller
     {
         return $this->rewardPostRequest(RewardRoutes::buy_coupon, [
             "user_id" => AuthHelper::userAuth()->id,
+            "coupon_id" => $request->coupon_id
+        ]);
+    }
+    public function compensateUserCoupon(RewardRequest $request)
+    {
+        return $this->rewardPostRequest(RewardRoutes::compensate_coupon, [
+            "user_id" => AuthHelper::userAuth()->id,
+            "coupon_id" => $request->coupon_id
+        ]);
+    }
+
+    public function givePeriodicCoupons(RewardRequest $request)
+    {
+        return $this->rewardPostRequest(RewardRoutes::give_periodic_coupons, [
             "coupon_id" => $request->coupon_id
         ]);
     }

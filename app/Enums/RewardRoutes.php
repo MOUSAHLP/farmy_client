@@ -42,6 +42,9 @@ class RewardRoutes
     const can_buy_coupon    = '/coupons/canBuy';
     const buy_coupon    = '/coupons/buy';
     const buy_and_use_coupon    = '/coupons/buy-and-use';
+
+    const compensate_coupon    = '/coupons/compensate';
+    const give_periodic_coupons    = '/coupons/give-periodic-coupons';
     // Points
     public static function UserValidPoints()
     {

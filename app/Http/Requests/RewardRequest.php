@@ -16,6 +16,9 @@ class RewardRequest extends FormRequest
 
     return match ($this->route()->getActionMethod()) {
       'BuyCoupon'   =>  $this->getbuyCouponRules(),
+      'compensateUserCoupon'   =>  $this->getbuyCouponRules(),
+      'givePeriodicCoupons'   =>  $this->getbuyCouponRules(),
+      
     };
   }
   public function getbuyCouponRules()

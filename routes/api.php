@@ -217,7 +217,7 @@ Route::group(['middleware' => 'lang'], function () {
                 Route::post('/buy', 'BuyCoupon');
 
                 Route::post('/compensate', 'compensateUserCoupon');
-                Route::post('/buy', 'BuyCoupon');
+                Route::post('/give-periodic-coupons', 'givePeriodicCoupons');
             });
             // Points
             Route::group([
