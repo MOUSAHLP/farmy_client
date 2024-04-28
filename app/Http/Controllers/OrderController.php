@@ -66,7 +66,16 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = $this->orderService->getAllByUser();
+        $userId = AuthHelper::userAuth()->id;
+        $user = $this->userService->find($userId);
+
+        $orders =  $user->orders()->orderBy('id', 'desc')
+            ->where("status", OrderStatus::Pending)
+            ->orWhere("status", OrderStatus::Confirmed)
+            ->orWhere("status", OrderStatus::OnDelivery)
+            ->orWhere("status", OrderStatus::Returned)
+            ->get();
+
         return $this->successResponse(
             $this->resource($orders, OrderResource::class),
             'dataFetchedSuccessfully'
