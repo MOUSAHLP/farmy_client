@@ -26,6 +26,7 @@ class OrderResource extends JsonResource
         $actionMethod = $request->route()->getActionMethod();
         return match ($actionMethod) {
             'index' => $this->getAllResource(),
+            'getHistoryOrders' => $this->getAllResource(),
             'getUserAllInvoices' => $this->getUserAllInvoicesResource(),
             'getAllOrders' => $this->getAllOrdersResource(),
             'show' => $this->showResource(),

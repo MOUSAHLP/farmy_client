@@ -6,6 +6,7 @@ use App\Enums\NotificationsTypes;
 use App\Enums\OrderRateAttributeEnums;
 use App\Enums\OrderStatus;
 use App\Exports\OrdersExport;
+use App\Helpers\AuthHelper;
 use App\Http\Requests\OrderDetailsRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
@@ -16,14 +17,18 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Services\DriverService;
 use App\Services\OrderService;
+use App\Services\UserService;
 use App\Traits\NotificationHelper;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
-    public function __construct(private OrderService $orderService, private DriverService $driverService)
-    {
+    public function __construct(
+        private OrderService $orderService,
+        private DriverService $driverService,
+        private UserService $userService,
+    ) {
     }
 
     // for dashboard
@@ -62,6 +67,20 @@ class OrderController extends Controller
     public function index()
     {
         $orders = $this->orderService->getAllByUser();
+        return $this->successResponse(
+            $this->resource($orders, OrderResource::class),
+            'dataFetchedSuccessfully'
+        );
+    }
+    public function getHistoryOrders()
+    {
+        $userId = AuthHelper::userAuth()->id;
+        $user = $this->userService->find($userId);
+
+        $orders =  $user->orders()->orderBy('id', 'desc')
+            ->where("status", OrderStatus::Deliverd)
+            ->orWhere("status", OrderStatus::Cancelled)
+            ->get();
         return $this->successResponse(
             $this->resource($orders, OrderResource::class),
             'dataFetchedSuccessfully'

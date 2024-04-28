@@ -82,6 +82,8 @@ Route::group(['middleware' => 'lang'], function () {
 
         // Orders
         Route::apiResource('orders', OrderController::class);
+        Route::get('/history-orders', [OrderController::class, 'getHistoryOrders']); 
+
         Route::get('/all-orders', [OrderController::class, 'getAllOrders']); // Dashboard
         Route::post('/change-product-status', [OrderController::class, 'changeOrderDetailStatus']);  // Dashboard
         Route::get('export-orders-excel', [OrderController::class, 'exportExcel']); // Dashboard
@@ -212,6 +214,9 @@ Route::group(['middleware' => 'lang'], function () {
                 Route::get('/', 'coupons');
                 Route::get('/fixed-value', 'fixedValueCoupons');
                 Route::get('/offers', 'offersCoupons');
+                Route::post('/buy', 'BuyCoupon');
+
+                Route::post('/compensate', 'compensateUserCoupon');
                 Route::post('/buy', 'BuyCoupon');
             });
             // Points

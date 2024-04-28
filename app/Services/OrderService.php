@@ -51,9 +51,9 @@ class OrderService
         $userId = AuthHelper::userAuth()->id;
         $user = $this->userService->find($userId);
         if (request()->has('status')) {
-            $user->orders()->with([
+            return $user->orders()->with([
                 'user', 'deliveryMethod', 'paymentMethod', 'userAddress', 'city', 'orderDetails'
-            ])->where('status', request()->status)->orderBy('id', 'asc');
+            ])->where('status', request()->status)->orderBy('id', 'asc')->get();
         }
 
         return $user->orders()->orderBy('id', 'desc')->get();
