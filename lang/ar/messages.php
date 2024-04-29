@@ -56,9 +56,10 @@ return [
   'not_found' => 'غير موجود',
   'no_products' => 'هذه العنصر ليس لديه منتجات',
 
-  // core asign order to driverd
+  // core assign order to driverd
   'core'  => [
     "assignError"  => 'لا يمكنك اسناد سائق لهذا الطلب',
+    "driverInactive"  => 'هذا السائق غير فعال حاليا',
     "assignChangeTitle" => 'تم تعيين طلب مسند اليك لسائق اخر',
     "assignChangeBody"  => 'اذهب لتبويبة طلباتي لرؤية اي طلب تم سحبه منك',
 

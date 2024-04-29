@@ -284,14 +284,14 @@ class OrderController extends Controller
             );
         }
 
-        // // check if the deiver is not in service
-        // $driver_status = Driver::find($request->driver_id)->status;
-        // if (!$driver_status) {
-        //     return $this->errorResponse(
-        //         'core.assignError',
-        //         400
-        //     );
-        // }
+        // check if the deiver is not in service
+        $driver_status = Driver::find($request->driver_id)->online_status;
+        if (!$driver_status) {
+            return $this->errorResponse(
+                'core.driverInactive',
+                400
+            );
+        }
         // if the order has already been taken by another driver then notify him that the order is no longer assigned to him
         if ($order->driver_id != null && $order->driver_id !=  $request->driver_id) {
             $old_driver = Driver::find($order->driver_id);

@@ -60,6 +60,7 @@ return [
     // core asign order to driverd
     'core'  => [
         "assignError"  => 'Can Not Asign Driver To This Order',
+        "driverInactive"  => 'This Driver Is Currently Inactive',
         "assignChangeTitle" => 'your order has been assigned to another driver',
         "assignChangeBody"  => 'go to my orders tab to check which order',
 

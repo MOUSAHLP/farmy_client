@@ -25,6 +25,7 @@ return new class extends Migration
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
             $table->boolean('status')->default(true);
+            $table->boolean('online_status')->default(true);
             $table->text('fcm_token')->nullable();
             $table->unsignedBigInteger('city_id')->nullable();
             $table->rememberToken();
