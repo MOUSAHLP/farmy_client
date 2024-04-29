@@ -34,6 +34,7 @@ class DriverResource extends JsonResource
       'type'              => new DriverTypeResource($this->type),
       'role_id'           => $this->role,
       'status'            => $this->status,
+      'online_status'     => (bool)$this->online_status,
       'fcm_token'         => $this->fcm_token,
       'created_at'        => $this->created_at
     ];
@@ -53,6 +54,7 @@ class DriverResource extends JsonResource
       'type'              => new DriverTypeResource($this->type),
       'role_id'           => $this->role,
       'status'            => $this->status,
+      'online_status'     => (bool)$this->online_status,
       'fcm_token'         => $this->fcm_token,
       'created_at'        => $this->created_at
     ];

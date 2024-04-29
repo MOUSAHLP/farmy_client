@@ -26,10 +26,8 @@ class DriverTypeResource extends JsonResource
   public function getAllResource()
   {
     return [
-      'id'                => $this->id,
       'type'              => DriverTypes::getName($this->type),
       'value'            => $this->value,
-      'created_at'        => $this->created_at
     ];
   }
 
