@@ -55,6 +55,10 @@ class Driver extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(City::class);
     }
+    public function type()
+    {
+        return $this->hasOne(DriverType::class);
+    }
     public function notifications()
     {
         return $this->morphMany(Notification::class, 'notifiable');

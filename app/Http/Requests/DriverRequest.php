@@ -35,13 +35,15 @@ class DriverRequest extends FormRequest
     return [
       'first_name'          => 'required|string|max:255',
       'last_name'           => 'required|string|max:255',
-      'email'               => 'required|email|unique:users,email',
+      'email'               => 'required|email|unique:drivers,email',
       'password'            => 'required|min:8',
       'address'             => 'nullable|string',
       'phone'               => 'required|numeric',
       'status'              => 'sometimes|boolean',
       'fcm_token'           => 'nullable|string',
       'city_id'             => 'sometimes|required|integer|exists:cities,id',
+      'type'                => 'required|integer',
+      'type_value'          => 'required|integer',
     ];
   }
 
@@ -50,7 +52,7 @@ class DriverRequest extends FormRequest
     return [
       'first_name'          => 'sometimes|required|string|max:255',
       'last_name'           => 'sometimes|required|string|max:255',
-      'email'               => 'sometimes|required|email|unique:users,email',
+      'email'               => 'sometimes|required|email|unique:drivers,email',
       'password'            => 'sometimes|required|min:8',
       'address'             => 'nullable|string',
       'phone'               => 'sometimes|required|numeric',

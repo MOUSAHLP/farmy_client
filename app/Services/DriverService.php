@@ -30,7 +30,11 @@ class DriverService
         DB::beginTransaction();
 
         $driver = Driver::create($validatedData);
-
+        $driver->type()->create([
+            "type" => $validatedData["type"],
+            "value" => $validatedData["type_value"]
+        ]);
+        $driver->save();
         DB::commit();
 
         return $driver;

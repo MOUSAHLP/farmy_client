@@ -108,7 +108,7 @@ class ProductController extends Controller
     {
         $validatedData = $request->validated();
         return $this->successResponse(
-            $this->productService->findAllFromArray($validatedData),
+            $this->resource($this->productService->findAllFromArray($validatedData), ProductResource::class),
             'dataFetchedSuccessfully'
         );
     }
