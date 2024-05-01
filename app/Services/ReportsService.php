@@ -33,7 +33,6 @@ class ReportsService
         $data["categories"]  = Category::with(["subcategories", "subcategories.products"])
             ->get()->select(["id", "name", "subcategories"])
             ->map(function ($model) {
-                // OrderDetail
                 $model["count"] = 0;
                 foreach ($model["subcategories"] as $subcategory) {
                     foreach ($subcategory["products"] as $product) {
@@ -56,17 +55,14 @@ class ReportsService
 
     public function getOrdersReport()
     {
-        $i=0;
         $data = Order::all()
             ->groupBy('status')
             ->map(function ($model, $key) {
                 return [
-                    // "id" => $i,
                     "value" => $model->count(),
                     "label" => OrderStatus::getName(intval($key)) ,
                 ];
             })->values();
-        // ->count();
         return $data;
     }
 }
