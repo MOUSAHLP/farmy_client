@@ -27,6 +27,7 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PaymentProcessController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\SubCategoryController;
@@ -235,6 +236,12 @@ Route::group(['middleware' => 'lang'], function () {
                 Route::get('/memberships', 'membershipsGuide');
             });
         });
+    });
+    Route::group(['middleware' => 'auth:user', 'prefix' => 'reports'], function () {
+        Route::get('/statistics', [ReportsController::class, 'getStatistics']);
+        Route::get('/categories', [ReportsController::class, 'getCategoriesReport']);
+        Route::get('/orders', [ReportsController::class, 'getOrdersReport']);
+        
     });
     Route::apiResource('delivery_time_infos', DeliveryTimeInfoController::class);
     Route::post('send-notification', [NotificationController::class, 'sendPushNotification']);

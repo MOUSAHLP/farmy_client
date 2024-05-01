@@ -43,6 +43,10 @@ class OrderService
             $order->whereBetween('created_at', [request()->start_date, request()->end_date]);
         }
 
+        if (request()->has('driver_id')) {
+            $order->where('driver_id',  request()->driver_id);
+        }
+
         return $order->paginate(10)->appends(request()->input());
     }
 

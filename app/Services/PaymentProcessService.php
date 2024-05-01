@@ -148,15 +148,19 @@ class PaymentProcessService
     }
     public function getDeliveryPrice($deliveryPrice)
     {
-        $response = $this->rewardGetRequest(RewardRoutes::UserCurrentRank());
-        if ($response == null) {
-            return $deliveryPrice;
-        }
-
-        foreach ($response->data->features as $feature) {
-            if ($feature->name == "discount_on_deliver") {
-                return $deliveryPrice - (int)(($deliveryPrice / 100) * $feature->value);
+        if (AuthHelper::userAuth() != null) {
+            $response = $this->rewardGetRequest(RewardRoutes::UserCurrentRank());
+            if ($response == null) {
+                return $deliveryPrice;
             }
+
+            foreach ($response->data->features as $feature) {
+                if ($feature->name == "discount_on_deliver") {
+                    return $deliveryPrice - (int)(($deliveryPrice / 100) * $feature->value);
+                }
+            }
+        }else{
+            return $deliveryPrice;
         }
     }
     public function getCoupon()

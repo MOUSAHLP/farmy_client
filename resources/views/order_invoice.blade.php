@@ -652,6 +652,13 @@
                                         <span id="tq_1" class="t s2"> :ﺿﺮﻳﺒﺔ</span>
                                     </td>
                                 </tr>
+                                
+                                <tr>
+                                    <td class="p_table1">{{ $order->invoice['extra_discount'] }}</td>
+                                    <td>
+                                        <span id="tq_1" class="t s2"> حسم اضافي</span>
+                                    </td>
+                                </tr>
                                 <tr style="background-color: #4f894a">
                                     <td class="p_table1" style="color: white">
                                         {{ $order->total }}
