@@ -84,6 +84,7 @@ Route::group(['middleware' => 'lang'], function () {
         // Orders
         Route::apiResource('orders', OrderController::class);
         Route::get('/history-orders', [OrderController::class, 'getHistoryOrders']);
+        Route::get('/checkCodeExists/{id}', [OrderController::class, 'checkCodeExists']);
 
         Route::get('/all-orders', [OrderController::class, 'getAllOrders']); // Dashboard
         Route::post('/change-product-status', [OrderController::class, 'changeOrderDetailStatus']);  // Dashboard

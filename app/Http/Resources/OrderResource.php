@@ -41,6 +41,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
+            'code' => $this->code,
             // 'user' => $this->user->only(['id', 'username', 'phone', 'email']),
             // 'driver' => ($this->driver ? $this->driver->only(['id', 'username', 'phone', 'email']) : null),
             'status' => OrderStatus::getName($this->status),
@@ -81,6 +82,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
+            'code' => $this->code,
             'user_name' => $this->user->first_name . " " . $this->user->last_name,
             'total' => $this->total,
             'driver' => ($this->driver ? $this->driver->username : null),
@@ -124,6 +126,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
+            'code' => $this->code,
             'user' => $this->user->only(['id', 'username', 'phone', 'email']),
             'driver' => ($this->driver ? $this->driver->only(['id', 'username', 'phone', 'email']) : null),
             'status' => OrderStatus::getName($this->status),
@@ -195,6 +198,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'order_number' => $this->order_number,
+            'code' => $this->code,
             'user' => $this->user->only(['id', 'username', 'phone', 'email']),
             'driver' => ($this->driver ? $this->driver->only(['id', 'username', 'phone', 'email']) : null),
             'status' => OrderStatus::getName($this->status),

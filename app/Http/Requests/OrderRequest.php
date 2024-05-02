@@ -51,6 +51,7 @@ class OrderRequest extends FormRequest
         return [
             'order_number'          => '',
             'user_id'               => '',
+            'code'               => '',
             'driver_id'             => '',
             'status'                => '',
             'delivery_method_id'    => 'required|exists:delivery_methods,id',
