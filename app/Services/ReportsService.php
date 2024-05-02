@@ -24,7 +24,6 @@ class ReportsService
         $data["drivers_num"]    = Driver::count();
         $data["categories_num"] = Category::count();
         $data["sellers_num"]    = Seller::count();
-
         return $data;
     }
 
@@ -60,7 +59,7 @@ class ReportsService
             ->map(function ($model, $key) {
                 return [
                     "value" => $model->count(),
-                    "label" => OrderStatus::getName(intval($key)) ,
+                    "label" => OrderStatus::getName(intval($key)),
                 ];
             })->values();
         return $data;
