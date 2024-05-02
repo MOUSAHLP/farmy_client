@@ -70,8 +70,18 @@ class ReportsService
 
     public function getCouponsReport()
     {
-        $data = $this->rewardGetRequest(RewardRoutes::report_coupons);
+        return $this->rewardGetRequest(RewardRoutes::report_coupons);
+    }
+
+    public function getDriversReport()
+    {
+        $data = Driver::all()
+            ->map(function ($model, $key) {
+                return [
+                    "value" => Order::where("driver_id",$model->id)->count(),
+                    "label" => $model->first_name . " ".$model->last_name,
+                ];
+            })->values();
         return $data;
     }
-    
 }

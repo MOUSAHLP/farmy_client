@@ -48,4 +48,14 @@ class ReportsController extends Controller
             'dataFetchedSuccessfully'
         );
     }
+    public function getDriversReport()
+    {
+        $data = $this->reportsService->getDriversReport();
+
+        return $this->successResponse(
+            $data,
+            'dataFetchedSuccessfully'
+        );
+    }
+    
 }
