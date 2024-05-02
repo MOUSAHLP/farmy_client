@@ -21,6 +21,7 @@ use App\Services\UserService;
 use App\Traits\NotificationHelper;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -81,7 +82,7 @@ class OrderController extends Controller
             'dataFetchedSuccessfully'
         );
     }
-    public function checkCodeExists($id)
+     public function checkCodeExists($id)
     {
 
         $code = $request->input('code');
@@ -97,6 +98,16 @@ class OrderController extends Controller
          return $this->respondWithError($order, "Code is False");
         }
 
+    }
+     public function displyCodeExists($id)
+    {
+
+       
+        $code = Order::where('id', $id)->pluck('code')->first();
+
+            return response()->json( $code);
+
+        
     }
     public function getHistoryOrders()
     {
