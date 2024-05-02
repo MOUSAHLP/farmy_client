@@ -16,7 +16,7 @@ class RewardRequest extends FormRequest
 
     return match ($this->route()->getActionMethod()) {
       'BuyCoupon'   =>  $this->getbuyCouponRules(),
-      'compensateUserCoupon'   =>  $this->getbuyCouponRules(),
+      'compensateUserCoupon'   =>  $this->getCompensateCouponRules(),
       'givePeriodicCoupons'   =>  $this->getbuyCouponRules(),
       
     };
@@ -25,6 +25,14 @@ class RewardRequest extends FormRequest
   {
       return [
           "coupon_id" => "required|integer|exists:coupons,id"
+      ];
+  }
+
+  public function getCompensateCouponRules()  
+  {
+      return [
+          "user_id" => "required|integer|exists:users,id",
+          "coupon_id" => "required|integer|exists:coupons,id",
       ];
   }
 }

@@ -53,7 +53,7 @@ class RewardController extends Controller
     public function compensateUserCoupon(RewardRequest $request)
     {
         return $this->rewardPostRequest(RewardRoutes::compensate_coupon, [
-            "user_id" => AuthHelper::userAuth()->id,
+            "user_id" => $request->user_id,
             "coupon_id" => $request->coupon_id
         ]);
     }

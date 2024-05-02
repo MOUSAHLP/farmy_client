@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\OrderStatus;
+use App\Enums\RewardRoutes;
 use App\Models\Category;
 use App\Models\Driver;
 use App\Models\Order;
@@ -11,11 +12,13 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
 use App\Traits\ModelHelper;
+use App\Traits\RewardRequests;
 use Carbon\Carbon;
 
 class ReportsService
 {
-    use ModelHelper;
+    use ModelHelper, RewardRequests;
+
     public function getStatistics()
     {
         $data["orders_num"]     = Order::count();
@@ -64,4 +67,11 @@ class ReportsService
             })->values();
         return $data;
     }
+
+    public function getCouponsReport()
+    {
+        $data = $this->rewardGetRequest(RewardRoutes::report_coupons);
+        return $data;
+    }
+    
 }
