@@ -243,6 +243,7 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('/categories', [ReportsController::class, 'getCategoriesReport']);
         Route::get('/orders', [ReportsController::class, 'getOrdersReport']);
         Route::get('/earnings', [ReportsController::class, 'getEarningsReport']);
+        Route::get('/used-points', [ReportsController::class, 'getUsedPointsReport']);
         Route::get('/coupons', [ReportsController::class, 'getCouponsReport']);
         Route::get('/drivers', [ReportsController::class, 'getDriversReport']);
         

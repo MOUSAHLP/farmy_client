@@ -94,10 +94,15 @@ class ReportsService
                 ];
             })->values();
     }
+    
+    public function getUsedPointsReport()
+    {
+        return $this->rewardGetRequest(RewardRoutes::used_points_report)->data;
+    }
 
     public function getCouponsReport()
     {
-        return $this->rewardGetRequest(RewardRoutes::report_coupons);
+        return $this->rewardGetRequest(RewardRoutes::report_coupons)->data;
     }
 
     public function getDriversReport()

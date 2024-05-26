@@ -13,6 +13,7 @@ class RewardRoutes
         return '/points/user-statistics/' . $userId;
     }
     const add_points_to_user = "/points/add-points";
+    const used_points_report = "/points/used-report";
 
     // Achievements
     public static function UserAchievements()

@@ -48,7 +48,16 @@ class ReportsController extends Controller
             'dataFetchedSuccessfully'
         );
     }
+    public function getUsedPointsReport()
+    {
+        $data = $this->reportsService->getUsedPointsReport();
 
+        return $this->successResponse(
+            $data,
+            'dataFetchedSuccessfully'
+        );
+    }
+    
     public function getCouponsReport()
     {
         $data = $this->reportsService->getCouponsReport();
