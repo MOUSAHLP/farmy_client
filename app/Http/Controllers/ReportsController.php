@@ -38,6 +38,16 @@ class ReportsController extends Controller
             'dataFetchedSuccessfully'
         );
     }
+    
+    public function getEarningsReport()
+    {
+        $data = $this->reportsService->getEarningsReport();
+
+        return $this->successResponse(
+            $data,
+            'dataFetchedSuccessfully'
+        );
+    }
 
     public function getCouponsReport()
     {

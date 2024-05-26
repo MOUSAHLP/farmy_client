@@ -34,6 +34,9 @@ class RewardRoutes
     const percentage_coupons  = '/coupons/percentage';
     const delivery_coupons    = '/coupons/delivery';
     const report_coupons    = '/coupons/report';
+    const report_purchased_coupons    = '/coupons/purchased-report';
+    const report_compensation_coupons    = '/coupons/compensation-report';
+    const report_periodic_coupons    = '/coupons/periodic-report';
 
     // coupons usage
     const can_use_coupon    = '/coupons/canUse';

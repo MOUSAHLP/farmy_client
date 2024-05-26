@@ -27,6 +27,10 @@ class ReportsService
         $data["drivers_num"]    = Driver::count();
         $data["categories_num"] = Category::count();
         $data["sellers_num"]    = Seller::count();
+        $data["purchased_coupons_num"] =  $this->rewardGetRequest(RewardRoutes::report_purchased_coupons)->data->value;
+        $data["compensation_coupons_num"] =  $this->rewardGetRequest(RewardRoutes::report_compensation_coupons)->data->value;
+        $data["periodic_coupons_num"] =  $this->rewardGetRequest(RewardRoutes::report_periodic_coupons)->data->value;
+
         return $data;
     }
 
@@ -42,6 +46,10 @@ class ReportsService
 
                         if (request()->has("month")) {
                             $count->whereMonth('created_at', request()->month);
+                        }
+                        if (request()->has("from_date") && request()->has("to_date")) {
+                            $count->whereDate('created_at', ">=", request()->from_date);
+                            $count->whereDate('created_at', "<=", request()->to_date);
                         }
                         $model["count"] += $count->count();
                     }
@@ -68,6 +76,25 @@ class ReportsService
         return $data;
     }
 
+    public function getEarningsReport()
+    {
+        return OrderDetail::all()
+            ->groupBy('product_id')
+            ->map(function ($model, $key) {
+
+                $product = Product::find($key);
+
+                $earnings = 0;
+                foreach($model as $m){
+                    $earnings+=($m->price - $product->real_price) * $m->quantity ;
+                }
+                return [
+                    "value" => $earnings,
+                    "label" =>$product->name,
+                ];
+            })->values();
+    }
+
     public function getCouponsReport()
     {
         return $this->rewardGetRequest(RewardRoutes::report_coupons);
@@ -78,8 +105,8 @@ class ReportsService
         $data = Driver::all()
             ->map(function ($model, $key) {
                 return [
-                    "value" => Order::where("driver_id",$model->id)->count(),
-                    "label" => $model->first_name . " ".$model->last_name,
+                    "value" => Order::where("driver_id", $model->id)->count(),
+                    "label" => $model->first_name . " " . $model->last_name,
                 ];
             })->values();
         return $data;
