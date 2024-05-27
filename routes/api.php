@@ -238,7 +238,7 @@ Route::group(['middleware' => 'lang'], function () {
             });
         });
     });
-    Route::group(['middleware' => 'auth:user', 'prefix' => 'reports'], function () {
+    Route::group(['prefix' => 'reports'], function () {
         Route::get('/statistics', [ReportsController::class, 'getStatistics']);
         Route::get('/categories', [ReportsController::class, 'getCategoriesReport']);
         Route::get('/orders', [ReportsController::class, 'getOrdersReport']);
@@ -246,7 +246,6 @@ Route::group(['middleware' => 'lang'], function () {
         Route::get('/used-points', [ReportsController::class, 'getUsedPointsReport']);
         Route::get('/coupons', [ReportsController::class, 'getCouponsReport']);
         Route::get('/drivers', [ReportsController::class, 'getDriversReport']);
-        
     });
     Route::apiResource('delivery_time_infos', DeliveryTimeInfoController::class);
     Route::post('send-notification', [NotificationController::class, 'sendPushNotification']);
