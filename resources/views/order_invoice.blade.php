@@ -14,11 +14,6 @@
         .container {
             height: auto;
             border: 1px solid #333;
-            /* display: flex;F
-            justify-content: center;
-            align-items: center;
-            flex-direction: column; */
-
         }
 
         .img-holder {
@@ -45,9 +40,6 @@
         .title2 {
             height: auto;
             width: 100%;
-            /* display: flex;
-            justify-content: space-between;
-            align-items: center; */
         }
 
         .table1 {
@@ -278,6 +270,13 @@
             letter-spacing: -0.1px;
         }
 
+        #tw_1 {
+            left: 342px;
+            bottom: 211px;
+            direction: rtl;
+            /* letter-spacing: -0.1px; */
+        }
+
         #tr_1 {
             left: 326px;
             bottom: 211px;
@@ -484,6 +483,7 @@
         .downloaded {
             display: none;
         }
+
         .success-download {
             width: 100%;
             text-align: center;
@@ -652,11 +652,12 @@
                                         <span id="tq_1" class="t s2"> :ﺿﺮﻳﺒﺔ</span>
                                     </td>
                                 </tr>
-                                
+
                                 <tr>
                                     <td class="p_table1">{{ $order->invoice['extra_discount'] }}</td>
                                     <td>
-                                        <span id="tq_1" class="t s2"> حسم اضافي</span>
+                                        <span id="tw_1" class="t s2" style="font-family:'sans-serif"> حسم
+                                            إضافي</span>
                                     </td>
                                 </tr>
                                 <tr style="background-color: #4f894a">

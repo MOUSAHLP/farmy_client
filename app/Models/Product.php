@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Translatable\HasTranslations;
 
 class Product extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia;
+    use HasFactory, InteractsWithMedia /*,HasTranslations*/;
+
+    // public $translatable = ['name'];
 
     protected $fillable = [
         'name',
@@ -55,12 +58,12 @@ class Product extends Model implements HasMedia
 
     public function subCategory()
     {
-        return $this->belongsTo(SubCategory::class,'subcategory_id');
+        return $this->belongsTo(SubCategory::class, 'subcategory_id');
     }
     public function attributes()
     {
-       return $this->belongsToMany(Attribute::class,'product_attribute_values')
-       ->withPivot('value');
+        return $this->belongsToMany(Attribute::class, 'product_attribute_values')
+            ->withPivot('value');
     }
     public function commission()
     {
@@ -72,6 +75,6 @@ class Product extends Model implements HasMedia
     }
     public function  similarProducts()
     {
-       return Product::where('subcategory_id' ,$this->subcategory_id)->where('id', '!=', $this->id)->get();
+        return Product::where('subcategory_id', $this->subcategory_id)->where('id', '!=', $this->id)->get();
     }
 }
