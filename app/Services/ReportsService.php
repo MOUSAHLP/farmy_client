@@ -97,7 +97,7 @@ class ReportsService
     
     public function getUsedPointsReport()
     {
-        return $this->rewardGetRequest(RewardRoutes::used_points_report)->data;
+        return $this->rewardGetRequest(RewardRoutes::used_points_report."?year=". request()->year)->data;
     }
 
     public function getCouponsReport()
