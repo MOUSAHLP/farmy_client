@@ -58,9 +58,9 @@ class ReportsService
                 return $model;
             });
 
-        $data["month"] = Carbon::now()->monthName;
+        // $data["month"] = Carbon::now()->monthName;
 
-        return $data;
+        return  $data["categories"];
     }
 
     public function getOrdersReport()
