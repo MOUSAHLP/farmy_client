@@ -121,7 +121,8 @@ Route::group(['middleware' => 'lang'], function () {
 
         //// products
         Route::apiResource('products', ProductController::class);
-        Route::post('get-cart-products-info', [ProductController::class, 'getCartProductsInfo']); // for cart المسودة
+        Route::post('get-carts-price', [ProductController::class, 'getCartsPrice']); // for cart المسودة
+        Route::post('get-cart-products-info', [ProductController::class, 'getCartProductsInfo']); // for cart detail المسودة
         Route::get('web-product/{id}', [ProductController::class, 'webShow']);
 
         //// search

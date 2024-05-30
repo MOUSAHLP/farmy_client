@@ -104,6 +104,16 @@ class ProductController extends Controller
             'dataDeletedSuccessfully'
         );
     }
+
+    public function getCartsPrice(ProductRequest $request)
+    {
+        $validatedData = $request->validated();
+        return $this->successResponse(
+            $this->productService->getCartsPrice($validatedData),
+            'dataFetchedSuccessfully'
+        );
+    }
+
     public function getCartProductsInfo(ProductRequest $request)
     {
         $validatedData = $request->validated();

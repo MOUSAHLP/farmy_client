@@ -9,11 +9,14 @@ use App\Traits\ModelHelper;
 use App\Models\Product;
 use App\Models\RelatedProduct;
 use App\Traits\UploadImageTrait;
-use Illuminate\Support\Str;
 
 class ProductService
 {
     use ModelHelper, UploadImageTrait;
+    // public function __construct(
+    //     private PaymentProcessService $paymentProcessService
+    // ) {
+    // }
 
     public function getAll($request)
     {
@@ -57,6 +60,15 @@ class ProductService
     public function findAllFromArray($products)
     {
         return Product::with(['subCategory', 'commission', 'relatedProducts'])->whereIn("id", $products["products"])->get();
+    }
+
+    public function getCartsPrice($data)
+    {
+        $carts_prices = [];
+        foreach (array_keys($data) as $cart_id) {
+            $carts_prices[$cart_id] = $this->calculateCartPrice($data[$cart_id]);
+        }
+        return $carts_prices;
     }
 
     public function create($validatedData)
@@ -162,5 +174,39 @@ class ProductService
         $relation->delete();
         DB::commit();
         return true;
+    }
+
+
+    public function calculateCartPrice($products)
+    {
+        $total = 0;
+        $totalTax = 0;
+
+        foreach ($products as $product) {
+            if (isset($product['status']) && $product['status'] == 0) {
+                continue;
+            }
+
+            $currentProduct = $this->find($product['product_id']);
+
+            $seller = $currentProduct->seller;
+
+            $productTotal = $currentProduct->price * $product['quantity'];
+
+            if ($currentProduct['discount_status']) {
+                $productTotal = $productTotal - (int)(($productTotal / 100) * $currentProduct['discount']);
+            }
+
+            $total = $total + $productTotal;
+
+            $taxPercentage = $currentProduct->tax ?? 0;
+            $productTax = ($taxPercentage / 100) * $productTotal;
+            $totalTax = $totalTax + $productTax;
+        }
+        $total_sum = (int)($total + $totalTax);
+
+        if ($total_sum < 0) $total_sum = 0;
+
+        return $total_sum;
     }
 }

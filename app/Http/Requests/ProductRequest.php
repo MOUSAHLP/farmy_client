@@ -25,11 +25,12 @@ class ProductRequest extends FormRequest
     {
 
         return match ($this->route()->getActionMethod()) {
-            'index'               =>  $this->getIndexRules(),
-            'store'               =>  $this->getCreateRules(),
-            'update'               =>  $this->getUpdateRules(),
-            'addRelatedProducts'   =>  $this->addRelatedProducts(),
+            'index'                 =>  $this->getIndexRules(),
+            'store'                 =>  $this->getCreateRules(),
+            'update'                =>  $this->getUpdateRules(),
+            'addRelatedProducts'    =>  $this->addRelatedProducts(),
             'deleteRelatedProducts' =>  $this->deleteRelatedProducts(),
+            'getCartsPrice'         =>  $this->getCartsPriceRules(),
             'getCartProductsInfo'   =>  $this->getCartProductsInfoRules(),
         };
     }
@@ -106,6 +107,18 @@ class ProductRequest extends FormRequest
     {
         return [
             'relation_id'      => 'required|integer',
+        ];
+    }
+
+    public function getCartsPriceRules()
+    {
+        return [
+            '*.*.product_id' => [
+                'required',
+                'integer',
+                'exists:products,id',
+            ],
+            '*.*.quantity' => 'required|integer',
         ];
     }
 
