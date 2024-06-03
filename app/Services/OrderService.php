@@ -215,15 +215,8 @@ class OrderService
         $data['user_id'] =  AuthHelper::userAuth()->id;
         $data['status'] = OrderStatus::Pending;
         $data['date'] = now();
-        $length = 8;
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        $code = '';
-    
-        for ($i = 0; $i < $length; $i++) {
-            $code .= $characters[rand(0, strlen($characters) - 1)];
-        }
-    
-        $data['code'] =  $code;
+
+        $data['code'] =  rand(100000, 999999);
 
 
         $data['products'] = array_map(function ($product) {
