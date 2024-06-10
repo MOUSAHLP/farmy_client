@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 26, 2024 at 11:25 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: Jun 10, 2024 at 03:01 PM
+-- Server version: 8.0.37
+-- PHP Version: 8.1.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `farmy`
+-- Database: `peaklin2_farmy`
 --
 
 -- --------------------------------------------------------
@@ -28,11 +28,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `achievements` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `achievement` longtext NOT NULL,
-  `points` bigint(20) NOT NULL,
-  `description` longtext NOT NULL,
-  `segments` int(11) NOT NULL DEFAULT 0
+  `id` bigint UNSIGNED NOT NULL,
+  `achievement` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `points` bigint NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `segments` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -40,11 +40,11 @@ CREATE TABLE `achievements` (
 --
 
 INSERT INTO `achievements` (`id`, `achievement`, `points`, `description`, `segments`) VALUES
-(1, 'انشاء حساب', 100, 'عند انشائك لحساب ستحصل على 100 نقطة', 1),
-(2, 'مشاركة رابط تطبيق مع الأصدقاء', 50, 'عند تحقيق الشروط ستحصل على 50 نقطة', 1),
-(3, 'تقييم عملية الشراء ', 5, 'عند تقييم كل طلب ستحصل على 5 نقاط\r\n', 0),
-(4, 'اضافة تاريخ ميلادك الى ملفك الشخصي ', 10, 'أضف تاريخ ميلادك في `حسابي` و ستحصل على 10 نقاط\r\n', 1),
-(5, 'اتمام عملية الشراء', 1, 'عند اتمام عملية الشراء ستحصل على نقطة مقابل كل 1000 ليرة\r\n', 0);
+(1, '{\"ar\":\"انشاء حساب\",\"en\":\"Create an account\"}', 100, '{\"ar\":\"عند انشائك لحساب ستحصل على 100 نقطة\",\"en\":\"When you create an account, you will get 100 points\"}', 1),
+(2, '{\"ar\":\"مشاركة رابط تطبيق مع الأصدقاء\",\"en\":\"Share the application link with friends\"}', 50, '{\"ar\":\"عند تحقيق الشروط ستحصل على 50 نقطة\",\"en\":\"When you fulfill the conditions, you will get 50 points\"}', 1),
+(3, '{\"ar\":\"تقييم عملية الشراء\",\"en\":\"Rate a purchase\"}', 5, '{\"ar\":\"عند تقييم كل طلب ستحصل على 5 نقاط\",\"en\":\"When you rate an order, you will receive 5 points\"\n}', 0),
+(4, '{\"ar\":\"اضافة تاريخ ميلادك الى ملفك الشخصي\",\"en\":\"Add your date of birth to your profile\"}', 10, '{\"ar\":\"أضف تاريخ ميلادك في `حسابي` و ستحصل على 10 نقاط\",\"en\":\"Add your date of birth in \'My Account\' and you will get 10 points\"\n}', 1),
+(5, '{\"ar\":\"اتمام عملية الشراء\",\"en\":\"Complete the purchase process\"}', 1, '{\"ar\":\"عند اتمام عملية الشراء ستحصل على نقطة مقابل كل 1000 ليرة\",\"en\":\"When you complete the purchase process, you will get a point for every 1000 pound\"\n}', 0);
 
 -- --------------------------------------------------------
 
@@ -53,9 +53,9 @@ INSERT INTO `achievements` (`id`, `achievement`, `points`, `description`, `segme
 --
 
 CREATE TABLE `achievement_users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `achievement_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL
+  `id` bigint UNSIGNED NOT NULL,
+  `achievement_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -63,7 +63,11 @@ CREATE TABLE `achievement_users` (
 --
 
 INSERT INTO `achievement_users` (`id`, `achievement_id`, `user_id`) VALUES
-(1, 2, 20);
+(1, 2, 20),
+(5, 1, 49),
+(6, 1, 50),
+(7, 4, 50),
+(8, 1, 51);
 
 -- --------------------------------------------------------
 
@@ -72,9 +76,9 @@ INSERT INTO `achievement_users` (`id`, `achievement_id`, `user_id`) VALUES
 --
 
 CREATE TABLE `areas` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `is_default` tinyint(1) NOT NULL DEFAULT 0,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_default` tinyint(1) NOT NULL DEFAULT '0',
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -86,8 +90,11 @@ CREATE TABLE `areas` (
 --
 
 INSERT INTO `areas` (`id`, `name`, `is_default`, `latitude`, `longitude`, `created_at`, `updated_at`) VALUES
-(1, 'Jaramana', 1, 33.3, 33.3, '2023-12-07 16:08:10', '2023-12-18 07:49:40'),
-(2, 'Rukn Al Den', 0, 33.53894066554306, 36.29911617071872, '2023-12-17 12:28:33', '2023-12-17 12:28:33');
+(1, '{\"ar\":\"جرمانا\"}', 1, 33.3, 33.3, '2023-12-07 16:08:10', '2023-12-18 07:49:40'),
+(2, '{\"ar\":\"شسي\"}', 0, 33.53894066554306, 36.29911617071872, '2023-12-17 12:28:33', '2023-12-17 12:28:33'),
+(11, '{\"ar\":\"شس\"}', 0, 33.52509070970108, 36.22134157615328, '2024-06-03 11:27:10', '2024-06-03 11:27:10'),
+(12, '{\"ar\":\"انا\"}', 0, 33.52506117231969, 36.2213126844636, '2024-06-03 11:30:02', '2024-06-03 11:30:02'),
+(13, '{\"ar\":\"ةعةغ\"}', 0, 33.52506862567761, 36.22129111420058, '2024-06-03 11:30:20', '2024-06-03 11:30:20');
 
 -- --------------------------------------------------------
 
@@ -96,9 +103,9 @@ INSERT INTO `areas` (`id`, `name`, `is_default`, `latitude`, `longitude`, `creat
 --
 
 CREATE TABLE `attributes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 0,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -108,8 +115,8 @@ CREATE TABLE `attributes` (
 --
 
 INSERT INTO `attributes` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(7, 'عدد القطع', 0, '2023-12-28 08:57:56', '2023-12-28 08:57:56'),
-(8, 'الوزن', 0, '2023-12-28 08:59:37', '2023-12-28 08:59:37');
+(7, '{\"ar\":\"عدد القطع\",\"en\":\"the number of pieces\"}', 0, '2023-12-28 08:57:56', '2023-12-28 08:57:56'),
+(8, '{\"ar\":\"الوزن\",\"en\":\"the weight\"}', 0, '2023-12-28 08:59:37', '2023-12-28 08:59:37');
 
 -- --------------------------------------------------------
 
@@ -118,9 +125,9 @@ INSERT INTO `attributes` (`id`, `name`, `status`, `created_at`, `updated_at`) VA
 --
 
 CREATE TABLE `attribute_values` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `attribute_id` bigint(20) UNSIGNED NOT NULL,
-  `value` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `attribute_id` bigint UNSIGNED NOT NULL,
+  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -144,9 +151,9 @@ INSERT INTO `attribute_values` (`id`, `attribute_id`, `value`, `created_at`, `up
 --
 
 CREATE TABLE `banners` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `type` enum('section1','section2') NOT NULL,
-  `link` varchar(255) DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `type` enum('section1','section2') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `link` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `start_time` date NOT NULL DEFAULT '2023-12-08',
   `end_time` date NOT NULL DEFAULT '2024-12-08',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -158,7 +165,6 @@ CREATE TABLE `banners` (
 --
 
 INSERT INTO `banners` (`id`, `type`, `link`, `start_time`, `end_time`, `created_at`, `updated_at`) VALUES
-(10, 'section1', 'https://googel.com/', '2024-03-03', '2024-03-31', '2024-03-14 15:02:14', '2024-03-14 15:02:14'),
 (11, 'section1', 'https://googel.com/', '2024-03-03', '2024-03-31', '2024-03-14 15:02:27', '2024-03-14 15:02:27'),
 (12, 'section1', 'https://googel.com/', '2024-03-03', '2024-03-31', '2024-03-14 15:02:40', '2024-03-14 15:02:40'),
 (13, 'section2', 'https://googel.com/', '2024-03-03', '2024-03-31', '2024-03-14 15:02:54', '2024-03-14 15:02:54');
@@ -170,9 +176,9 @@ INSERT INTO `banners` (`id`, `type`, `link`, `start_time`, `end_time`, `created_
 --
 
 CREATE TABLE `categories` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -182,14 +188,15 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'خضار', 1, '2023-12-07 16:22:22', '2023-12-07 16:22:22'),
-(11, 'الفواكه', 1, '2024-03-14 14:50:58', '2024-03-14 14:50:58'),
-(12, 'بذور و مكسرات', 1, '2024-03-14 14:51:20', '2024-03-14 14:51:20'),
-(13, 'منتجات الألبان', 1, '2024-03-14 14:51:52', '2024-03-14 14:51:52'),
-(14, 'الحليب و البيض', 1, '2024-03-14 14:52:16', '2024-03-14 14:52:16'),
-(15, 'المخبوزات', 1, '2024-03-14 14:52:38', '2024-03-14 14:52:38'),
-(16, 'أسماك', 1, '2024-03-14 14:53:22', '2024-03-14 14:53:22'),
-(17, 'دجاج', 1, '2024-03-14 14:53:48', '2024-03-14 14:53:48');
+(1, '{\"ar\":\"خضار و أعشاب\",\"en\":\"Veggies & herbs\"}', 1, '2023-12-07 16:22:22', '2023-12-07 16:22:22'),
+(11, '{\"ar\":\"فواكه\",\"en\":\"fruits\"}', 1, '2024-03-14 14:50:58', '2024-03-14 14:50:58'),
+(12, '{\"ar\":\"بذور و مكسرات\",\"en\":\"Seeds and nuts\"}', 1, '2024-03-14 14:51:20', '2024-03-14 14:51:20'),
+(13, '{\"ar\":\"منتجات الألبان\",\"en\":\"Dairy products\"}', 1, '2024-03-14 14:51:52', '2024-04-30 13:39:46'),
+(14, '{\"ar\":\"الحليب والبيض\",\"en\":\"Milk and egg\"}', 1, '2024-03-14 14:52:16', '2024-04-30 13:40:09'),
+(15, '{\"ar\":\"المخبوزات\",\"en\":\"baked goods\"}', 1, '2024-03-14 14:52:38', '2024-04-30 13:40:30'),
+(16, '{\"ar\":\"أسماك\",\"en\":\"Fish\"}', 1, '2024-03-14 14:53:22', '2024-04-30 13:40:48'),
+(21, '{\"ar\":\"المياه المعدنية\",\"en\":\"mineral water\"}', 1, '2024-03-14 14:53:48', '2024-04-24 08:27:55'),
+(22, '{\"ar\":\"لحوم\",\"en\":\"Meat\"}', 1, '2024-04-30 13:42:44', '2024-04-30 13:42:44');
 
 -- --------------------------------------------------------
 
@@ -198,9 +205,9 @@ INSERT INTO `categories` (`id`, `name`, `status`, `created_at`, `updated_at`) VA
 --
 
 CREATE TABLE `cities` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `state_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -210,8 +217,8 @@ CREATE TABLE `cities` (
 --
 
 INSERT INTO `cities` (`id`, `name`, `state_id`, `created_at`, `updated_at`) VALUES
-(1, 'Jaramana', 1, '2023-12-07 16:07:05', '2023-12-07 16:07:05'),
-(2, 'مزة', 1, '2023-12-18 07:50:52', '2023-12-18 07:50:52');
+(1, '{\"ar\":\"جرمانا\",\"en\":\"Jaramana\"}', 1, '2023-12-07 16:07:05', '2023-12-07 16:07:05'),
+(2, '{\"ar\":\"مزة\",\"en\":\"mezze\"}', 1, '2023-12-18 07:50:52', '2023-12-18 07:50:52');
 
 -- --------------------------------------------------------
 
@@ -220,8 +227,8 @@ INSERT INTO `cities` (`id`, `name`, `state_id`, `created_at`, `updated_at`) VALU
 --
 
 CREATE TABLE `commissions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -231,8 +238,8 @@ CREATE TABLE `commissions` (
 --
 
 INSERT INTO `commissions` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'test', '2023-12-07 16:01:01', '2024-01-16 09:59:27'),
-(6, 'amount', '2024-01-02 16:43:46', '2024-01-02 16:43:46');
+(1, '{\"ar\":\"test\"}', '2023-12-07 16:01:01', '2024-01-16 09:59:27'),
+(6, '{\"ar\":\"amount\"}', '2024-01-02 16:43:46', '2024-01-02 16:43:46');
 
 -- --------------------------------------------------------
 
@@ -241,9 +248,9 @@ INSERT INTO `commissions` (`id`, `name`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `contact_us` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `notes` longtext NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -288,7 +295,13 @@ INSERT INTO `contact_us` (`id`, `email`, `notes`, `created_at`, `updated_at`) VA
 (33, 'e@gmail.com', 'gggggg', '2024-04-03 10:00:05', '2024-04-03 10:00:05'),
 (34, 'ggg@gmail.com', 'g g ub', '2024-04-04 09:09:20', '2024-04-04 09:09:20'),
 (35, 'ggg@gmail.cok', 'yvyvcyt', '2024-04-04 09:11:01', '2024-04-04 09:11:01'),
-(36, 'ggg@gmail.cok', 'yvyvcyt', '2024-04-04 09:11:53', '2024-04-04 09:11:53');
+(36, 'ggg@gmail.cok', 'yvyvcyt', '2024-04-04 09:11:53', '2024-04-04 09:11:53'),
+(37, 'tamaramari.1998@gmail.com', 'kkk', '2024-04-22 14:58:28', '2024-04-22 14:58:28'),
+(38, 'a@gmail.com', 'hhhhy', '2024-04-23 09:09:35', '2024-04-23 09:09:35'),
+(39, 'a@gmail.com', 'hhhhy', '2024-04-23 09:09:36', '2024-04-23 09:09:36'),
+(40, 'rr@gmail.com', 'ggg', '2024-04-23 10:15:41', '2024-04-23 10:15:41'),
+(41, 'fff@gmail.com', 'hhh', '2024-04-23 10:24:17', '2024-04-23 10:24:17'),
+(42, 'test@gmail.fon', 'عم تستت', '2024-04-23 13:16:50', '2024-04-23 13:16:50');
 
 -- --------------------------------------------------------
 
@@ -297,11 +310,11 @@ INSERT INTO `contact_us` (`id`, `email`, `notes`, `created_at`, `updated_at`) VA
 --
 
 CREATE TABLE `coupons` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `coupon_type_id` bigint(20) UNSIGNED NOT NULL,
-  `value` bigint(20) NOT NULL,
-  `price` int(11) DEFAULT 0,
-  `description` longtext NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `coupon_type_id` bigint UNSIGNED NOT NULL,
+  `value` bigint NOT NULL,
+  `price` int DEFAULT '0',
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -310,13 +323,13 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`id`, `coupon_type_id`, `value`, `price`, `description`, `created_at`) VALUES
-(3, 1, 3500, 100, 'احصل على خصم بقيمة 3500 ل.س', '2024-02-10 16:37:11'),
-(4, 1, 7000, 200, 'احصل على خصم بقيمة 7000 ل.س', '2024-02-22 10:54:25'),
-(5, 1, 10500, 300, 'احصل على خصم بقيمة 10500 ل.س', '2024-02-27 10:26:30'),
-(6, 1, 17500, 500, 'احصل على خصم بقيمة 17500 ل.س', '2024-02-17 17:32:18'),
-(7, 1, 35000, 1000, 'احصل على خصم بقيمة 35000 ل.س', '2024-02-10 18:28:39'),
-(24, 2, 10, 1000, 'احصل على خصم بقيمة 10% من سعر المنتجات', '2024-04-02 14:05:28'),
-(26, 3, 10, 300, 'احصل على خصم بقيمة 10% من سعر التوصيل', '2024-04-02 14:05:28');
+(3, 1, 3500, 100, '{\"ar\":\"احصل على خصم بقيمة 3500 ل.س\",\"en\":\"Get a discount of 3,500 SYP\"}', '2024-02-10 16:37:11'),
+(4, 1, 7000, 200, '{\"ar\":\"احصل على خصم بقيمة 7000 ل.س\",\"en\":\"Get a discount of 7000 SYP\"}', '2024-02-22 10:54:25'),
+(5, 1, 10500, 300, '{\"ar\":\"احصل على خصم بقيمة 10500 ل.س\",\"en\":\"Get a discount of 10,500 SYP\"}', '2024-02-27 10:26:30'),
+(6, 1, 17500, 500, '{\"ar\":\"احصل على خصم بقيمة 17500 ل.س\",\"en\":\"Get a discount of 17,500 SYP\"}', '2024-02-17 17:32:18'),
+(7, 1, 35000, 1000, '{\"ar\":\"احصل على خصم بقيمة 35000 ل.س\",\"en\":\"Get a discount of 35,00 SYP\"}', '2024-02-10 18:28:39'),
+(24, 2, 10, 1000, '{\"ar\":\"احصل على خصم بقيمة 10% من سعر المنتجات\",\"en\":\"Get a 10% discount on the price of the products\"}', '2024-04-02 14:05:28'),
+(30, 3, 10, 1000, '{\"ar\":\"احصل على خصم بقيمة 10% من سعر التوصيل\",\"en\":\"Get a 10% discount on the delivery price\"}', '2024-04-02 14:05:28');
 
 -- --------------------------------------------------------
 
@@ -325,10 +338,10 @@ INSERT INTO `coupons` (`id`, `coupon_type_id`, `value`, `price`, `description`, 
 --
 
 CREATE TABLE `coupons_types` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `type` int(11) NOT NULL
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -336,9 +349,9 @@ CREATE TABLE `coupons_types` (
 --
 
 INSERT INTO `coupons_types` (`id`, `name`, `image`, `type`) VALUES
-(1, 'كاش باك', 'ff1_1711023123.svg', 1),
-(2, 'حسم على قيمة المشتريات', 'Group_6_1711016608.svg', 2),
-(3, 'حسم توصيل', 'DELEVERING-01_1711023203.svg', 3);
+(1, '{\"ar\":\"كاش باك\",\"en\":\"cash\"}', 'ff1_1711023123.svg', 1),
+(2, '{\"ar\":\"حسم على قيمة المشتريات\",\"en\":\"Products price discount\"}', 'Group_6_1711016608.svg', 2),
+(3, '{\"ar\":\"حسم توصيل\",\"en\":\"delivery discount\"}', 'DELEVERING-01_1711023203.svg', 3);
 
 -- --------------------------------------------------------
 
@@ -347,124 +360,14 @@ INSERT INTO `coupons_types` (`id`, `name`, `image`, `type`) VALUES
 --
 
 CREATE TABLE `coupons_users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `coupon_id` bigint(20) UNSIGNED NOT NULL,
-  `coupon_code` varchar(255) NOT NULL,
-  `coupon_resource` int(11) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `coupon_id` bigint UNSIGNED NOT NULL,
+  `coupon_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `coupon_resource` int NOT NULL,
   `used_at` datetime DEFAULT NULL,
   `expire_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `coupons_users`
---
-
-INSERT INTO `coupons_users` (`id`, `user_id`, `coupon_id`, `coupon_code`, `coupon_resource`, `used_at`, `expire_at`) VALUES
-(1, 20, 5, 'dfrtgh2D', 0, NULL, '2024-03-12 19:48:20'),
-(2, 20, 7, 'OIH8Jd4s', 0, NULL, '2024-04-20 08:13:02'),
-(3, 20, 7, '', 0, '2024-03-18 13:39:21', '2024-03-04 16:16:42'),
-(5, 2, 7, '', 0, '2024-03-12 08:09:53', '2024-02-21 00:49:54'),
-(6, 10, 2, '', 0, '2024-03-09 18:09:03', '2024-03-05 16:23:47'),
-(7, 3, 9, '', 0, NULL, '2024-02-17 07:06:12'),
-(8, 3, 10, '', 0, NULL, '2024-03-25 17:41:41'),
-(9, 7, 5, '', 0, NULL, '2024-03-07 23:14:22'),
-(10, 1, 5, '', 0, NULL, '2024-03-21 00:20:23'),
-(11, 3, 3, '', 0, '2024-03-01 13:11:41', '2024-03-13 06:51:12'),
-(12, 10, 9, '', 0, NULL, '2024-03-12 14:30:08'),
-(13, 5, 4, '', 0, '2024-04-02 19:46:05', '2024-02-28 00:17:09'),
-(14, 6, 2, '', 0, '2024-03-16 17:42:09', '2024-02-23 21:38:18'),
-(15, 1, 10, '', 0, NULL, '2024-02-06 02:43:33'),
-(16, 9, 8, '', 0, NULL, '2024-02-29 00:57:26'),
-(17, 3, 4, '', 0, '2024-03-21 10:15:42', '2024-03-06 17:39:41'),
-(18, 5, 10, '', 0, '2024-04-01 01:10:35', '2024-03-01 21:41:12'),
-(19, 8, 4, '', 0, '2024-03-17 12:56:27', '2024-02-22 05:58:00'),
-(20, 2, 7, '', 0, NULL, '2024-03-03 19:40:06'),
-(21, 8, 6, '', 0, NULL, '2024-02-10 07:51:11'),
-(22, 10, 4, '', 0, '2024-03-21 00:44:01', '2024-03-04 10:58:05'),
-(23, 7, 8, '', 0, NULL, '2024-02-13 20:02:34'),
-(24, 6, 10, '', 0, '2024-02-10 01:01:55', '2024-03-09 16:39:05'),
-(25, 3, 4, '', 0, NULL, '2024-03-09 23:50:20'),
-(26, 2, 4, '', 1, NULL, '2024-03-03 21:47:26'),
-(27, 4, 9, '', 0, '2024-03-10 08:36:29', '2024-03-28 03:08:42'),
-(28, 8, 7, '', 0, NULL, '2024-02-14 15:59:27'),
-(29, 7, 5, '', 0, '2024-03-29 08:15:39', '2024-03-15 03:50:56'),
-(30, 5, 6, '', 0, '2024-04-03 00:09:06', '2024-03-03 22:29:23'),
-(31, 20, 2, 'vscKmWbu', 0, '2024-03-27 09:03:48', '2024-06-25 09:03:48'),
-(32, 20, 2, 'wL6gh23B', 0, '2024-03-27 12:42:15', '2024-06-25 12:42:15'),
-(33, 20, 2, 'U2l2HhlD', 0, '2024-03-31 09:56:24', '2024-06-29 09:56:24'),
-(34, 20, 2, '69yHNzJN', 0, '2024-03-31 12:43:36', '2024-06-29 12:43:36'),
-(35, 20, 2, 'K5aANIXC', 0, '2024-03-31 12:43:46', '2024-06-29 12:43:46'),
-(36, 20, 2, 'WmpnoXxn', 0, '2024-04-01 09:02:23', '2024-06-30 09:02:23'),
-(37, 20, 3, 'QdqxzKyn', 0, '2024-04-01 12:33:47', '2024-06-30 12:33:47'),
-(38, 20, 5, 'yD51bVHb', 0, '2024-04-15 10:41:32', '2024-07-14 10:41:32'),
-(39, 20, 4, 'QZGDwvdv', 1, NULL, '2024-07-27 08:44:17'),
-(40, 20, 4, 'V3rCCuuX', 1, NULL, '2024-07-27 08:45:20'),
-(41, 20, 4, '2RztMbxt', 1, NULL, '2024-07-27 08:46:13'),
-(42, 20, 4, 'z33XmqP7', 1, NULL, '2024-07-27 08:49:35'),
-(43, 20, 4, 'LSBc9SWd', 1, NULL, '2024-07-27 08:54:03'),
-(44, 20, 4, 'U7ExEtI1', 1, NULL, '2024-07-27 09:16:28'),
-(45, 20, 4, 'qfSvffg1', 2, NULL, '2024-07-27 09:18:03'),
-(46, 20, 4, 'HM7v5ZKx', 2, NULL, '2024-07-27 09:19:03'),
-(47, 20, 4, 'PBUz7Ajg', 2, NULL, '2024-07-27 09:20:54'),
-(48, 20, 4, 'xeaiYcbq', 1, NULL, '2024-07-27 09:21:43'),
-(49, 9, 3, 'RHqZsMlE', 3, NULL, '2024-07-27 09:55:24'),
-(50, 20, 3, 'x0UyltIy', 3, NULL, '2024-07-27 09:55:24'),
-(51, 20, 3, 'c9NWQre5', 3, NULL, '2024-07-27 09:55:24'),
-(52, 20, 3, 'oI1kCpQo', 3, NULL, '2024-07-27 09:55:24'),
-(53, 20, 3, 'icV402u8', 3, NULL, '2024-07-27 09:55:24'),
-(54, 20, 3, 'YcvTauvl', 2, NULL, '2024-07-27 14:09:22'),
-(55, 9, 3, 'cy1BOals', 3, NULL, '2024-07-27 14:13:40'),
-(56, 20, 3, 'My3RLRlt', 3, NULL, '2024-07-27 14:13:40'),
-(57, 20, 3, 'kUGW9qOT', 3, NULL, '2024-07-27 14:13:40'),
-(58, 20, 3, 'RLvpzzmo', 3, NULL, '2024-07-27 14:13:40'),
-(59, 20, 3, 'eS7ZzH6K', 3, NULL, '2024-07-27 14:13:40'),
-(60, 20, 3, 'jSs7I3ah', 2, NULL, '2024-07-31 10:51:55'),
-(61, 20, 3, '21MZtffP', 2, NULL, '2024-07-31 11:02:33');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `coupon_prices`
---
-
-CREATE TABLE `coupon_prices` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `coupon_id` bigint(20) UNSIGNED NOT NULL,
-  `coupon_price` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `coupon_prices`
---
-
-INSERT INTO `coupon_prices` (`id`, `coupon_id`, `coupon_price`) VALUES
-(1, 1, 100),
-(2, 2, 20),
-(3, 5, 219),
-(4, 7, 587),
-(5, 3, 894),
-(6, 10, 112),
-(7, 7, 385),
-(8, 3, 447),
-(9, 8, 21),
-(10, 9, 274),
-(11, 10, 112),
-(12, 11, 123),
-(13, 12, 33),
-(14, 13, 21),
-(15, 14, 121),
-(16, 15, 123),
-(17, 16, 555),
-(18, 17, 33),
-(19, 18, 54),
-(20, 19, 22),
-(21, 20, 43),
-(22, 21, 21),
-(23, 22, 55),
-(24, 23, 321),
-(25, 24, 21),
-(26, 25, 111);
 
 -- --------------------------------------------------------
 
@@ -473,8 +376,8 @@ INSERT INTO `coupon_prices` (`id`, `coupon_id`, `coupon_price`) VALUES
 --
 
 CREATE TABLE `delivery_attributes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -484,9 +387,9 @@ CREATE TABLE `delivery_attributes` (
 --
 
 INSERT INTO `delivery_attributes` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'عدم رن الجرس', '2023-12-08 11:53:27', '2024-01-01 15:26:10'),
-(2, 'الاتصال بي عند الوصول', '2024-01-02 06:54:20', '2024-01-02 06:54:20'),
-(3, 'التواصل عند عدم توفر منتج ما', '2024-01-02 08:20:20', '2024-01-02 08:20:20');
+(1, '{\"ar\":\"عدم رن الجرس\",\"en\":\"Not ringing the bell\"}', '2023-12-08 11:53:27', '2024-01-01 15:26:10'),
+(2, '{\"ar\":\"الاتصال بي عند الوصول\",\"en\":\"Contact me when arrival\"}', '2024-01-02 06:54:20', '2024-01-02 06:54:20'),
+(3, '{\"ar\":\"التواصل عند عدم توفر منتج ما\",\"en\":\"Communicate when a product is not available\"}', '2024-01-02 08:20:20', '2024-01-02 08:20:20');
 
 -- --------------------------------------------------------
 
@@ -495,11 +398,11 @@ INSERT INTO `delivery_attributes` (`id`, `name`, `created_at`, `updated_at`) VAL
 --
 
 CREATE TABLE `delivery_methods` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `time` int(11) NOT NULL,
-  `price` double NOT NULL DEFAULT 0,
-  `is_schedule` tinyint(4) NOT NULL DEFAULT 0,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time` int NOT NULL,
+  `price` double NOT NULL DEFAULT '0',
+  `is_schedule` tinyint NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -509,9 +412,9 @@ CREATE TABLE `delivery_methods` (
 --
 
 INSERT INTO `delivery_methods` (`id`, `name`, `time`, `price`, `is_schedule`, `created_at`, `updated_at`) VALUES
-(1, 'طلب عادي', 30, 1500, 0, NULL, NULL),
-(2, 'طلب مستعجل', 15, 3000, 0, NULL, NULL),
-(3, 'طلب مجدول', 0, 1500, 1, '2024-01-02 08:20:07', '2024-01-02 08:20:07');
+(1, '{\"ar\":\"طلب عادي\",\"en\":\"Normal order\"}', 45, 1500, 0, NULL, NULL),
+(2, '{\"ar\":\"طلب مستعجل\",\"en\":\"Urgent order\"}', 25, 3000, 0, NULL, NULL),
+(3, '{\"ar\":\"طلب مجدول\",\"en\":\"Scheduled order\"}', 0, 1500, 1, '2024-01-02 08:20:07', '2024-01-02 08:20:07');
 
 -- --------------------------------------------------------
 
@@ -520,11 +423,11 @@ INSERT INTO `delivery_methods` (`id`, `name`, `time`, `price`, `is_schedule`, `c
 --
 
 CREATE TABLE `delivery_time_infos` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int UNSIGNED NOT NULL,
   `start_time` time DEFAULT NULL,
   `end_time` time DEFAULT NULL,
-  `before_message` varchar(255) DEFAULT NULL,
-  `after_message` varchar(255) DEFAULT NULL,
+  `before_message` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `after_message` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -543,21 +446,21 @@ INSERT INTO `delivery_time_infos` (`id`, `start_time`, `end_time`, `before_messa
 --
 
 CREATE TABLE `drivers` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `address` varchar(255) DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `birthday` date DEFAULT NULL,
-  `phone` bigint(20) NOT NULL,
+  `phone` bigint NOT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `online_status` tinyint(1) NOT NULL DEFAULT 1,
-  `fcm_token` text DEFAULT NULL,
-  `city_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `online_status` tinyint(1) NOT NULL DEFAULT '1',
+  `fcm_token` text COLLATE utf8mb4_unicode_ci,
+  `city_id` bigint UNSIGNED DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -568,12 +471,13 @@ CREATE TABLE `drivers` (
 --
 
 INSERT INTO `drivers` (`id`, `first_name`, `last_name`, `email`, `password`, `address`, `birthday`, `phone`, `latitude`, `longitude`, `status`, `online_status`, `fcm_token`, `city_id`, `remember_token`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'issa', 'al_halabi', 'issa@gmail.com', '$2y$12$Iv8OwccwQGAYQxze4E9Lh.erkVGf20eDmmH8iB6p76J7k0RxmJ/cG', NULL, '2024-01-17', 946649532, NULL, NULL, 0, 1, 'eWoQydnVRXihRlnUiEwyfR:APA91bFnSe8Qulas-eyogWC0yKR5tDWD6BMDY7m49tuk26TJFPgBpAa9uZWmE3xfgdQq48ksNQalxpxbSVChititUJuEM9N-AJGXlwTi1SkVyecPne5tEa_hnAcINtM_bw9XlPzQlvdJ', NULL, NULL, NULL, '2024-03-28 09:03:33', '2024-04-29 12:49:13'),
-(2, 'qmiar yyy', 'qmar', 'qma1ra@gmail.com', '$2y$12$R8nsWK44LHmHhZ.Mwsv0DO32T2JkIA3oRXL3qb56YmHa5yRHtYcM.', NULL, '2024-01-17', 987654320, NULL, NULL, 1, 1, NULL, NULL, NULL, NULL, '2024-03-31 10:05:33', '2024-04-17 08:18:12'),
-(3, 'qmar', 'qmar', 'qmara@gmail.com', '$2y$12$mgb8Ge0x1pVOlATmWMsBwuoJHokYr6MEmtz4O8Diz3Fi6cmRhs0sS', NULL, NULL, 987654321, NULL, NULL, 1, 1, NULL, NULL, NULL, NULL, '2024-04-03 09:30:11', '2024-04-03 09:30:11'),
-(5, 'issa', 'halabi', 'issa1@gmail.com', 'qwer1234', NULL, NULL, 123123123, NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, '2024-04-29 09:25:15', '2024-04-29 09:25:15'),
-(6, 'issa', 'halabi', 'issa2@gmail.com', 'qwer1234', NULL, NULL, 123123123, NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, '2024-04-29 09:28:14', '2024-04-29 09:28:14'),
-(10, 'issa', 'halabi', 'issa3@gmail.com', 'qwer1234', NULL, NULL, 123123123, NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, '2024-04-29 09:31:06', '2024-04-29 09:31:06');
+(1, 'issa', 'halabi', 'issa@gmail.com', '$2y$12$Iv8OwccwQGAYQxze4E9Lh.erkVGf20eDmmH8iB6p76J7k0RxmJ/cG', NULL, '2024-01-17', 946649532, NULL, NULL, 1, 1, 'eWoQydnVRXihRlnUiEwyfR:APA91bFnSe8Qulas-eyogWC0yKR5tDWD6BMDY7m49tuk26TJFPgBpAa9uZWmE3xfgdQq48ksNQalxpxbSVChititUJuEM9N-AJGXlwTi1SkVyecPne5tEa_hnAcINtM_bw9XlPzQlvdJ', NULL, NULL, NULL, '2024-03-28 09:03:33', '2024-05-12 11:30:26'),
+(2, 'qmiar yyy', 'qmar', 'qma1ra@gmail.com', '$2y$12$cPABy81x38aTpXz1F3TzluZRYIsTbtxscXk7N7dOUKsmYDW2GvK9C', NULL, '2024-01-17', 987654320, NULL, NULL, 1, 1, NULL, NULL, NULL, NULL, '2024-03-31 10:05:33', '2024-04-30 14:59:29'),
+(3, 'qmar', 'qmar', 'qmara@gmail.com', '$2y$12$R8nsWK44LHmHhZ.Mwsv0DO32T2JkIA3oRXL3qb56YmHa5yRHtYcM.', NULL, NULL, 987654321, NULL, NULL, 1, 1, NULL, NULL, NULL, NULL, '2024-04-03 09:30:11', '2024-04-03 09:30:11'),
+(5, 'qmiar yyy', 'qmar', 'qma@gmail.com', '$2y$12$R8nsWK44LHmHhZ.Mwsv0DO32T2JkIA3oRXL3qb56YmHa5yRHtYcM.', NULL, '2024-01-17', 987654320, NULL, NULL, 1, 1, NULL, NULL, NULL, NULL, '2024-03-31 10:05:33', '2024-04-17 08:18:12'),
+(6, 'testasd', 'test', 'miametestd@miamed.com', '123456789', NULL, NULL, 5387582, NULL, NULL, 1, 1, NULL, 1, NULL, NULL, '2024-05-02 13:21:31', '2024-05-02 13:25:35'),
+(7, 'ثبث', 'ثب', 'cdscsdc@miamed.com', '123456789', NULL, NULL, 5387582, NULL, NULL, 1, 1, NULL, 1, NULL, NULL, '2024-05-02 13:39:35', '2024-05-02 13:39:35'),
+(8, 'Majd', 'Saati', 'miaedwedmed@miamed.com', '123456789', NULL, NULL, 5387582, NULL, NULL, 1, 1, NULL, 1, NULL, NULL, '2024-05-02 13:40:06', '2024-05-02 13:40:06');
 
 -- --------------------------------------------------------
 
@@ -582,10 +486,10 @@ INSERT INTO `drivers` (`id`, `first_name`, `last_name`, `email`, `password`, `ad
 --
 
 CREATE TABLE `driver_types` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `driver_id` bigint(20) UNSIGNED NOT NULL,
-  `type` int(11) NOT NULL,
-  `value` int(11) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `driver_id` bigint UNSIGNED NOT NULL,
+  `type` int NOT NULL,
+  `value` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -595,9 +499,13 @@ CREATE TABLE `driver_types` (
 --
 
 INSERT INTO `driver_types` (`id`, `driver_id`, `type`, `value`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 80, NULL, NULL),
-(2, 2, 2, 15, NULL, NULL),
-(3, 10, 1, 1000, '2024-04-29 09:31:06', '2024-04-29 09:31:06');
+(1, 6, 1, 120000, '2024-05-02 13:21:31', '2024-05-02 13:21:31'),
+(2, 7, 2, 121, '2024-05-02 13:39:35', '2024-05-02 13:39:35'),
+(3, 8, 2, 121, '2024-05-02 13:40:06', '2024-05-02 13:40:06'),
+(4, 1, 1, 120000, '2024-05-02 13:21:31', '2024-05-02 13:21:31'),
+(5, 2, 2, 121, '2024-05-02 13:39:35', '2024-05-02 13:39:35'),
+(6, 3, 2, 121, '2024-05-02 13:40:06', '2024-05-02 13:40:06'),
+(7, 5, 2, 121, '2024-05-02 13:40:06', '2024-05-02 13:40:06');
 
 -- --------------------------------------------------------
 
@@ -606,13 +514,13 @@ INSERT INTO `driver_types` (`id`, `driver_id`, `type`, `value`, `created_at`, `u
 --
 
 CREATE TABLE `failed_jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) NOT NULL,
-  `connection` text NOT NULL,
-  `queue` text NOT NULL,
-  `payload` longtext NOT NULL,
-  `exception` longtext NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -622,10 +530,10 @@ CREATE TABLE `failed_jobs` (
 --
 
 CREATE TABLE `favorits` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `product_id` int(10) UNSIGNED NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
+  `product_id` int UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -641,7 +549,12 @@ INSERT INTO `favorits` (`id`, `user_id`, `product_id`, `created_at`, `updated_at
 (77, 20, 43, '2024-03-14 10:36:56', '2024-03-14 10:36:56'),
 (86, 30, 40, '2024-03-14 14:44:12', '2024-03-14 14:44:12'),
 (95, 47, 40, '2024-04-02 16:02:47', '2024-04-02 16:02:47'),
-(97, 20, 49, '2024-04-16 11:43:03', '2024-04-16 11:43:03');
+(97, 20, 49, '2024-04-16 11:43:03', '2024-04-16 11:43:03'),
+(99, 50, 46, '2024-04-23 11:01:10', '2024-04-23 11:01:10'),
+(100, 50, 49, '2024-04-23 11:01:12', '2024-04-23 11:01:12'),
+(102, 20, 81, '2024-04-25 16:06:03', '2024-04-25 16:06:03'),
+(103, 47, 46, '2024-05-05 07:31:19', '2024-05-05 07:31:19'),
+(104, 20, 40, '2024-05-06 10:49:26', '2024-05-06 10:49:26');
 
 -- --------------------------------------------------------
 
@@ -650,10 +563,10 @@ INSERT INTO `favorits` (`id`, `user_id`, `product_id`, `created_at`, `updated_at
 --
 
 CREATE TABLE `gifts` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `quantity` double NOT NULL DEFAULT 0,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `quantity` double NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -663,8 +576,8 @@ CREATE TABLE `gifts` (
 --
 
 INSERT INTO `gifts` (`id`, `name`, `description`, `quantity`, `created_at`, `updated_at`) VALUES
-(1, 'test1', 'test', 0, '2023-12-08 11:41:07', '2023-12-08 11:41:36'),
-(3, 'Was K', 'xzc', 6, '2024-01-19 15:56:17', '2024-01-19 15:56:17');
+(1, '{\"ar\":\"test1\"}', '{\"ar\":\"test\"}', 0, '2023-12-08 11:41:07', '2023-12-08 11:41:36'),
+(3, '{\"ar\":\"Was K\"}', '{\"ar\":\"xzc\"}', 6, '2024-01-19 15:56:17', '2024-01-19 15:56:17');
 
 -- --------------------------------------------------------
 
@@ -673,11 +586,11 @@ INSERT INTO `gifts` (`id`, `name`, `description`, `quantity`, `created_at`, `upd
 --
 
 CREATE TABLE `home_page_dynamics` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `type` enum('category','section','slider') NOT NULL,
-  `order` varchar(255) NOT NULL,
-  `title_ar` varchar(255) NOT NULL,
-  `title_en` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `type` enum('category','section','slider') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `order` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title_ar` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title_en` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -687,9 +600,11 @@ CREATE TABLE `home_page_dynamics` (
 --
 
 INSERT INTO `home_page_dynamics` (`id`, `type`, `order`, `title_ar`, `title_en`, `created_at`, `updated_at`) VALUES
-(1, 'section', '9', 'الحسومات', 'discount', '2024-03-13 11:18:15', '2024-04-21 14:14:59'),
-(2, 'slider', '8', 'اعلانات', 'banners', '2024-03-13 11:18:53', '2024-04-21 14:14:59'),
-(6, 'category', '2', 'xالأقسام', 'asc', '2024-03-14 14:58:29', '2024-04-21 14:19:02');
+(20, 'category', '1', 'الأقسام', 'Categories', '2024-04-30 13:45:04', '2024-04-30 13:45:04'),
+(21, 'slider', '2', 'إعلانات', 'Banners', '2024-04-30 13:47:31', '2024-04-30 13:47:31'),
+(22, 'section', '4', 'المنتجات المقترحة', 'Suggested Products', '2024-04-30 13:54:03', '2024-05-01 09:36:07'),
+(23, 'slider', '5', 'مجد', 'Majjd', '2024-04-30 13:56:03', '2024-05-01 09:36:07'),
+(24, 'section', '6', 'حسومات', 'Discounts', '2024-04-30 13:56:53', '2024-05-01 09:36:07');
 
 -- --------------------------------------------------------
 
@@ -698,11 +613,11 @@ INSERT INTO `home_page_dynamics` (`id`, `type`, `order`, `title_ar`, `title_en`,
 --
 
 CREATE TABLE `home_page_dynamic_contents` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `home_page_dynamic_id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `category_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `banner_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `home_page_dynamic_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED DEFAULT NULL,
+  `category_id` bigint UNSIGNED DEFAULT NULL,
+  `banner_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -712,16 +627,31 @@ CREATE TABLE `home_page_dynamic_contents` (
 --
 
 INSERT INTO `home_page_dynamic_contents` (`id`, `home_page_dynamic_id`, `product_id`, `category_id`, `banner_id`, `created_at`, `updated_at`) VALUES
-(38, 2, NULL, NULL, 10, '2024-03-14 15:15:24', '2024-03-14 15:15:24'),
-(39, 2, NULL, NULL, 11, '2024-03-14 15:15:24', '2024-03-14 15:15:24'),
-(40, 2, NULL, NULL, 12, '2024-03-14 15:15:24', '2024-03-14 15:15:24'),
-(41, 2, NULL, NULL, 13, '2024-03-14 15:15:24', '2024-03-14 15:15:24'),
-(42, 1, 46, NULL, NULL, '2024-03-14 15:18:41', '2024-03-14 15:18:41'),
-(43, 1, 47, NULL, NULL, '2024-03-14 15:18:41', '2024-03-14 15:18:41'),
-(44, 1, 48, NULL, NULL, '2024-03-14 15:18:41', '2024-03-14 15:18:41'),
-(45, 1, 49, NULL, NULL, '2024-03-14 15:18:41', '2024-03-14 15:18:41'),
-(113, 6, NULL, 1, NULL, '2024-04-21 14:19:02', '2024-04-21 14:19:02'),
-(114, 6, NULL, 11, NULL, '2024-04-21 14:19:02', '2024-04-21 14:19:02');
+(128, 21, NULL, NULL, 11, '2024-04-30 13:47:31', '2024-04-30 13:47:31'),
+(129, 21, NULL, NULL, 12, '2024-04-30 13:47:31', '2024-04-30 13:47:31'),
+(130, 21, NULL, NULL, 13, '2024-04-30 13:47:31', '2024-04-30 13:47:31'),
+(131, 22, 40, NULL, NULL, '2024-04-30 13:54:03', '2024-04-30 13:54:03'),
+(132, 22, 46, NULL, NULL, '2024-04-30 13:54:03', '2024-04-30 13:54:03'),
+(133, 22, 47, NULL, NULL, '2024-04-30 13:54:03', '2024-04-30 13:54:03'),
+(134, 22, 48, NULL, NULL, '2024-04-30 13:54:03', '2024-04-30 13:54:03'),
+(135, 22, 49, NULL, NULL, '2024-04-30 13:54:03', '2024-04-30 13:54:03'),
+(136, 23, NULL, NULL, 11, '2024-04-30 13:56:03', '2024-04-30 13:56:03'),
+(137, 23, NULL, NULL, 12, '2024-04-30 13:56:03', '2024-04-30 13:56:03'),
+(138, 23, NULL, NULL, 13, '2024-04-30 13:56:03', '2024-04-30 13:56:03'),
+(139, 24, 49, NULL, NULL, '2024-04-30 13:56:53', '2024-04-30 13:56:53'),
+(140, 24, 47, NULL, NULL, '2024-04-30 13:56:53', '2024-04-30 13:56:53'),
+(141, 24, 40, NULL, NULL, '2024-04-30 13:56:53', '2024-04-30 13:56:53'),
+(142, 24, 48, NULL, NULL, '2024-04-30 13:56:53', '2024-04-30 13:56:53'),
+(143, 24, 46, NULL, NULL, '2024-04-30 13:56:53', '2024-04-30 13:56:53'),
+(164, 20, NULL, 1, NULL, '2024-05-08 12:19:33', '2024-05-08 12:19:33'),
+(165, 20, NULL, 11, NULL, '2024-05-08 12:19:33', '2024-05-08 12:19:33'),
+(166, 20, NULL, 12, NULL, '2024-05-08 12:19:33', '2024-05-08 12:19:33'),
+(167, 20, NULL, 22, NULL, '2024-05-08 12:19:33', '2024-05-08 12:19:33'),
+(168, 20, NULL, 16, NULL, '2024-05-08 12:19:33', '2024-05-08 12:19:33'),
+(170, 20, NULL, 13, NULL, '2024-05-08 12:19:33', '2024-05-08 12:19:33'),
+(171, 20, NULL, 14, NULL, '2024-05-08 12:19:33', '2024-05-08 12:19:33'),
+(172, 20, NULL, 15, NULL, '2024-05-08 12:19:33', '2024-05-08 12:19:33'),
+(173, 20, NULL, 21, NULL, '2024-05-08 12:19:33', '2024-05-08 12:19:33');
 
 -- --------------------------------------------------------
 
@@ -730,10 +660,10 @@ INSERT INTO `home_page_dynamic_contents` (`id`, `home_page_dynamic_id`, `product
 --
 
 CREATE TABLE `join_our_teams` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `phone` varchar(255) NOT NULL,
-  `job` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `job` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -764,25 +694,25 @@ INSERT INTO `join_our_teams` (`id`, `name`, `phone`, `job`, `created_at`, `updat
 --
 
 CREATE TABLE `media` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(255) NOT NULL,
-  `model_id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` char(36) DEFAULT NULL,
-  `collection_name` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `file_name` varchar(255) NOT NULL,
-  `mime_type` varchar(255) DEFAULT NULL,
-  `disk` varchar(255) NOT NULL,
-  `conversions_disk` varchar(255) DEFAULT NULL,
-  `size` bigint(20) UNSIGNED NOT NULL,
-  `manipulations` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`manipulations`)),
-  `custom_properties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`custom_properties`)),
-  `generated_conversions` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`generated_conversions`)),
-  `responsive_images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`responsive_images`)),
-  `order_column` int(10) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint UNSIGNED NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `collection_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `disk` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `conversions_disk` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `size` bigint UNSIGNED NOT NULL,
+  `manipulations` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `custom_properties` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `generated_conversions` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `responsive_images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `order_column` int UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `media`
@@ -790,7 +720,6 @@ CREATE TABLE `media` (
 
 INSERT INTO `media` (`id`, `model_type`, `model_id`, `uuid`, `collection_name`, `name`, `file_name`, `mime_type`, `disk`, `conversions_disk`, `size`, `manipulations`, `custom_properties`, `generated_conversions`, `responsive_images`, `order_column`, `created_at`, `updated_at`) VALUES
 (13, 'App\\Models\\SubCategory', 2, '0cd48206-5c61-423d-8154-f7b49a94d950', 'subcategory-images', 'flyglh', 'flyglh.jpg', 'image/jpeg', 'public', 'public', 1196549, '[]', '[]', '[]', '[]', 1, '2023-12-19 05:36:43', '2023-12-19 05:36:43'),
-(20, 'App\\Models\\Product', 36, '19b67808-c598-4016-89c4-4f1bd0e6f615', 'product-image', 'لحمة', 'لحمة.jpg', 'image/jpeg', 'public', 'public', 34476, '[]', '[]', '[]', '[]', 1, '2023-12-26 06:37:52', '2023-12-26 06:37:52'),
 (27, 'App\\Models\\Product', 40, '4ca13041-64e9-4db9-858b-bc860c612825', 'product-image', 'kosa', 'kosa.jpg', 'image/jpeg', 'public', 'public', 704947, '[]', '[]', '[]', '[]', 1, '2024-01-02 16:49:16', '2024-01-02 16:49:16'),
 (49, 'App\\Models\\Product', 46, '41e4aa5d-57b6-427f-a510-c131be75ac21', 'product-image', 'Rectangle 22', 'Rectangle-22.png', 'image/png', 'public', 'public', 249783, '[]', '[]', '[]', '[]', 1, '2024-03-14 14:26:40', '2024-03-14 14:26:40'),
 (50, 'App\\Models\\Product', 47, '1057fcdc-8898-4e3b-a650-b848d0605581', 'product-image', 'Rectangle 16', 'Rectangle-16.png', 'image/png', 'public', 'public', 102187, '[]', '[]', '[]', '[]', 1, '2024-03-14 14:30:09', '2024-03-14 14:30:09'),
@@ -807,8 +736,9 @@ INSERT INTO `media` (`id`, `model_type`, `model_id`, `uuid`, `collection_name`, 
 (67, 'App\\Models\\Banner', 11, '268d307a-af4b-44a0-be8b-22e4d1779772', 'banner-image', 'Slider1', 'Slider1.png', 'image/png', 'public', 'public', 100014, '[]', '[]', '[]', '[]', 1, '2024-03-14 15:02:27', '2024-03-14 15:02:27'),
 (68, 'App\\Models\\Banner', 12, 'd8be8d43-e09b-499d-a22c-0e58f1028d46', 'banner-image', 'Slider1', 'Slider1.png', 'image/png', 'public', 'public', 100014, '[]', '[]', '[]', '[]', 1, '2024-03-14 15:02:40', '2024-03-14 15:02:40'),
 (69, 'App\\Models\\Banner', 13, '1dde4ddf-bd23-4fb3-9787-21a4c8acc9ca', 'banner-image', 'Slider1', 'Slider1.png', 'image/png', 'public', 'public', 100014, '[]', '[]', '[]', '[]', 1, '2024-03-14 15:02:54', '2024-03-14 15:02:54'),
-(70, 'App\\Models\\Banner', 10, '426d092a-97c6-4081-9f6c-be9840e1d4c7', 'banner-image', 'Slider1', 'Slider1.png', 'image/png', 'public', 'public', 718198, '[]', '[]', '[]', '[]', 1, '2024-03-18 16:05:13', '2024-03-18 16:05:13'),
-(71, 'App\\Models\\Product', 50, '861ac6f4-37ac-408b-b2f4-7540da257ab3', 'product-image', '1', '1.webp', 'image/webp', 'public', 'public', 29986, '[]', '[]', '[]', '[]', 1, '2024-03-20 14:25:03', '2024-03-20 14:25:03');
+(82, 'App\\Models\\Category', 21, '94bb30bd-0277-4c2a-8a82-68891bdbb32a', 'category-image', 'photo_٢٠٢٤-٠٤-٣٠_١٥-٣٢-٣٦ (2)', 'photo_٢٠٢٤-٠٤-٣٠_١٥-٣٢-٣٦-(2).jpg', 'image/jpeg', 'public', 'public', 28480, '[]', '[]', '[]', '[]', 1, '2024-04-30 13:35:27', '2024-04-30 13:35:27'),
+(83, 'App\\Models\\Category', 22, '70126021-da38-4774-9113-c2d177056217', 'category-image', 'photo_٢٠٢٤-٠٤-٣٠_١٥-٤٠-٢٩', 'photo_٢٠٢٤-٠٤-٣٠_١٥-٤٠-٢٩.jpg', 'image/jpeg', 'public', 'public', 35710, '[]', '[]', '[]', '[]', 1, '2024-04-30 13:42:44', '2024-04-30 13:42:44'),
+(84, 'App\\Models\\SubCategory', 12, 'baa986d8-3342-4386-a65b-07d978f1a76f', 'subcategory-images', 'Screenshot 2022-10-21 134031', 'Screenshot-2022-10-21-134031.jpg', 'image/jpeg', 'public', 'public', 144673, '[]', '[]', '[]', '[]', 1, '2024-06-02 11:52:18', '2024-06-02 11:52:18');
 
 -- --------------------------------------------------------
 
@@ -817,9 +747,9 @@ INSERT INTO `media` (`id`, `model_type`, `model_id`, `uuid`, `collection_name`, 
 --
 
 CREATE TABLE `migrations` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) NOT NULL,
-  `batch` int(11) NOT NULL
+  `id` int UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -897,9 +827,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `model_has_permissions` (
-  `permission_id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(255) NOT NULL,
-  `model_id` bigint(20) UNSIGNED NOT NULL
+  `permission_id` bigint UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -909,9 +839,9 @@ CREATE TABLE `model_has_permissions` (
 --
 
 CREATE TABLE `model_has_roles` (
-  `role_id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(255) NOT NULL,
-  `model_id` bigint(20) UNSIGNED NOT NULL
+  `role_id` bigint UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -921,11 +851,11 @@ CREATE TABLE `model_has_roles` (
 --
 
 CREATE TABLE `notifications` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `notifiable_type` varchar(255) NOT NULL,
-  `notifiable_id` bigint(20) UNSIGNED NOT NULL,
-  `data` longtext NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notifiable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notifiable_id` bigint UNSIGNED NOT NULL,
+  `data` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -935,12 +865,11 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `created_at`, `updated_at`) VALUES
-(1, '3', 'App\\Models\\User', 1, '{\"title\":\"t\",\"body\":\"r\"}', '2024-01-09 22:42:56', '2024-01-09 22:42:56'),
-(2, '3', 'App\\Models\\User', 1, '{\"title\":\"t\",\"body\":\"r\"}', '2024-01-09 22:44:14', '2024-01-09 22:44:14'),
-(3, '3', 'App\\Models\\User', 1, '{\"title\":\"t\",\"body\":\"r\"}', '2024-01-09 22:46:52', '2024-01-09 22:46:52'),
-(4, '3', 'App\\Models\\User', 1, '{\"title\":\"t\",\"body\":\"r\"}', '2024-01-09 22:47:17', '2024-01-09 22:47:17'),
-(5, '3', 'App\\Models\\User', 1, '{\"title\":\"t\",\"body\":\"r\"}', '2024-01-09 22:47:43', '2024-01-09 22:47:43'),
-(6, '3', 'App\\Models\\User', 1, '{\"title\":\"t\",\"body\":\"r\"}', '2024-01-09 22:52:14', '2024-01-09 22:52:14'),
+(2, '3', 'App\\Models\\Driver', 3, '{\"title\":\"title\",\"body\":\"body\"}', '2024-01-09 22:44:14', '2024-01-09 22:44:14'),
+(3, '3', 'App\\Models\\Driver', 2, '{\"title\":\"title\",\"body\":\"body\"}', '2024-01-09 22:46:52', '2024-01-09 22:46:52'),
+(4, '3', 'App\\Models\\Driver', 2, '{\"title\":\"title\",\"body\":\"body\"}', '2024-01-09 22:47:17', '2024-01-09 22:47:17'),
+(5, '3', 'App\\Models\\Driver', 3, '{\"title\":\"title\",\"body\":\"body\"}', '2024-01-09 22:47:43', '2024-01-09 22:47:43'),
+(6, '3', 'App\\Models\\Driver', 1, '{\"title\":\"t\",\"body\":\"r\"}', '2024-01-09 22:52:14', '2024-01-09 22:52:14'),
 (7, '3', 'App\\Models\\User', 19, '{\"title\":\"test\",\"body\":\"test\"}', '2024-01-11 13:45:49', '2024-01-11 13:45:49'),
 (8, '3', 'App\\Models\\User', 19, '{\"title\":\"test\",\"body\":\"test\"}', '2024-01-11 13:50:33', '2024-01-11 13:50:33'),
 (9, '3', 'App\\Models\\User', 19, '{\"title\":\"test\",\"body\":\"test\"}', '2024-01-11 13:50:45', '2024-01-11 13:50:45'),
@@ -952,7 +881,6 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 (15, '3', 'App\\Models\\User', 20, '{\"title\":\"t\",\"body\":\"r\"}', '2024-01-21 12:57:00', '2024-01-21 12:57:00'),
 (16, '3', 'App\\Models\\User', 1, '{\"title\":\"ss\",\"body\":\"ss\"}', '2024-03-27 10:13:34', '2024-03-27 10:13:34'),
 (17, '3', 'App\\Models\\User', 2, '{\"title\":\"ss\",\"body\":\"ss\"}', '2024-03-27 10:13:34', '2024-03-27 10:13:34'),
-(18, '3', 'App\\Models\\User', 20, '{\"title\":\"ss\",\"body\":\"ss\"}', '2024-03-27 10:13:34', '2024-03-27 10:13:34'),
 (19, '3', 'App\\Models\\User', 30, '{\"title\":\"ss\",\"body\":\"ss\"}', '2024-03-27 10:13:34', '2024-03-27 10:13:34'),
 (20, '3', 'App\\Models\\User', 1, '{\"title\":\"sdsd\",\"body\":\"sd\"}', '2024-04-04 09:21:20', '2024-04-04 09:21:20'),
 (21, '3', 'App\\Models\\User', 2, '{\"title\":\"sdsd\",\"body\":\"sd\"}', '2024-04-04 09:21:39', '2024-04-04 09:21:39'),
@@ -1021,7 +949,6 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 (84, '3', 'App\\Models\\User', 9, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
 (85, '3', 'App\\Models\\User', 10, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
 (86, '3', 'App\\Models\\User', 19, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
-(87, '3', 'App\\Models\\User', 20, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
 (88, '3', 'App\\Models\\User', 21, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
 (89, '3', 'App\\Models\\User', 22, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
 (90, '3', 'App\\Models\\User', 23, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
@@ -1047,7 +974,6 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 (110, '3', 'App\\Models\\User', 44, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
 (111, '3', 'App\\Models\\User', 45, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
 (112, '3', 'App\\Models\\User', 46, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
-(113, '3', 'App\\Models\\User', 47, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:07:52', '2024-04-04 11:07:52'),
 (114, '3', 'App\\Models\\User', 5, '{\"title\":\"sdsdsd\",\"body\":\"sdsds\"}', '2024-04-04 11:08:00', '2024-04-04 11:08:00'),
 (115, '3', 'App\\Models\\User', 9, '{\"title\":\"sdsdsd\",\"body\":\"sdsds\"}', '2024-04-04 11:08:00', '2024-04-04 11:08:00'),
 (116, '3', 'App\\Models\\User', 1, '{\"title\":\"sdsd\",\"body\":\"sdsd\"}', '2024-04-04 11:08:12', '2024-04-04 11:08:12'),
@@ -1208,34 +1134,422 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 (271, '3', 'App\\Models\\User', 46, '{\"title\":\"ffff\",\"body\":\"fffff\"}', '2024-04-15 12:46:08', '2024-04-15 12:46:08'),
 (272, '3', 'App\\Models\\User', 47, '{\"title\":\"ffff\",\"body\":\"fffff\"}', '2024-04-15 12:46:08', '2024-04-15 12:46:08'),
 (273, '3', 'App\\Models\\User', 48, '{\"title\":\"ffff\",\"body\":\"fffff\"}', '2024-04-15 12:46:08', '2024-04-15 12:46:08'),
-(274, '2', 'App\\Models\\Driver', 1, '{\"title\":\"your order has been assigned to another driver\",\"body\":\"go to my orders tab to check which order\"}', '2024-04-17 13:30:32', '2024-04-17 13:30:32'),
-(275, '1', 'App\\Models\\Driver', 1, '{\"title\":\"your order has been assigned to another driver\",\"body\":\"go to my orders tab to check which order\"}', '2024-04-17 13:30:42', '2024-04-17 13:30:42'),
-(276, '3', 'App\\Models\\Driver', 1, '{\"title\":\"your order has been assigned to another driver\",\"body\":\"go to my orders tab to check which order\"}', '2024-04-17 13:33:06', '2024-04-17 13:33:06'),
-(277, '3', 'App\\Models\\User', 47, '{\"title\":\"your order has been assigned to another driver\",\"body\":\"go to my orders tab to check which order\"}', '2024-04-18 06:45:21', '2024-04-18 06:45:21'),
-(278, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\":object\"}', '2024-04-18 06:55:26', '2024-04-18 06:55:26'),
-(279, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"messages.core.cancelOrderBodyqwe\"}', '2024-04-18 06:56:15', '2024-04-18 06:56:15'),
-(280, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"sdcf\"}', '2024-04-18 07:01:11', '2024-04-18 07:01:11'),
-(281, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"reason :sdcf\"}', '2024-04-18 07:03:37', '2024-04-18 07:03:37'),
-(282, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"\\u0627\\u0644\\u0633\\u0628\\u0628 : \\u0644\\u0623\\u0646\\u0643 \\u0643\\u0644\\u0628\"}', '2024-04-18 07:04:52', '2024-04-18 07:04:52'),
-(283, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":260,\"order_status\":2,\"driver_phone\":987654320}', '2024-04-21 09:34:43', '2024-04-21 09:34:43'),
-(284, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":258,\"order_status\":2,\"driver_phone\":987654320}', '2024-04-21 09:36:58', '2024-04-21 09:36:58'),
-(285, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":257,\"order_status\":2,\"driver_phone\":987654320}', '2024-04-21 09:37:10', '2024-04-21 09:37:10'),
-(286, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":253,\"order_status\":2,\"driver_phone\":987654320}', '2024-04-21 09:49:47', '2024-04-21 09:49:47'),
-(287, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":252,\"order_status\":2,\"driver_phone\":987654320}', '2024-04-21 09:52:40', '2024-04-21 09:52:40'),
-(288, '3', 'App\\Models\\User', 47, '{\"title\":\"\\u062a\\u0645 \\u0642\\u0628\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0642\\u0628\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643 \\u0645\\u0646 \\u0642\\u0628\\u0644 \\u0633\\u0627\\u0626\\u0642\",\"order_id\":264,\"order_status\":2,\"driver_phone\":946649532}', '2024-04-22 09:32:57', '2024-04-22 09:32:57'),
-(289, '3', 'App\\Models\\User', 47, '{\"title\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0627\\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0646\\u0637\\u0642\\u0629\",\"order_id\":264,\"order_status\":4,\"driver_phone\":946649532}', '2024-04-22 13:49:16', '2024-04-22 13:49:16'),
-(290, '3', 'App\\Models\\User', 48, '{\"title\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0627\\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0646\\u0637\\u0642\\u0629\",\"order_id\":264,\"order_status\":4,\"driver_phone\":946649532}', '2024-04-22 13:50:38', '2024-04-22 13:50:38'),
-(291, '3', 'App\\Models\\User', 48, '{\"title\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0627\\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0646\\u0637\\u0642\\u0629\",\"order_id\":264,\"order_status\":4,\"driver_phone\":946649532}', '2024-04-22 13:58:16', '2024-04-22 13:58:16'),
-(292, '3', 'App\\Models\\User', 48, '{\"title\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0627\\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0646\\u0637\\u0642\\u0629\",\"order_id\":264,\"order_status\":4,\"driver_phone\":946649532}', '2024-04-22 14:00:11', '2024-04-22 14:00:11'),
-(293, '3', 'App\\Models\\User', 48, '{\"title\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0627\\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0646\\u0637\\u0642\\u0629\",\"order_id\":264,\"order_status\":4,\"driver_phone\":946649532}', '2024-04-22 14:03:27', '2024-04-22 14:03:27'),
-(294, '3', 'App\\Models\\User', 48, '{\"title\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0627\\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0646\\u0637\\u0642\\u0629\",\"order_id\":264,\"order_status\":4,\"driver_phone\":946649532}', '2024-04-22 14:10:01', '2024-04-22 14:10:01'),
-(295, '3', 'App\\Models\\User', 48, '{\"title\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0627\\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0646\\u0637\\u0642\\u0629\",\"order_id\":264,\"order_status\":4,\"driver_phone\":946649532}', '2024-04-22 14:10:39', '2024-04-22 14:10:39'),
-(296, '3', 'App\\Models\\User', 20, '{\"title\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0627\\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0646\\u0637\\u0642\\u0629\",\"order_id\":263,\"order_status\":4,\"driver_phone\":946649532}', '2024-04-23 12:39:47', '2024-04-23 12:39:47'),
-(297, '3', 'App\\Models\\User', 20, '{\"title\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\",\"body\":\"\\u062a\\u0645 \\u0648\\u0635\\u0648\\u0644 \\u0627\\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0646\\u0637\\u0642\\u0629\",\"order_id\":263,\"order_status\":4,\"driver_phone\":946649532}', '2024-04-23 12:40:26', '2024-04-23 12:40:26'),
-(298, '3', 'App\\Models\\User', 20, '{\"title\":\"\\u0637\\u0644\\u0628\\u0643 \\u0642\\u064a\\u062f \\u0627\\u0644\\u062a\\u0648\\u0635\\u064a\\u0644\",\"body\":\"\\u0637\\u0644\\u0628\\u0643 \\u0627\\u0644\\u0627\\u0646 \\u0642\\u064a\\u062f \\u0627\\u0644\\u062a\\u0648\\u0635\\u064a\\u0644\",\"order_id\":221,\"order_status\":3,\"driver_phone\":987654320}', '2024-04-23 13:43:05', '2024-04-23 13:43:05'),
-(300, '3', 'App\\Models\\Driver', 2, '{\"title\":\"\\u062a\\u0645 \\u062a\\u0639\\u064a\\u064a\\u0646 \\u0637\\u0644\\u0628 \\u0645\\u0633\\u0646\\u062f \\u0627\\u0644\\u064a\\u0643 \\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u062e\\u0631\",\"body\":\"\\u0627\\u0630\\u0647\\u0628 \\u0644\\u062a\\u0628\\u0648\\u064a\\u0628\\u0629 \\u0637\\u0644\\u0628\\u0627\\u062a\\u064a \\u0644\\u0631\\u0624\\u064a\\u0629 \\u0627\\u064a \\u0637\\u0644\\u0628 \\u062a\\u0645 \\u0633\\u062d\\u0628\\u0647 \\u0645\\u0646\\u0643\"}', '2024-04-29 12:40:51', '2024-04-29 12:40:51'),
-(301, '3', 'App\\Models\\Driver', 1, '{\"title\":\"\\u062a\\u0645 \\u062a\\u0639\\u064a\\u064a\\u0646 \\u0637\\u0644\\u0628 \\u0645\\u0633\\u0646\\u062f \\u0627\\u0644\\u064a\\u0643 \\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u062e\\u0631\",\"body\":\"\\u0627\\u0630\\u0647\\u0628 \\u0644\\u062a\\u0628\\u0648\\u064a\\u0628\\u0629 \\u0637\\u0644\\u0628\\u0627\\u062a\\u064a \\u0644\\u0631\\u0624\\u064a\\u0629 \\u0627\\u064a \\u0637\\u0644\\u0628 \\u062a\\u0645 \\u0633\\u062d\\u0628\\u0647 \\u0645\\u0646\\u0643\"}', '2024-04-29 12:45:10', '2024-04-29 12:45:10'),
-(302, '3', 'App\\Models\\Driver', 2, '{\"title\":\"\\u062a\\u0645 \\u062a\\u0639\\u064a\\u064a\\u0646 \\u0637\\u0644\\u0628 \\u0645\\u0633\\u0646\\u062f \\u0627\\u0644\\u064a\\u0643 \\u0644\\u0633\\u0627\\u0626\\u0642 \\u0627\\u062e\\u0631\",\"body\":\"\\u0627\\u0630\\u0647\\u0628 \\u0644\\u062a\\u0628\\u0648\\u064a\\u0628\\u0629 \\u0637\\u0644\\u0628\\u0627\\u062a\\u064a \\u0644\\u0631\\u0624\\u064a\\u0629 \\u0627\\u064a \\u0637\\u0644\\u0628 \\u062a\\u0645 \\u0633\\u062d\\u0628\\u0647 \\u0645\\u0646\\u0643\"}', '2024-04-29 12:46:49', '2024-04-29 12:46:49');
+(274, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":223,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-21 09:32:52', '2024-04-21 09:32:52'),
+(275, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"reason : \"}', '2024-04-21 10:27:50', '2024-04-21 10:27:50'),
+(276, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"reason : \"}', '2024-04-21 10:30:26', '2024-04-21 10:30:26'),
+(277, '1', 'App\\Models\\User', 20, '{\"title\":\"your order has been canceled\",\"body\":\"reason : \"}', '2024-04-21 10:40:51', '2024-04-21 10:40:51'),
+(278, '1', 'App\\Models\\User', 20, '{\"title\":\"your order has been canceled\",\"body\":\"reason : \"}', '2024-04-21 10:46:38', '2024-04-21 10:46:38'),
+(279, '1', 'App\\Models\\User', 20, '{\"title\":\"your order has been canceled\",\"body\":\"reason : \"}', '2024-04-21 10:58:32', '2024-04-21 10:58:32'),
+(280, '1', 'App\\Models\\User', 20, '{\"title\":\"your order has been canceled\",\"body\":\"reason : \"}', '2024-04-21 11:05:42', '2024-04-21 11:05:42'),
+(281, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"reason : gH\"}', '2024-04-21 11:10:54', '2024-04-21 11:10:54'),
+(282, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"reason : \"}', '2024-04-21 11:55:12', '2024-04-21 11:55:12'),
+(283, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"reason : \"}', '2024-04-21 11:55:59', '2024-04-21 11:55:59'),
+(284, '1', 'App\\Models\\User', 47, '{\"title\":\"your order has been canceled\",\"body\":\"reason : qqqq\"}', '2024-04-21 11:58:15', '2024-04-21 11:58:15'),
+(285, '1', 'App\\Models\\User', 20, '{\"title\":\"your order has been canceled\",\"body\":\"reason : vcvcvc\"}', '2024-04-21 12:06:14', '2024-04-21 12:06:14'),
+(286, '1', 'App\\Models\\User', 20, '{\"title\":\"your order has been canceled\",\"body\":\"reason : vvvv\"}', '2024-04-21 12:07:31', '2024-04-21 12:07:31'),
+(287, '1', 'App\\Models\\User', 20, '{\"title\":\"your order has been canceled\",\"body\":\"reason : eeee\"}', '2024-04-21 12:08:07', '2024-04-21 12:08:07'),
+(288, '1', 'App\\Models\\User', 20, '{\"title\":\"your order has been canceled\",\"body\":\"reason : aaa\"}', '2024-04-21 12:11:12', '2024-04-21 12:11:12'),
+(289, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":240,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-04-21 13:19:35', '2024-04-21 13:19:35'),
+(290, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":271,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-04-21 13:22:41', '2024-04-21 13:22:41'),
+(291, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":240,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-04-21 13:29:04', '2024-04-21 13:29:04'),
+(292, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":271,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-04-21 13:36:27', '2024-04-21 13:36:27'),
+(293, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":271,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-04-21 14:17:25', '2024-04-21 14:17:25'),
+(294, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":271,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-04-21 14:20:54', '2024-04-21 14:20:54'),
+(295, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":271,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-04-21 14:27:14', '2024-04-21 14:27:14'),
+(296, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":271,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-04-21 14:27:56', '2024-04-21 14:27:56'),
+(297, '1', 'App\\Models\\User', 20, '{\"title\":\"your order has been canceled\",\"body\":\"reason : \\u0621\\u0621\\u0624\\u0621\\u0624\\u0621\\u0624\"}', '2024-04-21 14:38:34', '2024-04-21 14:38:34'),
+(298, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":271,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-04-21 14:50:38', '2024-04-21 14:50:38'),
+(299, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":271,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-04-21 14:51:03', '2024-04-21 14:51:03'),
+(300, '3', 'App\\Models\\User', 28, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":272,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-04-21 14:57:54', '2024-04-21 14:57:54'),
+(301, '3', 'App\\Models\\User', 28, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":272,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-04-21 15:00:53', '2024-04-21 15:00:53'),
+(302, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":242,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-04-21 15:04:08', '2024-04-21 15:04:08'),
+(303, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":242,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-04-21 15:04:14', '2024-04-21 15:04:14'),
+(304, '3', 'App\\Models\\User', 28, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":272,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-22 09:31:04', '2024-04-22 09:31:04'),
+(305, '3', 'App\\Models\\User', 28, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":272,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-22 10:02:16', '2024-04-22 10:02:16'),
+(306, '3', 'App\\Models\\User', 28, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":273,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-22 10:39:33', '2024-04-22 10:39:33'),
+(307, '3', 'App\\Models\\User', 28, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":273,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-04-22 10:49:52', '2024-04-22 10:49:52'),
+(308, '3', 'App\\Models\\User', 47, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":246,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-22 11:00:52', '2024-04-22 11:00:52'),
+(309, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":269,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-22 11:12:41', '2024-04-22 11:12:41'),
+(310, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":270,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-22 11:26:04', '2024-04-22 11:26:04'),
+(311, '3', 'App\\Models\\User', 28, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":273,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-04-22 12:38:15', '2024-04-22 12:38:15'),
+(312, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":274,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-22 16:34:57', '2024-04-22 16:34:57'),
+(313, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":274,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-22 16:35:19', '2024-04-22 16:35:19'),
+(314, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":270,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 08:49:35', '2024-04-23 08:49:35'),
+(315, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":279,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-23 12:23:15', '2024-04-23 12:23:15'),
+(316, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":275,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-23 12:23:25', '2024-04-23 12:23:25'),
+(317, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":279,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 12:25:14', '2024-04-23 12:25:14'),
+(318, '3', 'App\\Models\\User', 50, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":275,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 12:43:53', '2024-04-23 12:43:53'),
+(319, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":281,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-23 13:16:14', '2024-04-23 13:16:14'),
+(320, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":282,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-23 13:24:44', '2024-04-23 13:24:44'),
+(321, '3', 'App\\Models\\User', 50, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":282,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 13:25:45', '2024-04-23 13:25:45'),
+(322, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":283,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-23 13:28:56', '2024-04-23 13:28:56'),
+(323, '3', 'App\\Models\\User', 50, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":283,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 13:29:40', '2024-04-23 13:29:40'),
+(324, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":284,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-23 13:31:29', '2024-04-23 13:31:29'),
+(325, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":285,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-23 13:33:31', '2024-04-23 13:33:31'),
+(326, '3', 'App\\Models\\User', 50, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":285,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 13:33:58', '2024-04-23 13:33:58'),
+(327, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":279,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-04-23 13:44:58', '2024-04-23 13:44:58'),
+(328, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":279,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-04-23 13:45:44', '2024-04-23 13:45:44'),
+(329, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":279,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-04-23 13:48:44', '2024-04-23 13:48:44'),
+(330, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":223,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-04-23 13:50:13', '2024-04-23 13:50:13'),
+(331, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":223,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-04-23 13:51:55', '2024-04-23 13:51:55'),
+(332, '3', 'App\\Models\\User', 50, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":284,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 16:11:55', '2024-04-23 16:11:55'),
+(333, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":280,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-23 16:14:44', '2024-04-23 16:14:44'),
+(334, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":281,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-23 16:37:48', '2024-04-23 16:37:48'),
+(335, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":282,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-23 16:38:25', '2024-04-23 16:38:25'),
+(336, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":285,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-23 16:38:56', '2024-04-23 16:38:56'),
+(337, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":284,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-23 16:53:39', '2024-04-23 16:53:39'),
+(338, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":283,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-23 16:58:19', '2024-04-23 16:58:19'),
+(339, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":280,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 16:59:41', '2024-04-23 16:59:41'),
+(340, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":280,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-23 16:59:49', '2024-04-23 16:59:49'),
+(341, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":286,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-23 21:37:33', '2024-04-23 21:37:33'),
+(342, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":286,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 21:42:21', '2024-04-23 21:42:21'),
+(343, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":286,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-23 21:44:40', '2024-04-23 21:44:40'),
+(344, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":286,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-23 21:45:06', '2024-04-23 21:45:06'),
+(345, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":286,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-23 21:45:14', '2024-04-23 21:45:14'),
+(346, '3', 'App\\Models\\User', 50, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":275,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-24 08:18:15', '2024-04-24 08:18:15'),
+(347, '3', 'App\\Models\\User', 28, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":272,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-24 08:39:06', '2024-04-24 08:39:06');
+INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `created_at`, `updated_at`) VALUES
+(348, '3', 'App\\Models\\User', 47, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":246,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-24 08:40:58', '2024-04-24 08:40:58'),
+(349, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":287,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-24 08:49:11', '2024-04-24 08:49:11'),
+(350, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":287,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-24 08:49:30', '2024-04-24 08:49:30'),
+(351, '3', 'App\\Models\\User', 47, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":237,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-24 10:16:17', '2024-04-24 10:16:17'),
+(352, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":292,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-04-24 11:28:52', '2024-04-24 11:28:52'),
+(353, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":292,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-04-24 11:31:35', '2024-04-24 11:31:35'),
+(354, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":292,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-24 11:34:18', '2024-04-24 11:34:18'),
+(355, '3', 'App\\Models\\User', 2, '{\"title\":\"test\",\"body\":\"test\"}', '2024-04-24 11:37:00', '2024-04-24 11:37:00'),
+(356, '3', 'App\\Models\\User', 10, '{\"title\":\"test\",\"body\":\"test\"}', '2024-04-24 11:37:00', '2024-04-24 11:37:00'),
+(369, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":297,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-04-30 11:56:49', '2024-04-30 11:56:49'),
+(370, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":296,\"order_status\":3,\"driver_phone\":\"987654320\"}', '2024-05-02 08:48:08', '2024-05-02 08:48:08'),
+(371, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":296,\"order_status\":4,\"driver_phone\":\"987654320\"}', '2024-05-02 08:48:29', '2024-05-02 08:48:29'),
+(372, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":223,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-05-02 12:33:16', '2024-05-02 12:33:16'),
+(373, '3', 'App\\Models\\User', 20, '{\"title\":\"messages.core.code\",\"body\":\"123487\"}', '2024-05-05 09:09:52', '2024-05-05 09:09:52'),
+(374, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":223,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 09:09:53', '2024-05-05 09:09:53'),
+(375, '3', 'App\\Models\\User', 20, '{\"title\":\"messages.core.code\",\"body\":\"123487\"}', '2024-05-05 09:10:53', '2024-05-05 09:10:53'),
+(376, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Delivery is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 09:17:22', '2024-05-05 09:17:22'),
+(377, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 09:19:09', '2024-05-05 09:19:09'),
+(378, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 09:20:05', '2024-05-05 09:20:05'),
+(379, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 09:20:35', '2024-05-05 09:20:35'),
+(380, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 09:24:46', '2024-05-05 09:24:46'),
+(381, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 09:25:47', '2024-05-05 09:25:47'),
+(382, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":223,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-05-05 09:25:47', '2024-05-05 09:25:47'),
+(383, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 09:26:20', '2024-05-05 09:26:20'),
+(384, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 09:34:03', '2024-05-05 09:34:03'),
+(385, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":305,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 09:34:35', '2024-05-05 09:34:35'),
+(386, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 09:34:50', '2024-05-05 09:34:50'),
+(387, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 09:36:00', '2024-05-05 09:36:00'),
+(388, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 09:38:44', '2024-05-05 09:38:44'),
+(389, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 09:38:51', '2024-05-05 09:38:51'),
+(390, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":305,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 09:38:53', '2024-05-05 09:38:53'),
+(391, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 09:39:08', '2024-05-05 09:39:08'),
+(392, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"UX08UFT1\"}', '2024-05-05 09:39:18', '2024-05-05 09:39:18'),
+(393, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 09:41:43', '2024-05-05 09:41:43'),
+(394, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 09:43:07', '2024-05-05 09:43:07'),
+(395, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 09:51:49', '2024-05-05 09:51:49'),
+(396, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":null}', '2024-05-05 10:03:24', '2024-05-05 10:03:24'),
+(397, '3', 'App\\Models\\User', 47, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":null}', '2024-05-05 10:04:39', '2024-05-05 10:04:39'),
+(398, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 10:30:45', '2024-05-05 10:30:45'),
+(399, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 10:32:39', '2024-05-05 10:32:39'),
+(400, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 10:35:09', '2024-05-05 10:35:09'),
+(401, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"18888235\"}', '2024-05-05 10:35:22', '2024-05-05 10:35:22'),
+(402, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"188882\"}', '2024-05-05 10:43:07', '2024-05-05 10:43:07'),
+(403, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":306,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 10:44:59', '2024-05-05 10:44:59'),
+(404, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":null}', '2024-05-05 10:45:04', '2024-05-05 10:45:04'),
+(405, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":null}', '2024-05-05 10:46:08', '2024-05-05 10:46:08'),
+(406, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":null}', '2024-05-05 10:46:24', '2024-05-05 10:46:24'),
+(407, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":null}', '2024-05-05 10:47:06', '2024-05-05 10:47:06'),
+(408, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":null}', '2024-05-05 10:52:42', '2024-05-05 10:52:42'),
+(409, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":306,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 10:54:20', '2024-05-05 10:54:20'),
+(410, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":null}', '2024-05-05 10:55:17', '2024-05-05 10:55:17'),
+(411, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":null}', '2024-05-05 10:56:18', '2024-05-05 10:56:18'),
+(412, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"123487\"}', '2024-05-05 10:56:39', '2024-05-05 10:56:39'),
+(413, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":221,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-05-05 10:56:40', '2024-05-05 10:56:40'),
+(414, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Driver is on road this your Order Code\",\"body\":\"430336\"}', '2024-05-05 10:56:54', '2024-05-05 10:56:54'),
+(415, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":306,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-05-05 10:56:54', '2024-05-05 10:56:54'),
+(416, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":306,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 11:45:01', '2024-05-05 11:45:01'),
+(417, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"430336\"}', '2024-05-05 11:45:42', '2024-05-05 11:45:42'),
+(418, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":306,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 11:46:04', '2024-05-05 11:46:04'),
+(419, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":307,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 11:49:29', '2024-05-05 11:49:29'),
+(420, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"998448\"}', '2024-05-05 11:50:06', '2024-05-05 11:50:06'),
+(421, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":307,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 11:50:40', '2024-05-05 11:50:40'),
+(422, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"998448\"}', '2024-05-05 11:54:03', '2024-05-05 11:54:03'),
+(423, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":307,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 11:54:19', '2024-05-05 11:54:19'),
+(424, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":304,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 12:09:36', '2024-05-05 12:09:36'),
+(425, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"UX08UFT1\"}', '2024-05-05 12:09:54', '2024-05-05 12:09:54'),
+(426, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":308,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 12:12:27', '2024-05-05 12:12:27'),
+(427, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"886248\"}', '2024-05-05 12:12:43', '2024-05-05 12:12:43'),
+(428, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":308,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 12:12:59', '2024-05-05 12:12:59'),
+(429, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":309,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 13:02:20', '2024-05-05 13:02:20'),
+(430, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"870803\"}', '2024-05-05 13:03:58', '2024-05-05 13:03:58'),
+(431, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":309,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 13:05:05', '2024-05-05 13:05:05'),
+(432, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":310,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 13:16:11', '2024-05-05 13:16:11'),
+(433, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"099600\"}', '2024-05-05 13:16:19', '2024-05-05 13:16:19'),
+(434, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":310,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 13:16:31', '2024-05-05 13:16:31'),
+(435, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":311,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 13:21:43', '2024-05-05 13:21:43'),
+(436, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"819696\"}', '2024-05-05 13:22:00', '2024-05-05 13:22:00'),
+(437, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"819696\"}', '2024-05-05 13:26:26', '2024-05-05 13:26:26'),
+(438, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":312,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 13:35:32', '2024-05-05 13:35:32'),
+(439, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":312,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 13:35:32', '2024-05-05 13:35:32'),
+(440, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"465093\"}', '2024-05-05 13:36:23', '2024-05-05 13:36:23'),
+(441, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"465093\"}', '2024-05-05 13:38:08', '2024-05-05 13:38:08'),
+(442, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"465093\"}', '2024-05-05 13:38:57', '2024-05-05 13:38:57'),
+(443, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"465093\"}', '2024-05-05 13:40:37', '2024-05-05 13:40:37'),
+(444, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":312,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 13:41:00', '2024-05-05 13:41:00'),
+(445, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":313,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 13:44:46', '2024-05-05 13:44:46'),
+(446, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"937778\"}', '2024-05-05 13:44:54', '2024-05-05 13:44:54'),
+(447, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":314,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 13:49:44', '2024-05-05 13:49:44'),
+(448, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":223,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 13:49:52', '2024-05-05 13:49:52'),
+(449, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"452815\"}', '2024-05-05 13:50:05', '2024-05-05 13:50:05'),
+(450, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":315,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 13:55:51', '2024-05-05 13:55:51'),
+(451, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"272225\"}', '2024-05-05 13:58:36', '2024-05-05 13:58:36'),
+(452, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":316,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 14:01:45', '2024-05-05 14:01:45'),
+(453, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"243577\"}', '2024-05-05 14:02:30', '2024-05-05 14:02:30'),
+(454, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:10:12', '2024-05-05 14:10:12'),
+(455, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:10:35', '2024-05-05 14:10:35'),
+(456, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":221,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 14:10:43', '2024-05-05 14:10:43'),
+(457, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:10:53', '2024-05-05 14:10:53'),
+(458, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":317,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 14:12:41', '2024-05-05 14:12:41'),
+(459, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"091046\"}', '2024-05-05 14:12:55', '2024-05-05 14:12:55'),
+(460, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:14:49', '2024-05-05 14:14:49'),
+(461, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:16:05', '2024-05-05 14:16:05'),
+(462, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":221,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 14:16:33', '2024-05-05 14:16:33'),
+(463, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:16:39', '2024-05-05 14:16:39'),
+(464, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:17:31', '2024-05-05 14:17:31'),
+(465, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:17:34', '2024-05-05 14:17:34'),
+(466, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:17:54', '2024-05-05 14:17:54'),
+(467, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:17:57', '2024-05-05 14:17:57'),
+(468, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:18:20', '2024-05-05 14:18:20'),
+(469, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:22:15', '2024-05-05 14:22:15'),
+(470, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":221,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 14:22:26', '2024-05-05 14:22:26'),
+(471, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:23:45', '2024-05-05 14:23:45'),
+(472, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":221,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 14:23:58', '2024-05-05 14:23:58'),
+(473, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":318,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 14:33:49', '2024-05-05 14:33:49'),
+(474, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:37:01', '2024-05-05 14:37:01'),
+(475, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:39:36', '2024-05-05 14:39:36'),
+(476, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:39:46', '2024-05-05 14:39:46'),
+(477, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:39:51', '2024-05-05 14:39:51'),
+(478, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:43:04', '2024-05-05 14:43:04'),
+(479, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":221,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 14:43:46', '2024-05-05 14:43:46'),
+(480, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":319,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 14:46:40', '2024-05-05 14:46:40'),
+(481, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:51:31', '2024-05-05 14:51:31'),
+(482, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:51:47', '2024-05-05 14:51:47'),
+(483, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:52:23', '2024-05-05 14:52:23'),
+(484, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:52:27', '2024-05-05 14:52:27'),
+(485, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:55:50', '2024-05-05 14:55:50'),
+(486, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-05 14:56:26', '2024-05-05 14:56:26'),
+(487, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"314543\"}', '2024-05-05 15:05:44', '2024-05-05 15:05:44'),
+(488, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":320,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 15:11:38', '2024-05-05 15:11:38'),
+(489, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"936665\"}', '2024-05-05 15:11:47', '2024-05-05 15:11:47'),
+(490, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":320,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 15:12:04', '2024-05-05 15:12:04'),
+(491, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"936665\"}', '2024-05-05 15:12:04', '2024-05-05 15:12:04'),
+(492, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":321,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 15:19:58', '2024-05-05 15:19:58'),
+(493, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"577227\"}', '2024-05-05 15:20:12', '2024-05-05 15:20:12'),
+(494, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":321,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-05 15:21:12', '2024-05-05 15:21:12'),
+(495, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"577227\"}', '2024-05-05 15:21:12', '2024-05-05 15:21:12'),
+(496, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":322,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-05 15:24:09', '2024-05-05 15:24:09'),
+(497, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"914938\"}', '2024-05-05 15:26:15', '2024-05-05 15:26:15'),
+(498, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:07:27', '2024-05-06 08:07:27'),
+(499, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:07:47', '2024-05-06 08:07:47'),
+(500, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:07:51', '2024-05-06 08:07:51'),
+(501, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:07:55', '2024-05-06 08:07:55'),
+(502, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:08:36', '2024-05-06 08:08:36'),
+(503, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:08:39', '2024-05-06 08:08:39'),
+(504, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:08:47', '2024-05-06 08:08:47'),
+(505, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:08:59', '2024-05-06 08:08:59'),
+(506, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:09:19', '2024-05-06 08:09:19'),
+(507, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:09:25', '2024-05-06 08:09:25'),
+(508, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":326,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-06 08:13:49', '2024-05-06 08:13:49'),
+(509, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:14:03', '2024-05-06 08:14:03'),
+(510, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:14:29', '2024-05-06 08:14:29'),
+(511, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:14:31', '2024-05-06 08:14:31'),
+(512, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:17:08', '2024-05-06 08:17:08'),
+(513, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:17:29', '2024-05-06 08:17:29'),
+(514, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:18:10', '2024-05-06 08:18:10'),
+(515, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:18:38', '2024-05-06 08:18:38'),
+(516, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:18:44', '2024-05-06 08:18:44'),
+(517, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:19:40', '2024-05-06 08:19:40'),
+(518, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:21:00', '2024-05-06 08:21:00'),
+(519, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:22:51', '2024-05-06 08:22:51'),
+(520, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:23:05', '2024-05-06 08:23:05'),
+(521, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:23:07', '2024-05-06 08:23:07'),
+(522, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:23:35', '2024-05-06 08:23:35'),
+(523, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:23:46', '2024-05-06 08:23:46'),
+(524, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:24:02', '2024-05-06 08:24:02'),
+(525, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":221,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-06 08:24:06', '2024-05-06 08:24:06'),
+(526, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 08:24:12', '2024-05-06 08:24:12'),
+(527, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":221,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-06 08:24:22', '2024-05-06 08:24:22'),
+(528, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\"}', '2024-05-06 08:25:27', '2024-05-06 08:25:27'),
+(529, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":324,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-06 08:32:52', '2024-05-06 08:32:52'),
+(530, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"153235\"}', '2024-05-06 08:33:22', '2024-05-06 08:33:22'),
+(531, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":324,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-06 08:34:14', '2024-05-06 08:34:14'),
+(532, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":323,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-06 08:37:37', '2024-05-06 08:37:37'),
+(533, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\"}', '2024-05-06 08:37:55', '2024-05-06 08:37:55'),
+(534, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\"}', '2024-05-06 08:50:13', '2024-05-06 08:50:13'),
+(535, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\"}', '2024-05-06 08:58:14', '2024-05-06 08:58:14'),
+(536, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\"}', '2024-05-06 08:59:25', '2024-05-06 08:59:25'),
+(537, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\"}', '2024-05-06 09:03:58', '2024-05-06 09:03:58'),
+(538, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487 221\"}', '2024-05-06 09:08:37', '2024-05-06 09:08:37'),
+(539, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Code :  123487 221\"}', '2024-05-06 09:09:04', '2024-05-06 09:09:04'),
+(540, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Code:  123487 order_id:  221\"}', '2024-05-06 09:09:43', '2024-05-06 09:09:43'),
+(541, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Code: 123487 order_id: 221\"}', '2024-05-06 09:09:57', '2024-05-06 09:09:57'),
+(542, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Code: 123487 order_id: 221\"}', '2024-05-06 09:13:10', '2024-05-06 09:13:10'),
+(543, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Code: 844577 order_id: 326\"}', '2024-05-06 09:14:01', '2024-05-06 09:14:01'),
+(544, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"{\\\"code\\\":\\\"123487\\\",\\\"order_id\\\":221}\"}', '2024-05-06 09:14:14', '2024-05-06 09:14:14'),
+(545, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"{\\\"code\\\":\\\"844577\\\",\\\"order_id\\\":326}\"}', '2024-05-06 09:14:26', '2024-05-06 09:14:26'),
+(546, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Code: 123487 order_id: 221\",\"order_id\":221}', '2024-05-06 09:15:36', '2024-05-06 09:15:36'),
+(547, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\",\"order_id\":221}', '2024-05-06 09:16:15', '2024-05-06 09:16:15'),
+(548, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\",\"order_id\":221}', '2024-05-06 09:18:38', '2024-05-06 09:18:38'),
+(549, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326}', '2024-05-06 09:18:39', '2024-05-06 09:18:39'),
+(550, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\",\"order_id\":221,\"status\":\"OnDelivery\"}', '2024-05-06 09:20:13', '2024-05-06 09:20:13'),
+(551, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"123487\",\"order_id\":221,\"status\":3}', '2024-05-06 09:20:52', '2024-05-06 09:20:52'),
+(552, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 09:21:27', '2024-05-06 09:21:27'),
+(553, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 09:23:23', '2024-05-06 09:23:23'),
+(554, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 09:31:17', '2024-05-06 09:31:17'),
+(555, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 09:32:32', '2024-05-06 09:32:32'),
+(556, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 09:37:30', '2024-05-06 09:37:30'),
+(557, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 09:40:47', '2024-05-06 09:40:47'),
+(558, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 09:59:48', '2024-05-06 09:59:48'),
+(559, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:01:53', '2024-05-06 10:01:53'),
+(560, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:03:06', '2024-05-06 10:03:06'),
+(561, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:05:50', '2024-05-06 10:05:50'),
+(562, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:09:42', '2024-05-06 10:09:42'),
+(563, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:11:45', '2024-05-06 10:11:45'),
+(564, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:12:54', '2024-05-06 10:12:54'),
+(565, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:14:33', '2024-05-06 10:14:33'),
+(566, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:16:24', '2024-05-06 10:16:24'),
+(567, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:17:11', '2024-05-06 10:17:11'),
+(568, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:18:17', '2024-05-06 10:18:17'),
+(569, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:19:03', '2024-05-06 10:19:03'),
+(570, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:19:33', '2024-05-06 10:19:33'),
+(571, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:20:52', '2024-05-06 10:20:52'),
+(572, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:21:46', '2024-05-06 10:21:46'),
+(573, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:23:07', '2024-05-06 10:23:07'),
+(574, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:23:43', '2024-05-06 10:23:43'),
+(575, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:24:38', '2024-05-06 10:24:38'),
+(576, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:25:50', '2024-05-06 10:25:50'),
+(577, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:26:27', '2024-05-06 10:26:27'),
+(578, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:27:26', '2024-05-06 10:27:26'),
+(579, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:27:36', '2024-05-06 10:27:36'),
+(580, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:28:13', '2024-05-06 10:28:13'),
+(581, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:29:50', '2024-05-06 10:29:50'),
+(582, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:30:08', '2024-05-06 10:30:08'),
+(583, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:30:40', '2024-05-06 10:30:40'),
+(584, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:31:45', '2024-05-06 10:31:45'),
+(585, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-06 10:32:41', '2024-05-06 10:32:41'),
+(586, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 10:33:14', '2024-05-06 10:33:14'),
+(587, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 10:33:55', '2024-05-06 10:33:55'),
+(588, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 10:34:17', '2024-05-06 10:34:17'),
+(589, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 10:36:33', '2024-05-06 10:36:33'),
+(590, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":327,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-05-06 10:37:06', '2024-05-06 10:37:06'),
+(591, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":328,\"order_status\":2,\"driver_phone\":\"987654320\"}', '2024-05-06 10:38:56', '2024-05-06 10:38:56'),
+(592, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 10:40:06', '2024-05-06 10:40:06'),
+(593, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 11:40:14', '2024-05-06 11:40:14'),
+(594, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 11:40:32', '2024-05-06 11:40:32'),
+(595, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 11:42:18', '2024-05-06 11:42:18'),
+(596, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 11:42:43', '2024-05-06 11:42:43'),
+(597, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 11:45:48', '2024-05-06 11:45:48'),
+(598, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-06 11:48:57', '2024-05-06 11:48:57'),
+(599, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":329,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-06 11:50:24', '2024-05-06 11:50:24'),
+(600, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"241374\",\"order_id\":329,\"status\":2}', '2024-05-06 11:50:31', '2024-05-06 11:50:31'),
+(601, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"241374\",\"order_id\":329,\"status\":3}', '2024-05-06 11:51:04', '2024-05-06 11:51:04'),
+(602, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"241374\",\"order_id\":329,\"status\":3}', '2024-05-06 11:52:21', '2024-05-06 11:52:21'),
+(603, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"241374\",\"order_id\":329,\"status\":3}', '2024-05-06 11:52:35', '2024-05-06 11:52:35'),
+(604, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"241374\",\"order_id\":329,\"status\":3}', '2024-05-06 11:52:59', '2024-05-06 11:52:59'),
+(605, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"241374\",\"order_id\":329,\"status\":3}', '2024-05-06 11:53:12', '2024-05-06 11:53:12'),
+(606, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"241374\",\"order_id\":329,\"status\":3}', '2024-05-06 11:53:28', '2024-05-06 11:53:28'),
+(607, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"241374\",\"order_id\":329,\"status\":3}', '2024-05-06 11:53:55', '2024-05-06 11:53:55'),
+(608, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":331,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-06 11:58:13', '2024-05-06 11:58:13'),
+(609, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":330,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-06 11:58:23', '2024-05-06 11:58:23'),
+(610, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"242740\",\"order_id\":330,\"status\":2}', '2024-05-06 11:58:34', '2024-05-06 11:58:34'),
+(611, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":332,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-06 12:06:35', '2024-05-06 12:06:35'),
+(612, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":2}', '2024-05-06 12:07:00', '2024-05-06 12:07:00'),
+(613, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:08:33', '2024-05-06 12:08:33'),
+(614, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:08:55', '2024-05-06 12:08:55'),
+(615, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:10:03', '2024-05-06 12:10:03'),
+(616, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:10:18', '2024-05-06 12:10:18'),
+(617, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:11:58', '2024-05-06 12:11:58'),
+(618, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:12:14', '2024-05-06 12:12:14'),
+(619, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:12:30', '2024-05-06 12:12:30'),
+(620, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:12:55', '2024-05-06 12:12:55'),
+(621, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:18:20', '2024-05-06 12:18:20'),
+(622, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:20:51', '2024-05-06 12:20:51'),
+(623, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:21:13', '2024-05-06 12:21:13'),
+(624, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:21:38', '2024-05-06 12:21:38'),
+(625, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:31:32', '2024-05-06 12:31:32'),
+(626, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:32:01', '2024-05-06 12:32:01'),
+(627, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:42:25', '2024-05-06 12:42:25'),
+(628, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 12:51:59', '2024-05-06 12:51:59'),
+(629, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 13:22:54', '2024-05-06 13:22:54'),
+(630, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 13:24:01', '2024-05-06 13:24:01'),
+(631, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-06 13:48:39', '2024-05-06 13:48:39'),
+(632, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"914938\",\"order_id\":322,\"status\":3}', '2024-05-07 13:12:56', '2024-05-07 13:12:56'),
+(633, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":322,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-07 13:15:17', '2024-05-07 13:15:17'),
+(634, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"746801\",\"order_id\":332,\"status\":3}', '2024-05-07 13:28:31', '2024-05-07 13:28:31'),
+(635, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":332,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-07 13:28:41', '2024-05-07 13:28:41'),
+(636, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":303,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-07 13:57:33', '2024-05-07 13:57:33'),
+(637, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"wMSUzQgT\",\"order_id\":303,\"status\":2}', '2024-05-07 13:57:38', '2024-05-07 13:57:38'),
+(638, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":302,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-07 14:23:07', '2024-05-07 14:23:07'),
+(639, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"VQT1ZdBl\",\"order_id\":302,\"status\":2}', '2024-05-07 14:23:14', '2024-05-07 14:23:14'),
+(640, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"VQT1ZdBl\",\"order_id\":302,\"status\":3}', '2024-05-07 14:58:38', '2024-05-07 14:58:38'),
+(641, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":301,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-07 15:02:34', '2024-05-07 15:02:34'),
+(642, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":301,\"status\":2}', '2024-05-07 15:02:42', '2024-05-07 15:02:42'),
+(643, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":301,\"status\":3}', '2024-05-07 15:14:31', '2024-05-07 15:14:31'),
+(644, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":301,\"status\":3}', '2024-05-07 15:29:54', '2024-05-07 15:29:54');
+INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `created_at`, `updated_at`) VALUES
+(645, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":301,\"status\":3}', '2024-05-07 15:30:45', '2024-05-07 15:30:45'),
+(646, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":301,\"status\":3}', '2024-05-07 15:32:00', '2024-05-07 15:32:00'),
+(647, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":301,\"status\":3}', '2024-05-07 15:36:33', '2024-05-07 15:36:33'),
+(648, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":301,\"status\":3}', '2024-05-07 15:37:25', '2024-05-07 15:37:25'),
+(649, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":301,\"status\":3}', '2024-05-07 15:43:17', '2024-05-07 15:43:17'),
+(650, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":300,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-07 20:22:47', '2024-05-07 20:22:47'),
+(651, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":300,\"status\":2}', '2024-05-07 20:22:55', '2024-05-07 20:22:55'),
+(652, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":299,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-07 21:00:23', '2024-05-07 21:00:23'),
+(653, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":299,\"status\":2}', '2024-05-07 21:00:44', '2024-05-07 21:00:44'),
+(654, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":298,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-08 08:15:15', '2024-05-08 08:15:15'),
+(655, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":298,\"status\":2}', '2024-05-08 08:15:23', '2024-05-08 08:15:23'),
+(656, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":null,\"order_id\":298,\"status\":3}', '2024-05-08 08:55:03', '2024-05-08 08:55:03'),
+(657, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"522301\",\"order_id\":331,\"status\":3}', '2024-05-08 08:59:42', '2024-05-08 08:59:42'),
+(658, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"522301\",\"order_id\":331,\"status\":3}', '2024-05-08 09:02:38', '2024-05-08 09:02:38'),
+(659, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"522301\",\"order_id\":331,\"status\":3}', '2024-05-08 09:04:30', '2024-05-08 09:04:30'),
+(660, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":331,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-08 09:04:42', '2024-05-08 09:04:42'),
+(661, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"242740\",\"order_id\":330,\"status\":3}', '2024-05-08 09:07:03', '2024-05-08 09:07:03'),
+(662, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":330,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-08 09:07:18', '2024-05-08 09:07:18'),
+(663, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"241374\",\"order_id\":329,\"status\":3}', '2024-05-08 09:42:11', '2024-05-08 09:42:11'),
+(664, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":329,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-08 09:42:27', '2024-05-08 09:42:27'),
+(665, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-08 10:34:18', '2024-05-08 10:34:18'),
+(666, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"844577\",\"order_id\":326,\"status\":3}', '2024-05-08 10:35:06', '2024-05-08 10:35:06'),
+(667, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":326,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-08 10:35:23', '2024-05-08 10:35:23'),
+(668, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"964962\",\"order_id\":323,\"status\":3}', '2024-05-08 10:38:02', '2024-05-08 10:38:02'),
+(669, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":323,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-08 10:38:17', '2024-05-08 10:38:17'),
+(670, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"091046\",\"order_id\":317,\"status\":3}', '2024-05-08 10:57:00', '2024-05-08 10:57:00'),
+(671, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Arrived\",\"body\":\"The Driver Has Arrived To Your Area\",\"order_id\":317,\"order_status\":4,\"driver_phone\":\"946649532\"}', '2024-05-08 10:57:13', '2024-05-08 10:57:13'),
+(672, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":340,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-12 11:27:19', '2024-05-12 11:27:19'),
+(673, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"342578\",\"order_id\":340,\"status\":2}', '2024-05-12 11:27:27', '2024-05-12 11:27:27'),
+(674, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":341,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-15 16:28:00', '2024-05-15 16:28:00'),
+(675, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"152415\",\"order_id\":341,\"status\":3}', '2024-05-15 16:28:13', '2024-05-15 16:28:13'),
+(678, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":358,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-05-30 13:37:36', '2024-05-30 13:37:36'),
+(679, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":358,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-05-30 13:37:59', '2024-05-30 13:37:59'),
+(680, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"GSIWz8Dr\",\"order_id\":358,\"status\":3}', '2024-06-02 13:05:30', '2024-06-02 13:05:30'),
+(681, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"GSIWz8Dr\",\"order_id\":358,\"status\":3}', '2024-06-02 13:06:15', '2024-06-02 13:06:15'),
+(682, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"GSIWz8Dr\",\"order_id\":358,\"status\":3}', '2024-06-02 13:09:48', '2024-06-02 13:09:48'),
+(683, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"GSIWz8Dr\",\"order_id\":358,\"status\":3}', '2024-06-02 13:11:35', '2024-06-02 13:11:35'),
+(684, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"GSIWz8Dr\",\"order_id\":358,\"status\":3}', '2024-06-02 13:14:01', '2024-06-02 13:14:01'),
+(685, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"GSIWz8Dr\",\"order_id\":358,\"status\":3}', '2024-06-02 13:15:23', '2024-06-02 13:15:23'),
+(686, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"GSIWz8Dr\",\"order_id\":358,\"status\":3}', '2024-06-02 13:16:30', '2024-06-02 13:16:30'),
+(687, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":360,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-06-02 13:21:31', '2024-06-02 13:21:31'),
+(688, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":360,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-06-02 13:21:41', '2024-06-02 13:21:41'),
+(689, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"q47z4hVJ\",\"order_id\":360,\"status\":3}', '2024-06-02 13:21:47', '2024-06-02 13:21:47'),
+(690, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":361,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-06-02 13:46:40', '2024-06-02 13:46:40'),
+(691, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":361,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-06-02 13:46:51', '2024-06-02 13:46:51'),
+(692, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"96368635\",\"order_id\":361,\"status\":3}', '2024-06-02 13:46:56', '2024-06-02 13:46:56'),
+(693, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"96368635\",\"order_id\":361,\"status\":3}', '2024-06-02 15:18:44', '2024-06-02 15:18:44'),
+(694, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"96368635\",\"order_id\":361,\"status\":3}', '2024-06-02 15:24:33', '2024-06-02 15:24:33'),
+(695, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"96368635\",\"order_id\":361,\"status\":3}', '2024-06-02 15:25:01', '2024-06-02 15:25:01'),
+(696, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":357,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-06-02 15:27:12', '2024-06-02 15:27:12'),
+(697, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":357,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-06-02 15:29:21', '2024-06-02 15:29:21'),
+(698, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"NfD7NvR7\",\"order_id\":357,\"status\":3}', '2024-06-02 15:29:33', '2024-06-02 15:29:33'),
+(699, '3', 'App\\Models\\User', 20, '{\"title\":\"Your Order Has Confirmed\",\"body\":\"Your Order Has Confirmed By A Driver\",\"order_id\":362,\"order_status\":2,\"driver_phone\":\"946649532\"}', '2024-06-02 15:31:39', '2024-06-02 15:31:39'),
+(700, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"Your Order Now is On The Way\",\"order_id\":362,\"order_status\":3,\"driver_phone\":\"946649532\"}', '2024-06-02 15:31:50', '2024-06-02 15:31:50'),
+(701, '3', 'App\\Models\\User', 20, '{\"title\":\"Order On The Way\",\"body\":\"89237661\",\"order_id\":362,\"status\":3}', '2024-06-02 15:32:00', '2024-06-02 15:32:00');
 
 -- --------------------------------------------------------
 
@@ -1244,31 +1558,32 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 --
 
 CREATE TABLE `orders` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `order_number` int(11) NOT NULL DEFAULT 1000,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `driver_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `status` tinyint(4) NOT NULL,
-  `delivery_method_id` bigint(20) UNSIGNED NOT NULL,
-  `payment_method_id` bigint(20) UNSIGNED NOT NULL,
-  `user_address_id` bigint(20) UNSIGNED NOT NULL,
-  `city_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `order_number` int NOT NULL DEFAULT '1000',
+  `user_id` bigint UNSIGNED NOT NULL,
+  `driver_id` bigint UNSIGNED DEFAULT NULL,
+  `status` tinyint NOT NULL,
+  `delivery_method_id` bigint UNSIGNED NOT NULL,
+  `payment_method_id` bigint UNSIGNED NOT NULL,
+  `user_address_id` bigint UNSIGNED NOT NULL,
+  `city_id` bigint UNSIGNED DEFAULT NULL,
   `start_time` time DEFAULT NULL,
   `end_time` time DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `payment_status` tinyint(1) NOT NULL DEFAULT 0,
-  `coupon_discount` double NOT NULL DEFAULT 0,
-  `tax` double NOT NULL DEFAULT 0,
-  `delivery_fee` double DEFAULT 0,
-  `extra_discount` double NOT NULL DEFAULT 0,
-  `sub_total` double NOT NULL DEFAULT 0,
-  `total` double NOT NULL DEFAULT 0,
+  `payment_status` tinyint(1) NOT NULL DEFAULT '0',
+  `coupon_discount` double NOT NULL DEFAULT '0',
+  `tax` double NOT NULL DEFAULT '0',
+  `delivery_fee` double DEFAULT '0',
+  `extra_discount` double NOT NULL DEFAULT '0',
+  `sub_total` double NOT NULL DEFAULT '0',
+  `total` double NOT NULL DEFAULT '0',
   `date` date NOT NULL,
-  `notes` text DEFAULT NULL,
-  `reason_for_cancel` text DEFAULT NULL,
-  `rate` int(11) DEFAULT NULL,
-  `changes` text DEFAULT NULL,
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `rate` int DEFAULT NULL,
+  `changes` text COLLATE utf8mb4_unicode_ci,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reason_for_cancel` text COLLATE utf8mb4_unicode_ci,
   `confirmed_at` datetime DEFAULT NULL,
   `delivered_at` datetime DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -1280,43 +1595,96 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `order_number`, `user_id`, `driver_id`, `status`, `delivery_method_id`, `payment_method_id`, `user_address_id`, `city_id`, `start_time`, `end_time`, `latitude`, `longitude`, `payment_status`, `coupon_discount`, `tax`, `delivery_fee`, `extra_discount`, `sub_total`, `total`, `date`, `notes`, `reason_for_cancel`, `rate`, `changes`, `confirmed_at`, `delivered_at`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(221, 1008, 20, 1, 4, 1, 1, 26, NULL, NULL, NULL, NULL, NULL, 1, 2249, 112.5, 4498, 0, 2472, 4833, '2024-04-01', 'test', NULL, 0, '[1,2]', NULL, '2024-04-23 16:44:48', NULL, '2024-04-01 10:02:23', '2024-04-23 13:58:11'),
-(223, 1010, 20, 2, 5, 1, 1, 26, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 4498, 0, 222, 4720, '2024-04-01', 'test', NULL, 0, '[1,2]', NULL, NULL, NULL, '2024-04-01 10:12:23', '2024-04-23 13:38:47'),
-(234, 1019, 47, NULL, 5, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 28500, 549866, '2024-04-07', NULL, NULL, NULL, '[1]', NULL, NULL, NULL, '2024-04-07 10:12:41', '2024-04-15 12:19:56'),
-(235, 1020, 47, 2, 2, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 28500, 549866, '2024-04-07', NULL, NULL, NULL, '[1,4]', NULL, NULL, NULL, '2024-04-07 10:14:53', '2024-04-08 13:33:27'),
-(236, 1021, 47, NULL, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 76500, 1556906, '2024-04-07', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-07 10:52:58', '2024-04-07 10:52:58'),
-(237, 1022, 47, 2, 2, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 28500, 549866, '2024-04-07', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-07 10:56:34', '2024-04-07 11:12:45'),
-(239, 1023, 20, NULL, 1, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 222, 222, '2024-04-08', NULL, NULL, NULL, '[1]', NULL, NULL, NULL, '2024-04-08 11:14:11', '2024-04-08 11:14:11'),
-(240, 1024, 20, 2, 2, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 14152222, 0, 68500, 15540242, '2024-04-09', NULL, NULL, NULL, '[1]', '2024-04-21 12:29:51', NULL, NULL, '2024-04-09 15:29:55', '2024-04-21 09:28:52'),
-(241, 1025, 47, 1, 4, 2, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 3212, 0, 5000, 8212, '2024-04-14', NULL, NULL, NULL, '[2]', NULL, NULL, NULL, '2024-04-14 08:09:19', '2024-04-14 08:09:19'),
-(242, 1026, 20, NULL, 1, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 14152222, 0, 2500, 14154722, '2024-04-14', 'ااغ', NULL, NULL, '[1]', NULL, NULL, NULL, '2024-04-14 13:56:50', '2024-04-14 13:56:50'),
-(243, 1027, 20, NULL, 1, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 2700, 9906556, 0, 90000, 9999256, '2024-04-14', 'لا', NULL, NULL, '[1]', NULL, NULL, NULL, '2024-04-14 13:59:04', '2024-04-14 13:59:04'),
-(244, 1028, 20, NULL, 1, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 2700, 9906556, 0, 90000, 9999256, '2024-04-14', 'لا', NULL, NULL, '[1]', NULL, NULL, NULL, '2024-04-14 14:00:59', '2024-04-14 14:00:59'),
-(245, 1029, 20, NULL, 1, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 510, 9906556, 0, 10200, 9917266, '2024-04-15', NULL, NULL, NULL, '[1]', NULL, NULL, NULL, '2024-04-15 07:45:54', '2024-04-15 07:45:54'),
-(246, 1030, 47, NULL, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 16, 1606, 0, 3300, 4922, '2024-04-15', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-15 08:31:27', '2024-04-15 08:31:27'),
-(247, 1031, 20, NULL, 1, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 10500, 0, 9906556, 0, 5000, 9901056, '2024-04-15', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-15 11:41:32', '2024-04-15 11:41:32'),
-(248, 1032, 47, NULL, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 2500, 4106, '2024-04-15', NULL, NULL, NULL, '[4]', NULL, NULL, NULL, '2024-04-15 14:22:23', '2024-04-15 14:22:23'),
-(249, 1033, 47, NULL, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 562, 1606, 0, 19220, 21388, '2024-04-15', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-15 14:24:42', '2024-04-15 14:24:42'),
-(250, 1034, 47, 2, 5, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 5000, 6606, '2024-04-15', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-15 14:25:43', '2024-04-17 14:49:40'),
-(251, 1035, 47, NULL, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 562, 1606, 0, 16720, 18888, '2024-04-15', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-15 14:26:32', '2024-04-15 14:26:32'),
-(252, 1036, 20, 2, 2, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 16, 9906556, 0, 800, 9907372, '2024-04-16', NULL, NULL, NULL, '[]', '2024-04-21 12:52:39', NULL, NULL, '2024-04-16 09:16:39', '2024-04-21 09:52:40'),
-(253, 1037, 20, 2, 2, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906556, 0, 2500, 9909056, '2024-04-16', NULL, NULL, NULL, '[]', '2024-04-21 12:49:46', NULL, NULL, '2024-04-16 09:18:18', '2024-04-21 09:49:47'),
-(254, 1038, 20, 2, 2, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906556, 0, 2500, 9909056, '2024-04-16', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-16 09:22:06', '2024-04-21 09:41:22'),
-(255, 1039, 20, 2, 1, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906556, 0, 2500, 9909056, '2024-04-16', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-16 09:22:58', '2024-04-17 13:03:21'),
-(256, 1040, 20, 2, 2, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906556, 0, 2500, 9909056, '2024-04-16', NULL, NULL, NULL, '[]', '2024-04-21 12:40:34', NULL, NULL, '2024-04-16 09:30:42', '2024-04-21 09:40:34'),
-(257, 1041, 20, 2, 2, 2, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 562, 19813112, 0, 11720, 19825394, '2024-04-16', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-16 09:31:30', '2024-04-21 09:37:09'),
-(258, 1042, 20, 2, 2, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 546, 9906556, 0, 10920, 9918022, '2024-04-16', NULL, NULL, NULL, '[]', NULL, NULL, NULL, '2024-04-16 09:32:10', '2024-04-21 09:36:58'),
-(259, 1043, 20, 2, 2, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906556, 0, 2500, 9909056, '2024-04-16', NULL, NULL, 1, '[]', '2024-04-21 12:36:57', NULL, NULL, '2024-04-16 09:33:25', '2024-04-21 09:35:57'),
-(260, 1044, 20, 2, 2, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906556, 0, 2500, 9909056, '2024-04-16', NULL, NULL, 4, '[]', NULL, NULL, NULL, '2024-04-16 09:39:00', '2024-04-21 11:33:16'),
-(261, 1045, 20, 2, 2, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906556, 0, 2500, 9909056, '2024-04-16', NULL, NULL, 4, '[]', NULL, NULL, NULL, '2024-04-16 09:40:11', '2024-04-21 11:35:40'),
-(262, 1046, 20, 1, 1, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 0, 0, 225, 14152222, 0, 4722, 14157169, '2024-04-24', NULL, NULL, NULL, '[2]', '2024-04-21 12:30:51', NULL, NULL, '2024-04-16 11:46:24', '2024-04-29 12:46:49'),
-(263, 1047, 20, 1, 4, 1, 1, 78, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906556, 0, 2500, 9909056, '2024-04-16', NULL, 'sdcf', NULL, '[1]', NULL, '2024-04-23 15:40:25', NULL, '2024-04-16 11:55:39', '2024-04-23 12:40:26'),
-(264, 1048, 20, 1, 2, 2, 1, 78, NULL, NULL, NULL, NULL, NULL, 1, 0, 225, 14152222, 0, 4722, 14157169, '2024-04-24', NULL, NULL, 2, '[4]', '2024-04-22 12:32:56', '2024-04-22 17:10:38', NULL, '2024-04-08 14:19:36', '2024-04-24 09:46:08'),
-(265, 1049, 20, NULL, 1, 1, 1, 26, NULL, NULL, NULL, NULL, NULL, 0, 0, 112.5, 4498, 0, 2472, 7000, '2024-04-25', 'test', NULL, NULL, '[1,2]', NULL, NULL, NULL, '2024-04-25 10:53:57', '2024-04-25 10:53:57'),
-(266, 1050, 20, NULL, 1, 1, 1, 26, NULL, NULL, NULL, NULL, NULL, 0, 0, 225, 4498, 0, 4722, 9400, '2024-04-25', 'test', NULL, NULL, '[1,2]', NULL, NULL, NULL, '2024-04-25 10:54:32', '2024-04-25 10:54:32'),
-(267, 1051, 20, NULL, 1, 1, 1, 26, NULL, NULL, NULL, NULL, NULL, 0, 0, 225, 4498, 0, 4722, 9400, '2024-04-25', 'test', NULL, NULL, '[1,2]', NULL, NULL, NULL, '2024-04-25 10:56:26', '2024-04-25 10:56:26'),
-(268, 1052, 20, 1, 2, 1, 1, 26, NULL, NULL, NULL, NULL, NULL, 0, 0, 225, 4498, 45, 4722, 9400, '2024-04-25', 'test', NULL, NULL, '[1,2]', NULL, NULL, NULL, '2024-04-25 10:57:27', '2024-04-25 10:57:27');
+INSERT INTO `orders` (`id`, `order_number`, `user_id`, `driver_id`, `status`, `delivery_method_id`, `payment_method_id`, `user_address_id`, `city_id`, `start_time`, `end_time`, `latitude`, `longitude`, `payment_status`, `coupon_discount`, `tax`, `delivery_fee`, `extra_discount`, `sub_total`, `total`, `date`, `notes`, `rate`, `changes`, `code`, `reason_for_cancel`, `confirmed_at`, `delivered_at`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(221, 1008, 20, 1, 3, 1, 1, 26, NULL, NULL, NULL, NULL, NULL, 1, 2249, 0, 4498, 0, 2722, 4971, '2024-04-01', 'test', 2, '[1,2]', '123487', NULL, NULL, '2024-05-06 10:24:21', NULL, '2024-04-01 10:02:23', '2024-05-06 09:03:58'),
+(223, 1010, 20, 1, 4, 1, 1, 26, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 4498, 0, 2500, 6998, '2024-04-01', 'test', 0, '[1,2]', NULL, NULL, '2024-04-23 15:51:55', '2024-05-05 15:49:51', NULL, '2024-04-01 10:12:23', '2024-05-05 13:49:52'),
+(234, 1019, 47, NULL, 5, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 28500, 549866, '2024-04-07', NULL, NULL, '[1]', NULL, NULL, NULL, NULL, NULL, '2024-04-07 10:12:41', '2024-04-15 12:19:56'),
+(235, 1020, 47, 2, 2, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 28500, 549866, '2024-04-07', NULL, NULL, '[1,4]', NULL, NULL, NULL, NULL, NULL, '2024-04-07 10:14:53', '2024-04-08 13:33:27'),
+(237, 1022, 47, 2, 3, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 546, 1606, 0, 10920, 13072, '2024-04-07', NULL, NULL, '[]', NULL, NULL, NULL, NULL, NULL, '2024-04-07 10:56:34', '2024-04-24 10:16:17'),
+(241, 1025, 47, 3, 1, 2, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 3212, 0, 5000, 8212, '2024-04-14', NULL, NULL, '[2]', NULL, NULL, NULL, NULL, NULL, '2024-04-14 08:09:19', '2024-04-14 08:09:19'),
+(246, 1030, 47, 2, 3, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 16, 1606, 0, 3300, 4922, '2024-04-15', NULL, NULL, '[]', NULL, 'qqqq', '2024-04-22 13:00:52', NULL, NULL, '2024-04-15 08:31:27', '2024-04-24 08:40:58'),
+(248, 1032, 47, 3, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 2500, 4106, '2024-04-15', NULL, NULL, '[4]', NULL, NULL, NULL, NULL, NULL, '2024-04-15 14:22:23', '2024-04-21 11:58:27'),
+(249, 1033, 47, 3, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 562, 1606, 0, 19220, 21388, '2024-04-15', NULL, NULL, '[]', NULL, NULL, NULL, NULL, NULL, '2024-04-15 14:24:42', '2024-04-21 12:14:09'),
+(250, 1034, 47, 3, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1606, 0, 5000, 6606, '2024-04-15', NULL, 1, '[]', NULL, 'gH', NULL, NULL, NULL, '2024-04-15 14:25:43', '2024-04-21 11:10:54'),
+(272, 1038, 28, 2, 4, 1, 1, 42, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 17724213, 0, 2500, 17726713, '2024-04-21', NULL, NULL, '[1]', NULL, NULL, '2024-04-22 11:31:04', '2024-04-24 10:39:06', NULL, '2024-04-21 14:51:58', '2024-04-24 08:39:06'),
+(273, 1038, 28, 3, 3, 1, 1, 42, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 17724213, 0, 2500, 17726713, '2024-04-21', NULL, NULL, '[1]', NULL, NULL, '2024-04-22 12:49:52', NULL, NULL, '2024-04-21 14:51:58', '2024-04-22 12:38:15'),
+(275, 1040, 50, 2, 4, 1, 1, 85, NULL, NULL, NULL, NULL, NULL, 1, 0, 16, 1632, 0, 800, 2448, '2024-04-23', NULL, NULL, '[5]', NULL, NULL, '2024-04-23 14:23:25', '2024-04-24 10:18:15', NULL, '2024-04-23 11:37:19', '2024-04-24 08:18:15'),
+(281, 1043, 50, 2, 4, 2, 1, 85, NULL, NULL, NULL, NULL, NULL, 1, 0, 510, 3265, 0, 10200, 13975, '2024-04-23', NULL, NULL, '[5]', NULL, NULL, '2024-04-23 15:16:14', '2024-04-23 18:37:48', NULL, '2024-04-23 13:15:42', '2024-04-23 16:37:49'),
+(282, 1044, 50, 2, 4, 2, 1, 85, NULL, NULL, NULL, NULL, NULL, 1, 0, 96, 3265, 0, 9800, 13161, '2024-04-23', NULL, NULL, '[]', NULL, NULL, '2024-04-23 15:24:43', '2024-04-23 18:38:24', NULL, '2024-04-23 13:23:17', '2024-04-23 16:38:25'),
+(283, 1045, 50, 2, 4, 2, 1, 85, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 3265, 0, 2500, 5765, '2024-04-23', NULL, NULL, '[]', NULL, NULL, '2024-04-23 15:28:55', '2024-04-23 18:58:19', NULL, '2024-04-23 13:27:58', '2024-04-23 16:58:19'),
+(284, 1046, 50, 2, 4, 1, 1, 85, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 1632, 0, 2500, 4132, '2024-04-23', NULL, NULL, '[]', NULL, NULL, '2024-04-23 15:31:29', '2024-04-23 18:53:39', NULL, '2024-04-23 13:30:46', '2024-04-23 16:53:39'),
+(285, 1047, 50, 2, 4, 1, 1, 85, NULL, NULL, NULL, NULL, NULL, 1, 0, 16, 1632, 0, 800, 2448, '2024-04-23', NULL, NULL, '[]', NULL, NULL, '2024-04-23 15:33:31', '2024-04-23 18:38:56', NULL, '2024-04-23 13:33:18', '2024-04-23 16:38:56'),
+(289, 1051, 20, 2, 2, 1, 1, 81, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1123, 0, 10000, 11123, '2024-04-24', NULL, NULL, '[4]', NULL, NULL, '2024-04-28 12:50:59', NULL, NULL, '2024-04-24 08:59:30', '2024-04-28 10:51:00'),
+(290, 1052, 20, NULL, 2, 1, 1, 87, NULL, NULL, NULL, NULL, NULL, 0, 0, 2730, 1120, 0, 54600, 58450, '2024-04-24', NULL, NULL, '[]', NULL, NULL, NULL, NULL, NULL, '2024-04-24 09:13:50', '2024-04-24 10:25:18'),
+(291, 1053, 20, 2, 2, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906235, 0, 2500, 9908735, '2024-04-24', NULL, NULL, '[]', NULL, NULL, '2024-04-28 12:50:49', NULL, NULL, '2024-04-24 10:37:13', '2024-04-28 10:50:49'),
+(292, 1054, 20, 2, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 3500, 0, 9906235, 0, 0, 9902735, '2024-04-24', NULL, NULL, '[1]', NULL, NULL, '2024-04-24 13:28:52', '2024-04-24 13:34:18', NULL, '2024-04-24 11:23:40', '2024-04-24 11:34:18'),
+(293, 1055, 20, 2, 2, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 3500, 526, 9906235, 0, 11000, 9914261, '2024-04-24', NULL, NULL, '[]', NULL, NULL, '2024-04-28 12:50:46', NULL, NULL, '2024-04-24 12:10:21', '2024-04-28 10:50:47'),
+(294, 1056, 20, 2, 4, 1, 1, 26, NULL, NULL, NULL, NULL, NULL, 1, 0, 32, 3149, 81, 6600, 9781, '2024-04-25', 'test', NULL, '[1,2]', NULL, NULL, '2024-04-25 14:31:51', '2024-04-25 14:38:23', NULL, '2024-04-25 12:14:04', '2024-04-25 12:38:23'),
+(295, 1057, 20, 2, 2, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906235, 35, 2500, 9908700, '2024-04-25', NULL, NULL, '[]', NULL, NULL, '2024-04-28 12:50:54', NULL, NULL, '2024-04-25 12:59:49', '2024-04-28 10:50:54'),
+(296, 1058, 20, 2, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 7000, 0, 9906235, 35, 2500, 9901735, '2024-04-26', NULL, NULL, '[]', NULL, NULL, '2024-04-28 12:50:52', '2024-05-02 10:48:29', NULL, '2024-04-26 16:44:47', '2024-05-02 08:48:29'),
+(297, 1059, 20, 2, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906235, 35, 2500, 9908735, '2024-04-28', NULL, NULL, '[]', NULL, NULL, '2024-04-28 12:50:43', '2024-04-30 13:56:48', NULL, '2024-04-28 10:50:13', '2024-04-30 11:56:49'),
+(298, 1060, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 14151763, 63, 2500, 14154200, '2024-04-28', 'jj', NULL, '[2]', NULL, NULL, '2024-05-08 10:15:15', NULL, NULL, '2024-04-28 13:50:29', '2024-05-08 08:15:23'),
+(299, 1061, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 14151763, 63, 12500, 14164200, '2024-04-29', NULL, NULL, '[]', NULL, NULL, '2024-05-07 23:00:23', NULL, NULL, '2024-04-29 11:27:50', '2024-05-07 21:00:44'),
+(300, 1062, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 675, 9906235, 10, 22500, 9929400, '2024-04-30', NULL, NULL, '[]', NULL, NULL, '2024-05-07 22:22:47', NULL, NULL, '2024-04-30 13:59:12', '2024-05-07 20:22:55'),
+(301, 1063, 20, 1, 3, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 16, 19812469, 85, 800, 19813200, '2024-05-02', NULL, NULL, '[]', NULL, NULL, '2024-05-07 17:02:34', NULL, NULL, '2024-05-02 09:31:15', '2024-05-07 15:02:42'),
+(302, 1064, 20, 1, 3, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-02', NULL, NULL, '[]', 'VQT1ZdBl', NULL, '2024-05-07 16:23:07', NULL, NULL, '2024-05-02 10:38:27', '2024-05-07 14:23:14'),
+(303, 1065, 20, 1, 3, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-02', NULL, NULL, '[]', 'wMSUzQgT', NULL, '2024-05-07 15:57:32', NULL, NULL, '2024-05-02 12:16:01', '2024-05-07 13:57:38'),
+(304, 1066, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906235, 35, 2500, 9908700, '2024-05-02', NULL, NULL, '[]', 'UX08UFT1', NULL, '2024-05-05 14:09:36', NULL, NULL, '2024-05-02 13:43:32', '2024-05-05 12:09:54'),
+(305, 1067, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 16, 9906235, 51, 800, 9907000, '2024-05-05', NULL, NULL, '[1]', '188882', NULL, '2024-05-05 11:34:35', '2024-05-05 11:38:53', NULL, '2024-05-05 09:14:29', '2024-05-05 09:38:53'),
+(306, 1068, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 16, 9906235, 51, 800, 9907000, '2024-05-05', NULL, NULL, '[]', '430336', NULL, '2024-05-05 12:44:58', '2024-05-05 13:46:04', NULL, '2024-05-05 10:44:10', '2024-05-05 11:46:04'),
+(307, 1069, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906235, 35, 2500, 9908735, '2024-05-05', NULL, NULL, '[]', '998448', NULL, '2024-05-05 13:49:29', '2024-05-05 13:54:18', NULL, '2024-05-05 11:47:51', '2024-05-05 11:54:19'),
+(308, 1070, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906235, 35, 2500, 9908700, '2024-05-05', NULL, NULL, '[]', '886248', NULL, '2024-05-05 14:12:26', '2024-05-05 14:12:58', NULL, '2024-05-05 12:11:47', '2024-05-05 12:12:59'),
+(309, 1071, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906235, 35, 2500, 9908700, '2024-05-05', NULL, NULL, '[]', '870803', NULL, '2024-05-05 15:02:19', '2024-05-05 15:05:04', NULL, '2024-05-05 13:01:40', '2024-05-05 13:05:05'),
+(310, 1072, 20, 1, 4, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-05', NULL, NULL, '[]', '099600', NULL, '2024-05-05 15:16:11', '2024-05-05 15:16:30', NULL, '2024-05-05 13:15:01', '2024-05-05 13:16:31'),
+(311, 1073, 20, 1, 3, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-05', NULL, NULL, '[]', '819696', NULL, '2024-05-05 15:21:43', NULL, NULL, '2024-05-05 13:21:09', '2024-05-05 13:22:00'),
+(312, 1074, 20, 1, 4, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 19812469, 69, 2500, 19814969, '2024-05-05', NULL, NULL, '[]', '465093', NULL, '2024-05-05 15:35:32', '2024-05-05 15:40:59', NULL, '2024-05-05 13:29:46', '2024-05-05 13:41:00'),
+(313, 1075, 20, 1, 3, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-05', NULL, NULL, '[]', '937778', NULL, '2024-05-05 15:44:45', NULL, NULL, '2024-05-05 13:41:55', '2024-05-05 13:44:54'),
+(314, 1076, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906235, 35, 2500, 9908700, '2024-05-05', NULL, NULL, '[]', '452815', NULL, '2024-05-05 15:49:44', NULL, NULL, '2024-05-05 13:48:33', '2024-05-05 13:50:05'),
+(315, 1077, 20, 1, 3, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-05', NULL, NULL, '[]', '272225', NULL, '2024-05-05 15:55:51', NULL, NULL, '2024-05-05 13:52:26', '2024-05-05 13:58:36'),
+(316, 1078, 20, 1, 3, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-05', NULL, NULL, '[]', '243577', NULL, '2024-05-05 16:01:45', NULL, NULL, '2024-05-05 14:00:42', '2024-05-05 14:02:30'),
+(317, 1079, 20, 1, 4, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 19812469, 69, 2500, 19814969, '2024-05-05', NULL, NULL, '[]', '091046', NULL, '2024-05-05 16:12:40', '2024-05-08 12:57:13', NULL, '2024-05-05 14:11:58', '2024-05-08 10:57:13'),
+(318, 1080, 20, 1, 2, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-05', NULL, NULL, '[]', '768146', NULL, '2024-05-05 16:33:49', NULL, NULL, '2024-05-05 14:22:25', '2024-05-05 14:33:49'),
+(319, 1081, 20, 1, 2, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-05', NULL, NULL, '[]', '314543', NULL, '2024-05-05 16:46:40', NULL, NULL, '2024-05-05 14:45:29', '2024-05-05 14:46:40'),
+(320, 1082, 20, 1, 4, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 19812469, 69, 2500, 19814900, '2024-05-05', NULL, NULL, '[]', '936665', NULL, '2024-05-05 17:11:38', '2024-05-05 17:12:03', NULL, '2024-05-05 15:11:03', '2024-05-05 15:12:04'),
+(321, 1083, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906235, 35, 2500, 9908700, '2024-05-05', NULL, NULL, '[]', '577227', NULL, '2024-05-05 17:19:58', '2024-05-05 17:21:12', NULL, '2024-05-05 15:19:41', '2024-05-05 15:21:12'),
+(322, 1084, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906235, 35, 2500, 9908735, '2024-05-05', NULL, NULL, '[]', '914938', NULL, '2024-05-05 17:24:09', '2024-05-07 15:15:17', NULL, '2024-05-05 15:23:28', '2024-05-07 13:15:17'),
+(323, 1085, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906235, 35, 2500, 9908735, '2024-05-06', NULL, NULL, '[]', '964962', NULL, '2024-05-06 10:37:37', '2024-05-08 12:38:17', NULL, '2024-05-06 08:11:46', '2024-05-08 10:38:17'),
+(324, 1086, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906235, 35, 2500, 9908700, '2024-05-06', NULL, NULL, '[]', '153235', NULL, '2024-05-06 10:32:52', '2024-05-06 10:34:13', NULL, '2024-05-06 08:12:13', '2024-05-06 08:34:14'),
+(326, 1087, 20, 1, 4, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 19812469, 69, 2500, 19814969, '2024-05-06', NULL, NULL, '[]', '844577', NULL, '2024-05-06 10:13:49', '2024-05-08 12:35:23', NULL, '2024-05-06 08:12:49', '2024-05-08 10:35:23'),
+(327, 1088, 20, 2, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906235, 35, 2500, 9908735, '2024-05-06', NULL, 2, '[]', '946006', NULL, '2024-05-06 12:37:05', NULL, NULL, '2024-05-06 10:36:42', '2024-05-06 15:28:53'),
+(328, 1089, 20, 2, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 16, 9906235, 51, 800, 9907051, '2024-05-06', NULL, 3, '[]', '466732', NULL, '2024-05-06 12:38:55', NULL, NULL, '2024-05-06 10:38:42', '2024-05-06 15:27:40'),
+(329, 1090, 20, 1, 4, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 16, 19812469, 85, 800, 19813285, '2024-05-06', NULL, 5, '[]', '241374', NULL, '2024-05-06 13:50:24', '2024-05-08 11:42:27', NULL, '2024-05-06 11:49:59', '2024-05-08 09:42:27'),
+(330, 1091, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 16, 9906235, 51, 800, 9907051, '2024-05-06', NULL, 5, '[]', '242740', NULL, '2024-05-06 13:58:22', '2024-05-08 11:07:18', NULL, '2024-05-06 11:54:40', '2024-05-08 09:07:18'),
+(331, 1092, 20, 1, 4, 2, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 16, 19812469, 85, 800, 19813285, '2024-05-06', NULL, 3, '[]', '522301', NULL, '2024-05-06 13:58:13', '2024-05-08 11:04:41', NULL, '2024-05-06 11:57:57', '2024-05-08 09:04:42'),
+(332, 1093, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 16, 9906235, 51, 800, 9907051, '2024-05-06', NULL, 2, '[]', '746801', NULL, '2024-05-06 14:06:34', '2024-05-07 15:28:41', NULL, '2024-05-06 12:06:06', '2024-05-07 13:28:41'),
+(333, 1094, 47, NULL, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 16, 1606, 22, 5800, 7400, '2024-05-09', NULL, NULL, '[1]', '123186', NULL, NULL, NULL, NULL, '2024-05-09 20:42:13', '2024-05-09 20:42:13'),
+(337, 1097, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 578, 9906235, 33, 12520, 9919300, '2024-05-12', NULL, NULL, '[1]', '338103', NULL, NULL, NULL, NULL, '2024-05-12 10:51:26', '2024-05-12 10:51:26'),
+(338, 1098, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 16, 9906235, 51, 800, 9907000, '2024-05-12', NULL, NULL, '[]', '333736', NULL, NULL, NULL, NULL, '2024-05-12 10:52:25', '2024-05-12 10:52:25'),
+(339, 1099, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 16, 9906235, 51, 5800, 9912000, '2024-05-12', NULL, NULL, '[2]', '461114', NULL, NULL, NULL, NULL, '2024-05-12 10:55:28', '2024-05-12 10:55:28'),
+(340, 1100, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 9906235, 35, 2500, 9908700, '2024-05-12', NULL, NULL, '[1]', '342578', NULL, '2024-05-12 13:27:19', NULL, NULL, '2024-05-12 11:00:12', '2024-05-12 11:27:27'),
+(341, 1101, 20, 1, 4, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 9906235, 35, 25000, 9931235, '2024-05-15', NULL, NULL, '[1]', '152415', NULL, '2024-05-15 18:28:00', '2024-05-15 18:28:44', NULL, '2024-05-15 16:27:34', '2024-05-15 16:28:45'),
+(342, 1102, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 14151763, 63, 2500, 14154200, '2024-05-26', NULL, NULL, '[]', '793657', NULL, NULL, NULL, NULL, '2024-05-26 14:21:52', '2024-05-26 14:21:52'),
+(343, 1103, 20, 1, 2, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 14151763, 63, 2500, 14154200, '2024-05-26', NULL, NULL, '[]', '633809', NULL, '2024-05-26 17:48:41', NULL, NULL, '2024-05-26 14:22:53', '2024-05-26 15:48:41'),
+(344, 1104, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 11321411, 11, 2500, 11323900, '2024-05-29', NULL, NULL, '[1]', '3ioVfUtu', NULL, NULL, NULL, NULL, '2024-05-29 11:00:57', '2024-05-29 11:00:57'),
+(345, 1105, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 11321411, 11, 2500, 11323900, '2024-05-29', NULL, NULL, '[1]', '4PaDMTzY', NULL, NULL, NULL, NULL, '2024-05-29 11:19:41', '2024-05-29 11:19:41'),
+(346, 1106, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 11321411, 11, 2500, 11323900, '2024-05-29', NULL, NULL, '[]', 'oA3Bw5Bn', NULL, NULL, NULL, NULL, '2024-05-29 11:22:28', '2024-05-29 11:22:28'),
+(347, 1107, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 11321411, 11, 2500, 11323900, '2024-05-29', NULL, NULL, '[]', 'EYXzzyIc', NULL, NULL, NULL, NULL, '2024-05-29 11:22:58', '2024-05-29 11:22:58'),
+(348, 1108, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 11321411, 11, 2500, 11323900, '2024-05-29', NULL, NULL, '[]', 'CZIltfgg', NULL, NULL, NULL, NULL, '2024-05-29 11:25:25', '2024-05-29 11:25:25'),
+(349, 1109, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 32, 11321411, 43, 6600, 11328000, '2024-05-29', NULL, NULL, '[1]', 'H8kQLULJ', NULL, NULL, NULL, NULL, '2024-05-29 11:32:47', '2024-05-29 11:32:47'),
+(350, 1110, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 11321411, 11, 2500, 11323900, '2024-05-29', NULL, NULL, '[]', 't179YxvY', NULL, NULL, NULL, NULL, '2024-05-29 11:43:29', '2024-05-29 11:43:29'),
+(351, 1111, 20, NULL, 1, 3, 1, 80, NULL, '16:05:00', NULL, NULL, NULL, 0, 0, 0, 11321411, 11, 2500, 11323900, '2024-05-29', NULL, NULL, '[]', 'ZuPfon0v', NULL, NULL, NULL, NULL, '2024-05-29 13:53:24', '2024-05-29 13:53:24'),
+(352, 1112, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 80, 0, 80, 4000, 4000, '2024-05-30', NULL, NULL, '[1]', 'dcVWhnTl', NULL, NULL, NULL, NULL, '2024-05-29 14:59:21', '2024-05-30 13:41:00'),
+(353, 1113, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 25, 0, 25, 2500, 2500, '2024-05-30', NULL, NULL, '[1]', 'K4wClXkw', NULL, NULL, NULL, NULL, '2024-05-30 08:15:56', '2024-05-30 08:15:56'),
+(354, 1114, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 25, 0, 25, 2500, 2500, '2024-05-30', NULL, NULL, '[]', 'H7BhywSL', NULL, NULL, NULL, NULL, '2024-05-30 09:33:54', '2024-05-30 09:33:54'),
+(355, 1115, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 100, 0, 0, 10000, 10100, '2024-05-30', NULL, NULL, '[]', 'Bk9F0LsE', NULL, NULL, NULL, NULL, '2024-05-30 09:36:15', '2024-05-30 09:36:15'),
+(356, 1116, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 80, 0, 80, 4000, 4000, '2024-05-30', NULL, NULL, '[]', 'uclEhR6z', NULL, NULL, NULL, NULL, '2024-05-30 09:37:24', '2024-05-30 09:37:24'),
+(357, 1117, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 48, 0, 48, 2400, 2448, '2024-05-30', NULL, NULL, '[]', 'NfD7NvR7', NULL, '2024-06-02 17:27:12', NULL, NULL, '2024-05-30 09:38:34', '2024-06-02 15:29:21'),
+(358, 1118, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 57, 0, 57, 4100, 4157, '2024-05-30', NULL, NULL, '[]', 'GSIWz8Dr', NULL, '2024-05-30 15:37:35', NULL, NULL, '2024-05-30 09:48:18', '2024-05-30 13:37:59'),
+(359, 1119, 47, NULL, 1, 1, 1, 76, NULL, NULL, NULL, NULL, NULL, 0, 0, 500, 1606, 6, 50000, 52100, '2024-06-02', NULL, NULL, '[]', 'aMJrvBjz', NULL, NULL, NULL, NULL, '2024-06-02 10:31:23', '2024-06-02 10:31:23'),
+(360, 1120, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 25, 0, 25, 2500, 2525, '2024-06-02', NULL, NULL, '[]', 'q47z4hVJ', NULL, '2024-06-02 15:21:31', NULL, NULL, '2024-06-02 13:21:11', '2024-06-02 13:21:41'),
+(361, 1121, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 25, 0, 25, 2500, 2525, '2024-06-02', NULL, NULL, '[]', '96368635', NULL, '2024-06-02 15:46:40', NULL, NULL, '2024-06-02 13:46:22', '2024-06-02 13:46:51'),
+(362, 1122, 20, 1, 3, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 100, 0, 0, 10000, 10100, '2024-06-02', NULL, NULL, '[]', '89237661', NULL, '2024-06-02 17:31:38', NULL, NULL, '2024-06-02 15:31:27', '2024-06-02 15:31:50'),
+(363, 1123, 20, NULL, 1, 1, 1, 80, NULL, NULL, NULL, NULL, NULL, 0, 0, 25, 0, 25, 2500, 2500, '2024-06-03', NULL, NULL, '[]', '342128', NULL, NULL, NULL, NULL, '2024-06-03 09:35:02', '2024-06-03 09:35:02');
 
 -- --------------------------------------------------------
 
@@ -1325,10 +1693,10 @@ INSERT INTO `orders` (`id`, `order_number`, `user_id`, `driver_id`, `status`, `d
 --
 
 CREATE TABLE `orders_rate_attributes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `rate_attribute_id` int(11) NOT NULL DEFAULT 0,
-  `input` text DEFAULT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `rate_attribute_id` int NOT NULL DEFAULT '0',
+  `input` text COLLATE utf8mb4_unicode_ci,
+  `order_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1338,8 +1706,7 @@ CREATE TABLE `orders_rate_attributes` (
 --
 
 INSERT INTO `orders_rate_attributes` (`id`, `rate_attribute_id`, `input`, `order_id`, `created_at`, `updated_at`) VALUES
-(4, 5, 'asczxc', 264, '2024-04-21 11:31:31', '2024-04-21 11:31:31'),
-(8, 5, 'asczxc', 261, '2024-04-21 11:41:18', '2024-04-21 11:41:18');
+(12, 2, NULL, 331, '2024-05-06 14:57:17', '2024-05-06 14:57:17');
 
 -- --------------------------------------------------------
 
@@ -1348,9 +1715,9 @@ INSERT INTO `orders_rate_attributes` (`id`, `rate_attribute_id`, `input`, `order
 --
 
 CREATE TABLE `order_delivery_attributes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
-  `delivery_attribute_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `delivery_attribute_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1364,22 +1731,24 @@ INSERT INTO `order_delivery_attributes` (`id`, `order_id`, `delivery_attribute_i
 (264, 223, 1, NULL, NULL),
 (276, 234, 1, NULL, NULL),
 (277, 235, 3, NULL, NULL),
-(278, 236, 3, NULL, NULL),
 (279, 237, 3, NULL, NULL),
-(281, 239, 2, NULL, NULL),
-(282, 240, 2, NULL, NULL),
 (283, 241, 3, NULL, NULL),
-(284, 242, 2, NULL, NULL),
-(285, 243, 2, NULL, NULL),
-(286, 244, 2, NULL, NULL),
-(287, 245, 2, NULL, NULL),
-(288, 262, 3, NULL, NULL),
-(289, 263, 1, NULL, NULL),
-(290, 264, 2, NULL, NULL),
-(291, 265, 1, NULL, NULL),
-(292, 266, 1, NULL, NULL),
-(293, 267, 1, NULL, NULL),
-(294, 268, 1, NULL, NULL);
+(297, 275, 1, NULL, NULL),
+(298, 281, 3, NULL, NULL),
+(302, 289, 1, NULL, NULL),
+(303, 292, 1, NULL, NULL),
+(304, 293, 2, NULL, NULL),
+(305, 294, 1, NULL, NULL),
+(306, 298, 1, NULL, NULL),
+(307, 333, 1, NULL, NULL),
+(308, 337, 1, NULL, NULL),
+(309, 340, 1, NULL, NULL),
+(310, 344, 2, NULL, NULL),
+(311, 345, 2, NULL, NULL),
+(312, 349, 2, NULL, NULL),
+(313, 351, 2, NULL, NULL),
+(314, 352, 2, NULL, NULL),
+(315, 353, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1388,12 +1757,12 @@ INSERT INTO `order_delivery_attributes` (`id`, `order_id`, `delivery_attribute_i
 --
 
 CREATE TABLE `order_details` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `quantity` int NOT NULL,
   `price` decimal(8,2) NOT NULL,
-  `status` tinyint(4) NOT NULL,
+  `status` tinyint NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1404,67 +1773,112 @@ CREATE TABLE `order_details` (
 --
 
 INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `quantity`, `price`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(387, 221, 36, 2, 111.00, 1, NULL, '2024-04-01 10:02:23', '2024-04-23 13:43:44'),
-(388, 221, 40, 1, 2500.00, 1, NULL, '2024-04-01 10:02:23', '2024-04-23 13:43:44'),
-(390, 223, 36, 2, 111.00, 1, NULL, '2024-04-01 10:12:23', '2024-04-23 13:38:47'),
-(391, 223, 40, 1, 2500.00, 0, NULL, '2024-04-01 10:12:23', '2024-04-23 13:38:47'),
+(388, 221, 40, 1, 2500.00, 1, NULL, '2024-04-01 10:02:23', '2024-04-01 10:02:23'),
+(391, 223, 40, 1, 2500.00, 1, NULL, '2024-04-01 10:12:23', '2024-04-01 10:12:23'),
 (405, 234, 46, 1, 12000.00, 1, NULL, '2024-04-07 10:12:41', '2024-04-07 10:12:41'),
 (406, 234, 47, 1, 14000.00, 1, NULL, '2024-04-07 10:12:41', '2024-04-07 10:12:41'),
 (407, 234, 40, 1, 2500.00, 1, NULL, '2024-04-07 10:12:41', '2024-04-07 10:12:41'),
 (408, 235, 47, 1, 14000.00, 1, NULL, '2024-04-07 10:14:53', '2024-04-07 10:14:53'),
 (409, 235, 46, 1, 12000.00, 1, NULL, '2024-04-07 10:14:53', '2024-04-07 10:14:53'),
 (410, 235, 40, 1, 2500.00, 1, NULL, '2024-04-07 10:14:53', '2024-04-07 10:14:53'),
-(411, 236, 40, 1, 2500.00, 1, NULL, '2024-04-07 10:52:58', '2024-04-07 10:52:58'),
-(412, 236, 46, 5, 12000.00, 1, NULL, '2024-04-07 10:52:58', '2024-04-07 10:52:58'),
-(413, 236, 47, 1, 14000.00, 1, NULL, '2024-04-07 10:52:58', '2024-04-07 10:52:58'),
-(414, 237, 40, 1, 2500.00, 1, NULL, '2024-04-07 10:56:34', '2024-04-07 11:16:18'),
-(415, 237, 46, 1, 12000.00, 1, NULL, '2024-04-07 10:56:34', '2024-04-07 11:16:18'),
+(414, 237, 40, 1, 2500.00, 0, NULL, '2024-04-07 10:56:34', '2024-04-24 10:16:17'),
+(415, 237, 46, 1, 12000.00, 0, NULL, '2024-04-07 10:56:34', '2024-04-24 10:16:17'),
 (416, 237, 47, 1, 14000.00, 1, NULL, '2024-04-07 10:56:34', '2024-04-07 11:16:18'),
-(419, 239, 22, 1, 111.00, 1, NULL, '2024-04-08 11:14:11', '2024-04-08 11:14:11'),
-(420, 239, 36, 1, 111.00, 1, NULL, '2024-04-08 11:14:11', '2024-04-08 11:14:11'),
-(421, 240, 46, 2, 12000.00, 1, NULL, '2024-04-09 15:29:55', '2024-04-09 15:29:55'),
-(422, 240, 40, 1, 2500.00, 1, NULL, '2024-04-09 15:29:55', '2024-04-09 15:29:55'),
-(423, 240, 47, 3, 14000.00, 1, NULL, '2024-04-09 15:29:55', '2024-04-09 15:29:55'),
 (424, 241, 40, 2, 2500.00, 1, NULL, '2024-04-14 08:09:19', '2024-04-14 08:09:19'),
-(425, 242, 40, 1, 2500.00, 1, NULL, '2024-04-14 13:56:51', '2024-04-14 13:56:51'),
-(426, 243, 49, 4, 25000.00, 1, NULL, '2024-04-14 13:59:05', '2024-04-14 13:59:05'),
-(427, 244, 49, 4, 25000.00, 1, NULL, '2024-04-14 14:01:00', '2024-04-14 14:01:00'),
-(428, 245, 48, 1, 17000.00, 1, NULL, '2024-04-15 07:45:55', '2024-04-15 07:45:55'),
 (429, 246, 40, 1, 2500.00, 1, NULL, '2024-04-15 08:31:28', '2024-04-15 08:31:28'),
 (430, 246, 46, 1, 1000.00, 1, NULL, '2024-04-15 08:31:28', '2024-04-15 08:31:28'),
-(431, 247, 40, 2, 2500.00, 1, NULL, '2024-04-15 11:41:33', '2024-04-15 11:41:33'),
 (432, 248, 40, 1, 2500.00, 1, NULL, '2024-04-15 14:22:24', '2024-04-15 14:22:24'),
 (433, 249, 47, 1, 14000.00, 1, NULL, '2024-04-15 14:24:43', '2024-04-15 14:24:43'),
 (434, 249, 46, 1, 1000.00, 1, NULL, '2024-04-15 14:24:43', '2024-04-15 14:24:43'),
 (435, 249, 40, 3, 2500.00, 1, NULL, '2024-04-15 14:24:43', '2024-04-15 14:24:43'),
 (436, 250, 40, 2, 2500.00, 1, NULL, '2024-04-15 14:25:43', '2024-04-15 14:25:43'),
-(437, 251, 47, 1, 14000.00, 1, NULL, '2024-04-15 14:26:33', '2024-04-15 14:26:33'),
-(438, 251, 46, 1, 1000.00, 1, NULL, '2024-04-15 14:26:33', '2024-04-15 14:26:33'),
-(439, 251, 40, 2, 2500.00, 1, NULL, '2024-04-15 14:26:33', '2024-04-15 14:26:33'),
-(440, 252, 46, 1, 1000.00, 1, NULL, '2024-04-16 09:16:40', '2024-04-16 09:16:40'),
-(441, 253, 40, 1, 2500.00, 1, NULL, '2024-04-16 09:18:19', '2024-04-16 09:18:19'),
-(442, 254, 40, 1, 2500.00, 1, NULL, '2024-04-16 09:22:06', '2024-04-16 09:22:06'),
-(443, 255, 40, 1, 2500.00, 1, NULL, '2024-04-16 09:22:58', '2024-04-16 09:22:58'),
-(444, 256, 40, 1, 2500.00, 1, NULL, '2024-04-16 09:30:43', '2024-04-16 09:30:43'),
-(445, 257, 47, 1, 14000.00, 1, NULL, '2024-04-16 09:31:30', '2024-04-16 09:31:30'),
-(446, 257, 46, 1, 1000.00, 1, NULL, '2024-04-16 09:31:30', '2024-04-16 09:31:30'),
-(447, 258, 47, 1, 14000.00, 1, NULL, '2024-04-16 09:32:10', '2024-04-16 09:32:10'),
-(448, 259, 40, 1, 2500.00, 1, NULL, '2024-04-16 09:33:26', '2024-04-16 09:33:26'),
-(449, 260, 40, 1, 2500.00, 1, NULL, '2024-04-16 09:39:01', '2024-04-16 09:39:01'),
-(450, 261, 40, 1, 2500.00, 1, NULL, '2024-04-16 09:40:12', '2024-04-16 09:40:12'),
-(452, 263, 46, 1, 2500.00, 1, NULL, '2024-04-16 11:55:40', '2024-04-16 11:55:40'),
-(464, 264, 22, 2, 111.00, 1, NULL, '2024-04-24 08:40:24', '2024-04-24 08:40:24'),
-(465, 264, 40, 2, 2500.00, 1, NULL, '2024-04-24 08:40:24', '2024-04-24 08:40:24'),
-(466, 262, 22, 2, 111.00, 1, NULL, '2024-04-24 08:41:52', '2024-04-24 08:41:52'),
-(467, 262, 40, 2, 2500.00, 0, NULL, '2024-04-24 08:41:52', '2024-04-24 09:45:10'),
-(468, 265, 36, 2, 111.00, 1, NULL, '2024-04-25 10:53:57', '2024-04-25 10:53:57'),
-(469, 265, 40, 1, 2500.00, 1, NULL, '2024-04-25 10:53:57', '2024-04-25 10:53:57'),
-(470, 266, 36, 2, 111.00, 1, NULL, '2024-04-25 10:54:32', '2024-04-25 10:54:32'),
-(471, 266, 40, 2, 2500.00, 1, NULL, '2024-04-25 10:54:32', '2024-04-25 10:54:32'),
-(472, 267, 36, 2, 111.00, 1, NULL, '2024-04-25 10:56:26', '2024-04-25 10:56:26'),
-(473, 267, 40, 2, 2500.00, 1, NULL, '2024-04-25 10:56:26', '2024-04-25 10:56:26'),
-(474, 268, 36, 2, 111.00, 1, NULL, '2024-04-25 10:57:27', '2024-04-25 10:57:27'),
-(475, 268, 40, 2, 2500.00, 1, NULL, '2024-04-25 10:57:27', '2024-04-25 10:57:27');
+(468, 272, 40, 1, 2500.00, 1, NULL, '2024-04-21 14:51:59', '2024-04-21 14:51:59'),
+(470, 275, 46, 1, 1000.00, 1, NULL, '2024-04-23 11:37:19', '2024-04-23 11:37:19'),
+(476, 281, 48, 1, 17000.00, 1, NULL, '2024-04-23 13:15:42', '2024-04-23 13:15:42'),
+(477, 282, 46, 6, 1000.00, 1, NULL, '2024-04-23 13:23:17', '2024-04-23 13:25:45'),
+(478, 282, 40, 2, 2500.00, 1, NULL, '2024-04-23 13:23:17', '2024-04-23 13:25:45'),
+(479, 283, 40, 1, 2500.00, 1, NULL, '2024-04-23 13:27:58', '2024-04-23 13:27:58'),
+(480, 284, 40, 1, 2500.00, 1, NULL, '2024-04-23 13:30:46', '2024-04-23 13:30:46'),
+(481, 285, 46, 1, 1000.00, 1, NULL, '2024-04-23 13:33:18', '2024-04-23 13:33:18'),
+(485, 289, 40, 4, 2500.00, 1, NULL, '2024-04-24 08:59:30', '2024-04-24 08:59:30'),
+(488, 290, 47, 1, 14000.00, 1, NULL, '2024-04-24 10:05:35', '2024-04-24 10:05:35'),
+(489, 290, 47, 4, 14000.00, 0, NULL, '2024-04-24 10:05:35', '2024-04-24 10:05:35'),
+(490, 291, 40, 1, 2500.00, 0, NULL, '2024-04-24 10:37:13', '2024-04-24 11:36:13'),
+(491, 292, 47, 1, 14000.00, 0, NULL, '2024-04-24 11:23:40', '2024-04-24 11:31:34'),
+(492, 293, 46, 1, 1000.00, 1, NULL, '2024-04-24 12:10:21', '2024-04-24 12:10:21'),
+(493, 293, 48, 1, 17000.00, 1, NULL, '2024-04-24 12:10:21', '2024-04-24 12:10:21'),
+(494, 294, 46, 2, 1000.00, 1, NULL, '2024-04-25 12:14:04', '2024-04-25 12:14:04'),
+(495, 294, 40, 2, 2500.00, 1, NULL, '2024-04-25 12:14:04', '2024-04-25 12:14:04'),
+(496, 295, 40, 1, 2500.00, 1, NULL, '2024-04-25 12:59:49', '2024-04-25 12:59:49'),
+(497, 296, 40, 1, 2500.00, 1, NULL, '2024-04-26 16:44:47', '2024-04-26 16:44:47'),
+(498, 297, 40, 1, 2500.00, 1, NULL, '2024-04-28 10:50:13', '2024-04-30 11:56:31'),
+(499, 298, 40, 1, 2500.00, 1, NULL, '2024-04-28 13:50:29', '2024-04-28 13:50:29'),
+(500, 299, 40, 5, 2500.00, 1, NULL, '2024-04-29 11:27:50', '2024-04-29 11:27:50'),
+(501, 300, 49, 1, 25000.00, 1, NULL, '2024-04-30 13:59:12', '2024-04-30 13:59:12'),
+(502, 301, 46, 1, 1000.00, 1, NULL, '2024-05-02 09:31:15', '2024-05-02 09:31:15'),
+(503, 302, 40, 1, 2500.00, 1, NULL, '2024-05-02 10:38:27', '2024-05-02 10:38:27'),
+(504, 303, 40, 1, 2500.00, 1, NULL, '2024-05-02 12:16:01', '2024-05-02 12:16:01'),
+(505, 304, 40, 1, 2500.00, 1, NULL, '2024-05-02 13:43:32', '2024-05-02 13:43:32'),
+(506, 305, 46, 1, 1000.00, 1, NULL, '2024-05-05 09:14:29', '2024-05-05 09:14:29'),
+(507, 306, 46, 1, 1000.00, 1, NULL, '2024-05-05 10:44:10', '2024-05-05 10:44:10'),
+(508, 307, 40, 1, 2500.00, 1, NULL, '2024-05-05 11:47:51', '2024-05-05 11:47:51'),
+(509, 308, 40, 1, 2500.00, 1, NULL, '2024-05-05 12:11:47', '2024-05-05 12:11:47'),
+(510, 309, 40, 1, 2500.00, 1, NULL, '2024-05-05 13:01:40', '2024-05-05 13:01:40'),
+(511, 310, 40, 1, 2500.00, 1, NULL, '2024-05-05 13:15:01', '2024-05-05 13:15:01'),
+(512, 311, 40, 1, 2500.00, 1, NULL, '2024-05-05 13:21:09', '2024-05-05 13:21:09'),
+(513, 312, 40, 1, 2500.00, 1, NULL, '2024-05-05 13:29:46', '2024-05-05 13:29:46'),
+(514, 313, 40, 1, 2500.00, 1, NULL, '2024-05-05 13:41:55', '2024-05-05 13:41:55'),
+(515, 314, 40, 1, 2500.00, 1, NULL, '2024-05-05 13:48:33', '2024-05-05 13:48:33'),
+(516, 315, 40, 1, 2500.00, 1, NULL, '2024-05-05 13:52:26', '2024-05-05 13:52:26'),
+(517, 316, 40, 1, 2500.00, 1, NULL, '2024-05-05 14:00:42', '2024-05-05 14:00:42'),
+(518, 317, 40, 1, 2500.00, 1, NULL, '2024-05-05 14:11:58', '2024-05-05 14:11:58'),
+(519, 318, 40, 1, 2500.00, 1, NULL, '2024-05-05 14:22:25', '2024-05-05 14:22:25'),
+(520, 319, 40, 1, 2500.00, 1, NULL, '2024-05-05 14:45:29', '2024-05-05 14:45:29'),
+(521, 320, 40, 1, 2500.00, 1, NULL, '2024-05-05 15:11:03', '2024-05-05 15:11:03'),
+(522, 321, 40, 1, 2500.00, 1, NULL, '2024-05-05 15:19:41', '2024-05-05 15:19:41'),
+(523, 322, 40, 1, 2500.00, 1, NULL, '2024-05-05 15:23:28', '2024-05-05 15:23:28'),
+(524, 323, 40, 1, 2500.00, 1, NULL, '2024-05-06 08:11:46', '2024-05-06 08:11:46'),
+(525, 324, 40, 1, 2500.00, 1, NULL, '2024-05-06 08:12:13', '2024-05-06 08:12:13'),
+(526, 326, 40, 1, 2500.00, 1, NULL, '2024-05-06 08:12:49', '2024-05-06 08:12:49'),
+(527, 327, 40, 1, 2500.00, 1, NULL, '2024-05-06 10:36:42', '2024-05-06 10:36:42'),
+(528, 328, 46, 1, 1000.00, 1, NULL, '2024-05-06 10:38:42', '2024-05-06 10:38:42'),
+(529, 329, 46, 1, 1000.00, 1, NULL, '2024-05-06 11:49:59', '2024-05-06 11:49:59'),
+(530, 330, 46, 1, 1000.00, 1, NULL, '2024-05-06 11:54:40', '2024-05-06 11:54:40'),
+(531, 331, 46, 1, 1000.00, 1, NULL, '2024-05-06 11:57:57', '2024-05-06 11:57:57'),
+(532, 332, 46, 1, 1000.00, 1, NULL, '2024-05-06 12:06:06', '2024-05-06 12:06:06'),
+(533, 333, 46, 1, 1000.00, 1, NULL, '2024-05-09 20:42:13', '2024-05-09 20:42:13'),
+(534, 333, 40, 2, 2500.00, 1, NULL, '2024-05-09 20:42:13', '2024-05-09 20:42:13'),
+(538, 337, 46, 2, 1000.00, 1, NULL, '2024-05-12 10:51:26', '2024-05-12 10:51:26'),
+(539, 337, 47, 1, 14000.00, 1, NULL, '2024-05-12 10:51:26', '2024-05-12 10:51:26'),
+(540, 338, 46, 1, 1000.00, 1, NULL, '2024-05-12 10:52:25', '2024-05-12 10:52:25'),
+(541, 339, 46, 1, 1000.00, 1, NULL, '2024-05-12 10:55:28', '2024-05-12 10:55:28'),
+(542, 339, 40, 2, 2500.00, 1, NULL, '2024-05-12 10:55:28', '2024-05-12 10:55:28'),
+(543, 340, 40, 1, 2500.00, 1, NULL, '2024-05-12 11:00:12', '2024-05-12 11:00:12'),
+(544, 341, 40, 10, 2500.00, 1, NULL, '2024-05-15 16:27:34', '2024-05-15 16:27:34'),
+(545, 342, 40, 1, 2500.00, 1, NULL, '2024-05-26 14:21:52', '2024-05-26 14:21:52'),
+(546, 343, 40, 1, 2500.00, 1, NULL, '2024-05-26 14:22:53', '2024-05-26 14:22:53'),
+(547, 344, 40, 1, 2500.00, 1, NULL, '2024-05-29 11:00:57', '2024-05-29 11:00:57'),
+(548, 345, 40, 1, 2500.00, 1, NULL, '2024-05-29 11:19:41', '2024-05-29 11:19:41'),
+(549, 346, 40, 1, 2500.00, 1, NULL, '2024-05-29 11:22:28', '2024-05-29 11:22:28'),
+(550, 347, 40, 1, 2500.00, 1, NULL, '2024-05-29 11:22:58', '2024-05-29 11:22:58'),
+(551, 348, 40, 1, 2500.00, 1, NULL, '2024-05-29 11:25:25', '2024-05-29 11:25:25'),
+(552, 349, 46, 2, 1000.00, 1, NULL, '2024-05-29 11:32:47', '2024-05-29 11:32:47'),
+(553, 349, 40, 2, 2500.00, 1, NULL, '2024-05-29 11:32:47', '2024-05-29 11:32:47'),
+(554, 350, 40, 1, 2500.00, 1, NULL, '2024-05-29 11:43:29', '2024-05-29 11:43:29'),
+(555, 351, 40, 1, 2500.00, 1, NULL, '2024-05-29 13:53:24', '2024-05-29 13:53:24'),
+(557, 353, 40, 1, 2500.00, 1, NULL, '2024-05-30 08:15:56', '2024-05-30 08:15:56'),
+(558, 354, 40, 1, 2500.00, 1, NULL, '2024-05-30 09:33:54', '2024-05-30 09:33:54'),
+(559, 355, 40, 4, 2500.00, 1, NULL, '2024-05-30 09:36:15', '2024-05-30 09:36:15'),
+(560, 356, 46, 5, 1000.00, 1, NULL, '2024-05-30 09:37:24', '2024-05-30 09:37:24'),
+(561, 357, 46, 3, 1000.00, 1, NULL, '2024-05-30 09:38:34', '2024-06-02 15:29:21'),
+(562, 358, 40, 1, 2500.00, 1, NULL, '2024-05-30 09:48:18', '2024-06-02 13:18:32'),
+(563, 358, 46, 2, 1000.00, 1, NULL, '2024-05-30 09:48:18', '2024-06-02 13:18:32'),
+(564, 352, 46, 5, 1000.00, 1, NULL, '2024-05-30 13:41:00', '2024-05-30 13:41:00'),
+(565, 359, 40, 20, 2500.00, 1, NULL, '2024-06-02 10:31:23', '2024-06-02 10:31:23'),
+(566, 360, 40, 1, 2500.00, 1, NULL, '2024-06-02 13:21:11', '2024-06-02 13:21:41'),
+(567, 361, 40, 1, 2500.00, 1, NULL, '2024-06-02 13:46:22', '2024-06-02 15:24:56'),
+(568, 362, 40, 4, 2500.00, 1, NULL, '2024-06-02 15:31:27', '2024-06-02 15:31:50'),
+(569, 363, 40, 1, 2500.00, 1, NULL, '2024-06-03 09:35:02', '2024-06-03 09:35:02');
 
 -- --------------------------------------------------------
 
@@ -1473,9 +1887,9 @@ INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `quantity`, `price`
 --
 
 CREATE TABLE `order_driver_acceptances` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
-  `driver_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `driver_id` bigint UNSIGNED NOT NULL,
   `status` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1488,13 +1902,69 @@ CREATE TABLE `order_driver_acceptances` (
 INSERT INTO `order_driver_acceptances` (`id`, `order_id`, `driver_id`, `status`, `created_at`, `updated_at`) VALUES
 (1, 237, 2, 1, '2024-04-07 11:12:45', '2024-04-07 11:12:45'),
 (2, 235, 2, 1, '2024-04-08 13:33:27', '2024-04-08 13:33:27'),
-(3, 264, 2, 1, '2024-04-17 11:25:25', '2024-04-17 11:25:25'),
-(4, 260, 2, 1, '2024-04-21 09:34:43', '2024-04-21 09:34:43'),
-(5, 258, 2, 1, '2024-04-21 09:36:58', '2024-04-21 09:36:58'),
-(6, 257, 2, 1, '2024-04-21 09:37:10', '2024-04-21 09:37:10'),
-(7, 253, 2, 1, '2024-04-21 09:49:47', '2024-04-21 09:49:47'),
-(8, 252, 2, 1, '2024-04-21 09:52:40', '2024-04-21 09:52:40'),
-(9, 264, 1, 1, '2024-04-22 09:32:57', '2024-04-22 09:32:57');
+(8, 272, 1, 1, '2024-04-21 14:57:54', '2024-04-21 14:57:54'),
+(10, 272, 2, 1, '2024-04-22 09:31:04', '2024-04-22 09:31:04'),
+(11, 273, 2, 1, '2024-04-22 10:39:33', '2024-04-22 10:39:33'),
+(12, 273, 1, 1, '2024-04-22 10:49:52', '2024-04-22 10:49:52'),
+(13, 246, 2, 1, '2024-04-22 11:00:53', '2024-04-22 11:00:53'),
+(18, 275, 2, 1, '2024-04-23 12:23:25', '2024-04-23 12:23:25'),
+(19, 281, 2, 1, '2024-04-23 13:16:14', '2024-04-23 13:16:14'),
+(20, 282, 2, 1, '2024-04-23 13:24:44', '2024-04-23 13:24:44'),
+(21, 283, 2, 1, '2024-04-23 13:28:56', '2024-04-23 13:28:56'),
+(22, 284, 2, 1, '2024-04-23 13:31:29', '2024-04-23 13:31:29'),
+(23, 285, 2, 1, '2024-04-23 13:33:31', '2024-04-23 13:33:31'),
+(24, 223, 1, 1, '2024-04-23 13:51:55', '2024-04-23 13:51:55'),
+(28, 292, 2, 1, '2024-04-24 11:28:52', '2024-04-24 11:28:52'),
+(29, 294, 2, 1, '2024-04-25 12:31:51', '2024-04-25 12:31:51'),
+(30, 297, 2, 1, '2024-04-28 10:50:43', '2024-04-28 10:50:43'),
+(31, 293, 2, 1, '2024-04-28 10:50:47', '2024-04-28 10:50:47'),
+(32, 291, 2, 1, '2024-04-28 10:50:49', '2024-04-28 10:50:49'),
+(33, 296, 2, 1, '2024-04-28 10:50:52', '2024-04-28 10:50:52'),
+(34, 295, 2, 1, '2024-04-28 10:50:54', '2024-04-28 10:50:54'),
+(35, 289, 2, 1, '2024-04-28 10:51:00', '2024-04-28 10:51:00'),
+(36, 305, 1, 1, '2024-05-05 09:34:35', '2024-05-05 09:34:35'),
+(37, 306, 1, 1, '2024-05-05 10:44:59', '2024-05-05 10:44:59'),
+(38, 307, 1, 1, '2024-05-05 11:49:29', '2024-05-05 11:49:29'),
+(39, 304, 1, 1, '2024-05-05 12:09:36', '2024-05-05 12:09:36'),
+(40, 308, 1, 1, '2024-05-05 12:12:27', '2024-05-05 12:12:27'),
+(41, 309, 1, 1, '2024-05-05 13:02:20', '2024-05-05 13:02:20'),
+(42, 310, 1, 1, '2024-05-05 13:16:11', '2024-05-05 13:16:11'),
+(43, 311, 1, 1, '2024-05-05 13:21:43', '2024-05-05 13:21:43'),
+(44, 312, 1, 1, '2024-05-05 13:35:32', '2024-05-05 13:35:32'),
+(45, 312, 1, 1, '2024-05-05 13:35:32', '2024-05-05 13:35:32'),
+(46, 313, 1, 1, '2024-05-05 13:44:46', '2024-05-05 13:44:46'),
+(47, 314, 1, 1, '2024-05-05 13:49:44', '2024-05-05 13:49:44'),
+(48, 315, 1, 1, '2024-05-05 13:55:51', '2024-05-05 13:55:51'),
+(49, 316, 1, 1, '2024-05-05 14:01:45', '2024-05-05 14:01:45'),
+(50, 317, 1, 1, '2024-05-05 14:12:41', '2024-05-05 14:12:41'),
+(51, 318, 1, 1, '2024-05-05 14:33:49', '2024-05-05 14:33:49'),
+(52, 319, 1, 1, '2024-05-05 14:46:40', '2024-05-05 14:46:40'),
+(53, 320, 1, 1, '2024-05-05 15:11:38', '2024-05-05 15:11:38'),
+(54, 321, 1, 1, '2024-05-05 15:19:58', '2024-05-05 15:19:58'),
+(55, 322, 1, 1, '2024-05-05 15:24:09', '2024-05-05 15:24:09'),
+(56, 326, 1, 1, '2024-05-06 08:13:49', '2024-05-06 08:13:49'),
+(57, 324, 1, 1, '2024-05-06 08:32:52', '2024-05-06 08:32:52'),
+(58, 323, 1, 1, '2024-05-06 08:37:37', '2024-05-06 08:37:37'),
+(59, 327, 2, 1, '2024-05-06 10:37:06', '2024-05-06 10:37:06'),
+(60, 328, 2, 1, '2024-05-06 10:38:56', '2024-05-06 10:38:56'),
+(61, 329, 1, 1, '2024-05-06 11:50:24', '2024-05-06 11:50:24'),
+(62, 331, 1, 1, '2024-05-06 11:58:13', '2024-05-06 11:58:13'),
+(63, 330, 1, 1, '2024-05-06 11:58:23', '2024-05-06 11:58:23'),
+(64, 332, 1, 1, '2024-05-06 12:06:35', '2024-05-06 12:06:35'),
+(65, 303, 1, 1, '2024-05-07 13:57:33', '2024-05-07 13:57:33'),
+(66, 302, 1, 1, '2024-05-07 14:23:07', '2024-05-07 14:23:07'),
+(67, 301, 1, 1, '2024-05-07 15:02:34', '2024-05-07 15:02:34'),
+(68, 300, 1, 1, '2024-05-07 20:22:47', '2024-05-07 20:22:47'),
+(69, 299, 1, 1, '2024-05-07 21:00:23', '2024-05-07 21:00:23'),
+(70, 298, 1, 1, '2024-05-08 08:15:15', '2024-05-08 08:15:15'),
+(71, 340, 1, 1, '2024-05-12 11:27:19', '2024-05-12 11:27:19'),
+(72, 341, 1, 1, '2024-05-15 16:28:00', '2024-05-15 16:28:00'),
+(73, 343, 1, 1, '2024-05-26 15:48:41', '2024-05-26 15:48:41'),
+(74, 358, 1, 1, '2024-05-30 13:37:36', '2024-05-30 13:37:36'),
+(75, 360, 1, 1, '2024-06-02 13:21:31', '2024-06-02 13:21:31'),
+(76, 361, 1, 1, '2024-06-02 13:46:40', '2024-06-02 13:46:40'),
+(77, 357, 1, 1, '2024-06-02 15:27:12', '2024-06-02 15:27:12'),
+(78, 362, 1, 1, '2024-06-02 15:31:39', '2024-06-02 15:31:39');
 
 -- --------------------------------------------------------
 
@@ -1503,9 +1973,9 @@ INSERT INTO `order_driver_acceptances` (`id`, `order_id`, `driver_id`, `status`,
 --
 
 CREATE TABLE `o_t_p_s` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `code` int(11) NOT NULL,
-  `phone` int(11) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `code` int NOT NULL,
+  `phone` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1516,7 +1986,6 @@ CREATE TABLE `o_t_p_s` (
 
 INSERT INTO `o_t_p_s` (`id`, `code`, `phone`, `created_at`, `updated_at`) VALUES
 (1, 673218, 938385477, '2023-12-08 11:12:04', '2023-12-08 11:12:04'),
-(3, 270446, 987654321, '2023-12-18 06:14:03', '2023-12-18 06:14:03'),
 (4, 158488, 9683824, '2023-12-18 06:15:59', '2023-12-18 06:15:59'),
 (6, 841717, 98652471, '2023-12-18 06:32:51', '2023-12-18 06:32:51'),
 (7, 525452, 5252, '2023-12-19 07:06:10', '2023-12-19 07:06:10'),
@@ -1554,8 +2023,8 @@ INSERT INTO `o_t_p_s` (`id`, `code`, `phone`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) NOT NULL,
-  `token` varchar(255) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1566,8 +2035,8 @@ CREATE TABLE `password_reset_tokens` (
 --
 
 CREATE TABLE `payment_methods` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1577,7 +2046,7 @@ CREATE TABLE `payment_methods` (
 --
 
 INSERT INTO `payment_methods` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'cash', NULL, NULL);
+(1, '{\"ar\":\"كاش\",\"en\":\"cash\"}', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1586,9 +2055,9 @@ INSERT INTO `payment_methods` (`id`, `name`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `permissions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `guard_name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1615,12 +2084,12 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 --
 
 CREATE TABLE `personal_access_tokens` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) NOT NULL,
-  `tokenable_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `token` varchar(64) NOT NULL,
-  `abilities` text DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1634,11 +2103,11 @@ CREATE TABLE `personal_access_tokens` (
 --
 
 CREATE TABLE `points` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `points` bigint(20) NOT NULL,
-  `used_points` bigint(20) NOT NULL DEFAULT 0,
-  `achievement_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `points` bigint NOT NULL,
+  `used_points` bigint NOT NULL DEFAULT '0',
+  `achievement_id` bigint UNSIGNED NOT NULL,
   `created_at` datetime NOT NULL,
   `used_at` datetime DEFAULT NULL,
   `expire_at` datetime NOT NULL
@@ -1649,67 +2118,7 @@ CREATE TABLE `points` (
 --
 
 INSERT INTO `points` (`id`, `user_id`, `points`, `used_points`, `achievement_id`, `created_at`, `used_at`, `expire_at`) VALUES
-(1, 4, 35, 0, 2, '2024-02-20 01:06:49', NULL, '2024-03-04 01:04:08'),
-(2, 8, 67, 0, 8, '2024-02-22 12:37:47', '2024-02-27 02:52:31', '2024-03-22 21:51:10'),
-(3, 6, 51, 18, 3, '2024-02-19 09:19:47', NULL, '2024-03-08 20:11:06'),
-(4, 20, 100, 0, 8, '2024-02-04 15:07:12', NULL, '2024-04-02 21:35:57'),
-(5, 1, 50, 37, 5, '2024-03-02 12:58:27', NULL, '2024-03-08 01:03:54'),
-(6, 4, 7, 0, 3, '2024-02-07 14:05:44', '2024-02-18 10:00:31', '2024-03-13 03:11:08'),
-(7, 4, 85, 24, 9, '2024-02-25 17:36:04', NULL, '2024-03-08 19:55:31'),
-(8, 2, 46, 0, 5, '2024-02-28 13:28:59', '2024-02-29 03:36:02', '2024-03-25 10:21:30'),
-(9, 1, 8, 0, 9, '2024-03-02 23:24:33', NULL, '2024-03-05 22:19:16'),
-(10, 20, 10, 0, 3, '2024-02-08 19:47:27', NULL, '2024-03-18 08:00:11'),
-(11, 1, 20, 10, 2, '2024-02-08 08:00:26', NULL, '2024-03-07 10:17:14'),
-(12, 4, 91, 0, 2, '2024-02-09 17:48:17', '2024-02-10 05:52:43', '2024-03-11 05:45:29'),
-(13, 9, 95, 0, 7, '2024-02-09 04:04:02', '2024-02-11 06:58:11', '2024-03-10 15:29:21'),
-(14, 6, 72, 0, 10, '2024-02-23 22:55:06', NULL, '2024-03-06 09:10:15'),
-(15, 3, 66, 53, 3, '2024-02-27 23:24:01', NULL, '2024-03-04 14:15:24'),
-(16, 4, 50, 29, 5, '2024-03-01 02:15:38', NULL, '2024-03-03 10:22:43'),
-(17, 4, 56, 0, 2, '2024-02-12 14:03:37', NULL, '2024-03-06 01:27:13'),
-(18, 5, 6, 2, 6, '2024-02-26 14:31:27', '2024-03-02 16:46:39', '2024-03-15 10:30:15'),
-(19, 20, 60, 40, 8, '2024-02-24 03:36:53', NULL, '2024-03-31 21:35:42'),
-(20, 20, 50, 0, 1, '2024-02-10 11:38:17', '2024-02-15 08:06:45', '2024-03-29 12:46:27'),
-(21, 4, 69, 46, 1, '2024-02-16 11:23:53', '2024-02-27 10:10:30', '2024-03-23 14:19:06'),
-(22, 2, 89, 14, 4, '2024-02-14 11:26:21', NULL, '2024-02-14 12:38:57'),
-(23, 9, 84, 62, 10, '2024-02-23 21:53:16', '2024-03-02 15:05:12', '2024-03-06 11:48:40'),
-(24, 3, 50, 0, 2, '2024-02-07 13:16:16', NULL, '2024-03-06 08:12:47'),
-(25, 1, 2, 0, 5, '2024-03-01 14:39:24', '2024-03-03 00:37:04', '2024-03-08 12:58:16'),
-(26, 8, 65, 22, 4, '2024-02-15 18:48:23', '2024-02-24 02:22:08', '2024-04-02 20:23:23'),
-(27, 8, 77, 59, 3, '2024-02-05 23:36:58', '2024-02-06 18:51:42', '2024-02-27 00:48:45'),
-(28, 4, 94, 0, 9, '2024-02-22 02:46:06', NULL, '2024-02-22 05:42:16'),
-(29, 7, 64, 0, 3, '2024-02-21 18:06:17', NULL, '2024-03-08 13:16:41'),
-(30, 10, 89, 29, 8, '2024-02-28 15:27:35', NULL, '2024-03-07 18:36:42'),
-(31, 20, 50, 50, 4, '2024-03-21 11:48:59', '2024-04-01 09:02:23', '2024-06-19 11:48:59'),
-(32, 20, 1200, 1200, 5, '2024-04-14 12:56:51', '2024-04-28 08:54:03', '2024-07-13 12:56:51'),
-(33, 20, 9999, 500, 5, '2024-04-14 12:59:04', NULL, '2024-07-13 12:59:04'),
-(34, 20, 9999, 0, 5, '2024-04-14 13:00:59', NULL, '2024-07-13 13:00:59'),
-(35, 20, 9917, 0, 5, '2024-04-15 06:45:54', NULL, '2024-07-14 06:45:54'),
-(36, 47, 4, 0, 5, '2024-04-15 07:31:28', NULL, '2024-07-14 07:31:28'),
-(37, 20, 9901, 0, 5, '2024-04-15 10:41:33', NULL, '2024-07-14 10:41:33'),
-(38, 47, 4, 0, 5, '2024-04-15 13:22:24', NULL, '2024-07-14 13:22:24'),
-(39, 47, 21, 0, 5, '2024-04-15 13:24:43', NULL, '2024-07-14 13:24:43'),
-(40, 47, 6, 0, 5, '2024-04-15 13:25:43', NULL, '2024-07-14 13:25:43'),
-(41, 47, 18, 0, 5, '2024-04-15 13:26:33', NULL, '2024-07-14 13:26:33'),
-(42, 20, 9907, 0, 5, '2024-04-16 08:16:39', NULL, '2024-07-15 08:16:39'),
-(43, 20, 9909, 0, 5, '2024-04-16 08:18:18', NULL, '2024-07-15 08:18:18'),
-(44, 20, 9909, 0, 5, '2024-04-16 08:22:06', NULL, '2024-07-15 08:22:06'),
-(45, 20, 9909, 0, 5, '2024-04-16 08:22:58', NULL, '2024-07-15 08:22:58'),
-(46, 20, 9909, 0, 5, '2024-04-16 08:30:42', NULL, '2024-07-15 08:30:42'),
-(47, 20, 19825, 0, 5, '2024-04-16 08:31:30', NULL, '2024-07-15 08:31:30'),
-(48, 20, 9918, 0, 5, '2024-04-16 08:32:10', NULL, '2024-07-15 08:32:10'),
-(49, 20, 9909, 0, 5, '2024-04-16 08:33:25', NULL, '2024-07-15 08:33:25'),
-(50, 20, 9909, 0, 5, '2024-04-16 08:39:00', NULL, '2024-07-15 08:39:00'),
-(51, 20, 9909, 0, 5, '2024-04-16 08:40:12', NULL, '2024-07-15 08:40:12'),
-(52, 20, 9909, 0, 5, '2024-04-16 10:46:24', NULL, '2024-07-15 10:46:24'),
-(53, 20, 9909, 0, 5, '2024-04-16 10:55:39', NULL, '2024-07-15 10:55:39'),
-(54, 20, 10044, 0, 5, '2024-04-16 13:19:36', NULL, '2024-07-15 13:19:36'),
-(55, 20, 5, 0, 3, '2024-04-17 12:43:17', NULL, '2024-07-16 12:43:17'),
-(56, 20, 5, 0, 3, '2024-04-17 12:43:32', NULL, '2024-07-16 12:43:32'),
-(57, 20, 5, 0, 3, '2024-04-17 12:43:37', NULL, '2024-07-16 12:43:37'),
-(58, 20, 5, 0, 3, '2024-04-17 12:43:43', NULL, '2024-07-16 12:43:43'),
-(59, 20, 5, 0, 3, '2024-04-17 12:44:07', NULL, '2024-07-16 12:44:07'),
-(60, 20, 5, 0, 3, '2024-04-17 12:44:26', NULL, '2024-07-16 12:44:26'),
-(61, 20, 5, 0, 3, '2024-04-17 12:44:37', NULL, '2024-07-16 12:44:37');
+(20, 20, 50, 0, 1, '2024-02-10 11:38:17', '2024-02-15 08:06:45', '2024-03-29 12:46:27');
 
 -- --------------------------------------------------------
 
@@ -1718,7 +2127,7 @@ INSERT INTO `points` (`id`, `user_id`, `points`, `used_points`, `achievement_id`
 --
 
 CREATE TABLE `point_in_pound` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
   `value` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1736,25 +2145,25 @@ INSERT INTO `point_in_pound` (`id`, `value`) VALUES
 --
 
 CREATE TABLE `products` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(191) NOT NULL,
-  `description` text DEFAULT NULL,
-  `real_price` double NOT NULL DEFAULT 0,
-  `price` double NOT NULL DEFAULT 0,
-  `tax` int(11) DEFAULT NULL,
-  `unit` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `suggested` int(11) DEFAULT NULL,
-  `availability` tinyint(1) NOT NULL DEFAULT 1,
-  `product_source` tinyint(1) NOT NULL DEFAULT 0,
-  `seller_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `subcategory_id` bigint(20) UNSIGNED NOT NULL,
-  `commission_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `real_price` double NOT NULL DEFAULT '0',
+  `price` double NOT NULL DEFAULT '0',
+  `tax` int DEFAULT NULL,
+  `unit` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `quantity` int NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `suggested` int DEFAULT NULL,
+  `availability` tinyint(1) NOT NULL DEFAULT '1',
+  `product_source` tinyint(1) NOT NULL DEFAULT '0',
+  `seller_id` bigint UNSIGNED DEFAULT NULL,
+  `subcategory_id` bigint UNSIGNED NOT NULL,
+  `commission_id` bigint UNSIGNED NOT NULL,
   `commission_value` double NOT NULL,
-  `discount` double NOT NULL DEFAULT 0,
-  `discount_status` tinyint(1) NOT NULL DEFAULT 0,
+  `discount` double NOT NULL DEFAULT '0',
+  `discount_status` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1764,16 +2173,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `real_price`, `price`, `tax`, `unit`, `slug`, `quantity`, `status`, `suggested`, `availability`, `product_source`, `seller_id`, `subcategory_id`, `commission_id`, `commission_value`, `discount`, `discount_status`, `created_at`, `updated_at`) VALUES
-(22, 'لحمة طازجة', 'product', 0, 111, NULL, NULL, NULL, 5, 1, 1, 1, 0, 2, 1, 1, 10, 0, 0, '2023-12-25 06:02:35', '2023-12-25 06:02:35'),
-(36, 'لحمة طازجة اصلية', 'product', 0, 111, NULL, NULL, NULL, 0, 1, 1, 1, 0, 2, 1, 1, 10, 0, 0, '2023-12-26 06:37:52', '2024-04-29 11:11:16'),
-(40, 'كوسا بلدية', '<ol>\n<li style=\"text-align: right;\">كوسا بلدية من جبل الشيخ&nbsp;<br>مسقية بمية فيجة</li>\n</ol>', 0, 2500, 5, NULL, NULL, 16, 1, NULL, 1, 0, 1, 2, 1, 20, 10, 1, '2024-01-02 16:49:16', '2024-04-29 11:11:16'),
-(46, 'فليفلة حمراء', '<p>فليفلة بلدية رقيقة</p>', 0, 1000, 2, NULL, NULL, 15, 1, NULL, 1, 0, 1, 2, 6, 4000, 20, 1, '2024-03-14 14:26:40', '2024-03-14 15:30:04'),
-(47, 'فليفلة خضراء', '<p>فليفلة بلدية رقيقة</p>', 0, 14000, 5, NULL, NULL, 16, 1, NULL, 1, 0, 1, 2, 6, 4000, 22, 1, '2024-03-14 14:30:09', '2024-03-14 14:30:09'),
-(48, 'فليفلة حمراء حارة', '<p>&nbsp;فليفلة حمراء حارة بلدية رقيقة</p>', 0, 17000, 5, NULL, NULL, 11, 1, NULL, 1, 0, 1, 2, 6, 1700, 40, 1, '2024-03-14 14:33:52', '2024-03-14 14:33:52'),
-(49, 'فليفلة مفرومة', '<p>&nbsp;فليفلة بلدية رقيقة مفرومة</p>', 0, 25000, 3, NULL, NULL, 15, 1, NULL, 1, 0, 1, 2, 6, 1999, 10, 1, '2024-03-14 14:37:59', '2024-03-14 14:37:59'),
-(50, 'test1', '<p>test</p>', 0, 21, 1, NULL, NULL, 1, 1, NULL, 1, 0, 1, 1, 1, 2, 0, 0, '2024-03-20 14:25:03', '2024-03-20 14:31:28'),
-(81, 's', 's', 0, 1000, 1, 'غرام', NULL, 10, 1, NULL, 1, 0, NULL, 1, 1, 1, 0, 0, '2024-04-25 11:40:47', '2024-04-25 11:40:47'),
-(82, 's', 's', 900, 1000, 1, 'غرام', NULL, 10, 1, NULL, 1, 0, NULL, 1, 1, 1, 0, 0, '2024-04-25 11:47:47', '2024-04-25 11:47:47');
+(40, '{\"ar\":\"كوسا بلدية\",\"en\":\"zucchini\"}', '{\"ar\":\"<ol>\n<li style=\"text-align: right;\">كوسا بلدية من جبل الشيخ&nbsp;<br>مسقية بمية فيجة</li>\n</ol>\"}', 0, 2500, 1, NULL, NULL, 20, 1, NULL, 1, 0, 1, 2, 1, 20, 10, 0, '2024-01-02 16:49:16', '2024-05-29 13:59:33'),
+(46, '{\"ar\":\"فليفلة حمراء\",\"en\":\"Red pepper\"}', '{\"ar\":\"<p>فليفلة بلدية رقيقة</p>\"}', 0, 1000, 2, NULL, NULL, 15, 1, NULL, 1, 0, 1, 2, 6, 4000, 20, 1, '2024-03-14 14:26:40', '2024-03-14 15:30:04'),
+(47, '{\"ar\":\"فليفلة خضراء\",\"en\":\"Green pepper\"}', '{\"ar\":\"<p>فليفلة بلدية رقيقة</p>\"}', 0, 14000, 5, NULL, NULL, 16, 1, NULL, 1, 0, 1, 2, 6, 4000, 22, 1, '2024-03-14 14:30:09', '2024-03-14 14:30:09'),
+(48, '{\"ar\":\"فليفلة حمراء حارة\",\"en\":\"Hot red pepper\"}', '{\"ar\":\"<p>&nbsp;فليفلة حمراء حارة بلدية رقيقة</p>\"}', 0, 17000, 5, NULL, NULL, 11, 1, NULL, 1, 0, 1, 2, 6, 1700, 40, 1, '2024-03-14 14:33:52', '2024-03-14 14:33:52'),
+(49, '{\"ar\":\"فليفلة مفرومة\",\"en\":\"Chopped pepper\"}', '{\"ar\":\"<p>&nbsp;فليفلة بلدية رقيقة مفرومة</p>\"}', 0, 25000, 3, NULL, NULL, 15, 1, NULL, 1, 0, 1, 2, 6, 1999, 10, 1, '2024-03-14 14:37:59', '2024-03-14 14:37:59');
 
 -- --------------------------------------------------------
 
@@ -1782,10 +2186,10 @@ INSERT INTO `products` (`id`, `name`, `description`, `real_price`, `price`, `tax
 --
 
 CREATE TABLE `product_attribute_values` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `attribute_id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `value` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `attribute_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1843,10 +2247,11 @@ INSERT INTO `product_attribute_values` (`id`, `attribute_id`, `product_id`, `val
 (72, 7, 50, '1', NULL, NULL),
 (75, 8, 56, '200g', NULL, NULL),
 (76, 7, 80, '1', NULL, NULL),
-(77, 7, 40, '1', NULL, NULL),
-(78, 8, 40, '500g', NULL, NULL),
 (79, 7, 81, '1', NULL, NULL),
-(80, 7, 82, '1', NULL, NULL);
+(80, 7, 82, '1', NULL, NULL),
+(81, 7, 83, '1', NULL, NULL),
+(82, 7, 40, '1', NULL, NULL),
+(83, 8, 40, '500g', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1855,19 +2260,12 @@ INSERT INTO `product_attribute_values` (`id`, `attribute_id`, `product_id`, `val
 --
 
 CREATE TABLE `product_related_product` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `related_product_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `related_product_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `product_related_product`
---
-
-INSERT INTO `product_related_product` (`id`, `product_id`, `related_product_id`, `created_at`, `updated_at`) VALUES
-(10, 22, 36, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1876,10 +2274,10 @@ INSERT INTO `product_related_product` (`id`, `product_id`, `related_product_id`,
 --
 
 CREATE TABLE `purchases` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `coupon_id` bigint(20) UNSIGNED NOT NULL,
-  `points` bigint(20) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `coupon_id` bigint UNSIGNED NOT NULL,
+  `points` bigint NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1891,13 +2289,34 @@ CREATE TABLE `purchases` (
 INSERT INTO `purchases` (`id`, `user_id`, `coupon_id`, `points`, `created_at`, `updated_at`) VALUES
 (8, 20, 3, 894, '2024-04-01 10:33:47', '2024-04-01 10:33:47'),
 (9, 20, 5, 300, '2024-04-15 08:41:32', '2024-04-15 08:41:32'),
-(10, 20, 4, 200, '2024-04-28 05:44:17', '2024-04-28 05:44:17'),
-(11, 20, 4, 200, '2024-04-28 05:45:20', '2024-04-28 05:45:20'),
-(12, 20, 4, 200, '2024-04-28 05:46:13', '2024-04-28 05:46:13'),
-(13, 20, 4, 200, '2024-04-28 05:49:35', '2024-04-28 05:49:35'),
-(14, 20, 4, 200, '2024-04-28 05:54:03', '2024-04-28 05:54:03'),
-(15, 20, 4, 200, '2024-04-28 06:16:28', '2024-04-28 06:16:28'),
-(16, 20, 4, 200, '2024-04-28 06:21:43', '2024-04-28 06:21:43');
+(10, 20, 3, 100, '2024-04-22 16:27:18', '2024-04-22 16:27:18'),
+(11, 20, 3, 100, '2024-04-22 16:53:45', '2024-04-22 16:53:45'),
+(12, 20, 3, 100, '2024-04-22 16:59:23', '2024-04-22 16:59:23'),
+(13, 20, 3, 100, '2024-04-22 17:00:16', '2024-04-22 17:00:16'),
+(14, 20, 5, 300, '2024-04-22 17:00:42', '2024-04-22 17:00:42'),
+(15, 20, 3, 100, '2024-04-22 17:12:14', '2024-04-22 17:12:14'),
+(16, 20, 3, 100, '2024-04-22 17:12:21', '2024-04-22 17:12:21'),
+(17, 20, 3, 100, '2024-04-22 17:12:39', '2024-04-22 17:12:39'),
+(18, 20, 3, 100, '2024-04-22 17:15:28', '2024-04-22 17:15:28'),
+(19, 20, 3, 100, '2024-04-22 17:17:49', '2024-04-22 17:17:49'),
+(20, 20, 3, 100, '2024-04-22 17:20:32', '2024-04-22 17:20:32'),
+(21, 20, 3, 100, '2024-04-23 11:01:53', '2024-04-23 11:01:53'),
+(22, 20, 3, 100, '2024-04-24 08:23:39', '2024-04-24 08:23:39'),
+(23, 20, 3, 100, '2024-04-24 09:10:20', '2024-04-24 09:10:20'),
+(24, 20, 4, 200, '2024-04-26 13:44:46', '2024-04-26 13:44:46'),
+(25, 20, 3, 100, '2024-05-27 10:50:37', '2024-05-27 10:50:37'),
+(26, 20, 4, 200, '2024-05-27 10:50:52', '2024-05-27 10:50:52'),
+(27, 20, 4, 200, '2024-05-27 10:51:32', '2024-05-27 10:51:32'),
+(28, 20, 3, 100, '2024-05-27 10:58:29', '2024-05-27 10:58:29'),
+(29, 20, 3, 100, '2024-05-27 11:01:44', '2024-05-27 11:01:44'),
+(30, 20, 3, 100, '2024-05-27 11:04:30', '2024-05-27 11:04:30'),
+(31, 20, 4, 200, '2024-05-27 11:04:40', '2024-05-27 11:04:40'),
+(32, 20, 3, 100, '2024-05-27 11:10:03', '2024-05-27 11:10:03'),
+(33, 20, 3, 100, '2024-05-29 05:57:41', '2024-05-29 05:57:41'),
+(34, 20, 3, 100, '2024-05-29 05:59:44', '2024-05-29 05:59:44'),
+(35, 20, 3, 100, '2024-05-29 06:00:03', '2024-05-29 06:00:03'),
+(36, 20, 3, 100, '2024-05-29 06:00:39', '2024-05-29 06:00:39'),
+(37, 20, 3, 100, '2024-05-29 07:16:17', '2024-05-29 07:16:17');
 
 -- --------------------------------------------------------
 
@@ -1906,9 +2325,9 @@ INSERT INTO `purchases` (`id`, `user_id`, `coupon_id`, `points`, `created_at`, `
 --
 
 CREATE TABLE `roles` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `guard_name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1940,8 +2359,8 @@ INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VAL
 --
 
 CREATE TABLE `role_has_permissions` (
-  `permission_id` bigint(20) UNSIGNED NOT NULL,
-  `role_id` bigint(20) UNSIGNED NOT NULL
+  `permission_id` bigint UNSIGNED NOT NULL,
+  `role_id` bigint UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1949,55 +2368,55 @@ CREATE TABLE `role_has_permissions` (
 --
 
 INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
+(2, 2),
+(3, 2),
+(4, 2),
+(5, 2),
+(7, 2),
+(8, 2),
+(9, 2),
+(10, 2),
+(2, 3),
+(3, 3),
+(4, 3),
+(5, 3),
+(7, 3),
+(8, 3),
+(9, 3),
+(10, 3),
 (1, 8),
 (1, 9),
+(2, 9),
+(3, 9),
+(4, 9),
+(5, 9),
+(7, 9),
+(8, 9),
+(9, 9),
+(10, 9),
 (1, 10),
+(2, 10),
+(3, 10),
+(4, 10),
+(5, 10),
+(7, 10),
+(8, 10),
+(9, 10),
+(10, 10),
 (1, 12),
+(2, 12),
 (1, 13),
 (1, 14),
 (1, 15),
 (1, 16),
-(1, 17),
-(2, 2),
-(2, 3),
-(2, 9),
-(2, 10),
-(2, 12),
 (2, 16),
-(2, 18),
-(3, 2),
-(3, 3),
-(3, 9),
-(3, 10),
 (3, 16),
-(4, 2),
-(4, 3),
-(4, 9),
-(4, 10),
-(4, 20),
-(5, 2),
-(5, 3),
-(5, 9),
-(5, 10),
 (5, 16),
+(1, 17),
+(2, 18),
 (5, 19),
-(5, 20),
-(7, 2),
-(7, 3),
-(7, 9),
-(7, 10),
-(8, 2),
-(8, 3),
-(8, 9),
-(8, 10),
-(9, 2),
-(9, 3),
-(9, 9),
-(9, 10),
-(10, 2),
-(10, 3),
-(10, 9),
-(10, 10);
+(4, 20),
+(5, 20);
 
 -- --------------------------------------------------------
 
@@ -2006,15 +2425,15 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 --
 
 CREATE TABLE `sellers` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `area_id` bigint(20) UNSIGNED NOT NULL,
-  `type` enum('internal','external') NOT NULL,
-  `discount` double NOT NULL DEFAULT 0,
-  `discount_status` tinyint(1) NOT NULL DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `area_id` bigint UNSIGNED NOT NULL,
+  `type` enum('internal','external') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `discount` double NOT NULL DEFAULT '0',
+  `discount_status` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2024,9 +2443,9 @@ CREATE TABLE `sellers` (
 --
 
 INSERT INTO `sellers` (`id`, `name`, `latitude`, `longitude`, `status`, `area_id`, `type`, `discount`, `discount_status`, `created_at`, `updated_at`) VALUES
-(1, 'Seller12', 33.49960754456129, 36.282430958591384, 1, 1, 'internal', 35, 0, '2023-12-07 16:08:28', '2024-04-02 12:19:26'),
-(9, 's2', NULL, NULL, 1, 1, 'external', 0, 0, '2024-04-02 12:37:36', '2024-04-02 12:37:36'),
-(10, 'Foad2', NULL, NULL, 1, 1, 'internal', 2, 0, '2024-04-02 20:57:54', '2024-04-02 20:57:54');
+(1, '{\"ar\":\"بائع1\",\"en\":\"Seller1\"}', 33.49960754456129, 36.282430958591384, 1, 1, 'internal', 35, 0, '2023-12-07 16:08:28', '2024-04-02 12:19:26'),
+(9, '{\"ar\":\"بائع2\",\"en\":\"Seller2\"}', NULL, NULL, 1, 1, 'external', 0, 0, '2024-04-02 12:37:36', '2024-04-02 12:37:36'),
+(10, '{\"ar\":\"بائع3\",\"en\":\"Seller3\"}', NULL, NULL, 1, 1, 'internal', 2, 0, '2024-04-02 20:57:54', '2024-04-02 20:57:54');
 
 -- --------------------------------------------------------
 
@@ -2035,10 +2454,10 @@ INSERT INTO `sellers` (`id`, `name`, `latitude`, `longitude`, `status`, `area_id
 --
 
 CREATE TABLE `settings` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `baseUrl` varchar(255) NOT NULL,
-  `version` varchar(255) NOT NULL,
-  `phone` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `baseUrl` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `show_reward_system` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2056,8 +2475,8 @@ INSERT INTO `settings` (`id`, `baseUrl`, `version`, `phone`, `show_reward_system
 --
 
 CREATE TABLE `states` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2067,7 +2486,7 @@ CREATE TABLE `states` (
 --
 
 INSERT INTO `states` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Damascus', '2023-12-07 16:06:40', '2023-12-07 16:06:40');
+(1, '{\"ar\":\"دمشق\",\"en\":\"Damascus\"}', '2023-12-07 16:06:40', '2023-12-07 16:06:40');
 
 -- --------------------------------------------------------
 
@@ -2076,10 +2495,10 @@ INSERT INTO `states` (`id`, `name`, `created_at`, `updated_at`) VALUES
 --
 
 CREATE TABLE `sub_categories` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `category_id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `category_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2089,8 +2508,8 @@ CREATE TABLE `sub_categories` (
 --
 
 INSERT INTO `sub_categories` (`id`, `name`, `status`, `category_id`, `created_at`, `updated_at`) VALUES
-(1, 'بقدونس', 1, 1, '2023-12-07 16:22:37', '2023-12-07 16:22:37'),
-(2, 'فليفلة اصفر', 1, 1, '2023-12-18 05:53:58', '2023-12-19 05:36:43');
+(2, '{\"ar\":\"فليفلة اصفر\",\"en\":\"Yellow pepper\"}', 1, 1, '2023-12-18 05:53:58', '2023-12-19 05:36:43'),
+(12, '{\"ar\":\"موز\",\"en\":\"banana\"}', 1, 11, '2024-06-02 11:52:17', '2024-06-02 11:52:17');
 
 -- --------------------------------------------------------
 
@@ -2099,22 +2518,22 @@ INSERT INTO `sub_categories` (`id`, `name`, `status`, `category_id`, `created_at
 --
 
 CREATE TABLE `users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `birthday` date DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `phone` bigint(20) NOT NULL,
-  `role_id` bigint(20) UNSIGNED NOT NULL DEFAULT 2,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` bigint NOT NULL,
+  `role_id` bigint UNSIGNED NOT NULL DEFAULT '2',
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `fcm_token` text DEFAULT NULL,
-  `city_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
-  `delete_reason` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `fcm_token` text COLLATE utf8mb4_unicode_ci,
+  `city_id` bigint UNSIGNED DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `delete_reason` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -2131,8 +2550,8 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `birthday`, `email`, `pass
 (9, 'qmar', 'albakeer', '2024-01-16', NULL, '$2y$10$gsqGmOKWKu4ihCB.UfcaPO8vAWkSx4F/Rx8EKbJ96rgTxYQex5xyC', NULL, 987654322, 2, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2023-12-18 06:17:50', '2023-12-18 06:31:59'),
 (10, 'shawki', 'shawki', '2024-01-16', NULL, '$2y$10$ShLt9Octu5uiXq32hOTz.ugRLjXBIiqUFvR.XdtiEzPmyZ/HGHIOO', NULL, 994297125, 2, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2023-12-19 06:18:34', '2023-12-19 06:18:34'),
 (19, 'anwar', 'sh', NULL, 'anwar@anwar.com', '$2y$10$t3LVPKhCJQ6oHMQYDcSl0e/rMQVftDvGUzhswk36Cm39gHeieY6NK', NULL, 936252114, 2, NULL, NULL, 1, 'edYfPsmRSLa9DxpNrfmzhk:APA91bHeRdVpWbhdWIQxVAU-9AK3n6exv6rtHg-T7vRoyOc7jlzOaFDgKZGqxi8AWIXoNt9BQPWDyM-BwFDunedfaB769LGLZsUCLfjfXx-Ppwq_f7N_LM0Ub7w8WNHOn73R9LDb9qJc', NULL, NULL, NULL, NULL, '2024-01-03 07:25:23', '2024-03-06 11:24:34'),
-(20, 'Mouhanad', 'Haroun', '2024-01-06', 'tt@gmail.com', '$2y$10$XHCroDrGqfERyxQ8Ih0BYOLmsBxd3mLPwvtY6C84pXXVIQ61Ctax6', NULL, 987654111, 2, NULL, NULL, 1, 'eyVzdz93RQSSrPt1Y8wZVu:APA91bF8rkoxpi_S6Cws8JSPgJV8nzuUJb9FwfcfEzFEUZ8731ZC3Z5__Qy9zj_YmsEH7b7D-gJTZBNzIvCrjFhtzZz8BM6QbcimP3l2iNek4dFJTNyslqv-v3yvvIHaNEQw4BZuv9YX', NULL, NULL, NULL, NULL, '2024-01-06 10:56:48', '2024-04-16 14:42:41'),
-(28, 'ghina123', 'sharaf', '2024-01-16', 'ghina@gmail.com', '$2y$10$OYm6GDdh6VUlU7HgMRgtluhOJczom3CHxTmVp/O/l63zn8yec/OyW', NULL, 946156989, 2, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-02-07 10:35:14', '2024-02-21 11:17:52'),
+(20, 'Mouhanad', 'Haroun', '2024-02-02', 'tt@gmail.com', '$2y$10$XHCroDrGqfERyxQ8Ih0BYOLmsBxd3mLPwvtY6C84pXXVIQ61Ctax6', NULL, 987654111, 2, NULL, NULL, 1, 'fmc6uXjqTnGY0-ZToD-YIh:APA91bG8Mj5WECbe4BM6k7D-9PzFALJ58YOurAVXSMtXUFQ11S0_w14v1yoHTZQswLpP4ahFBU6EGbpkeoOKJDUNrCiZrDiSahNxXNIsLZlIluDERLlB5fiP8fnSQXtZzp8TP_4LrdMf', NULL, NULL, NULL, NULL, '2024-01-06 10:56:48', '2024-06-02 12:27:04'),
+(28, 'ghina123', 'sharaf', '2024-01-16', 'ghina@gmail.com', '$2y$10$OYm6GDdh6VUlU7HgMRgtluhOJczom3CHxTmVp/O/l63zn8yec/OyW', NULL, 946156989, 2, NULL, NULL, 1, 'fPcp5Qy0Q-C-Yf5It8Ou6r:APA91bEx5KBWbFWKuMbTJaqKSfYdppi2QNK7hG3FxP9c7kK8dD4sBHoWzlk2sTWOiCzKGhmDef5IY49kJH7psPV7Uwnh09D0EtFj4vF40i-5WY1c7u5tFK-DXxmISYyJkEMKyhh-c5ng', NULL, NULL, NULL, NULL, '2024-02-07 10:35:14', '2024-04-21 14:49:53'),
 (38, 'mousa', 'halabi', NULL, 'mousa@m.com', '$2y$10$/LSFNQhnkqQK8JisKNG3vuIX/FZ5O6OxCSp6oljHq6XGWwRgmmT7O', NULL, 984350792, 2, 2, 2, 1, NULL, NULL, NULL, NULL, NULL, '2024-03-04 11:01:36', '2024-03-04 11:01:36'),
 (39, 'new user2', 'Saati', NULL, 'peaklink@gmail.com', '$2y$10$KZW1NLQ27RKVFPYzFF67V.0tG8iroIwEBa3JlrXirzbEPKwLTGag6', NULL, 935387582, 3, NULL, NULL, 1, NULL, 1, NULL, NULL, '2024-03-04 15:20:12', '2024-03-04 15:16:11', '2024-03-04 15:20:12'),
 (40, 'majd', 'saati', NULL, 'peaklink1@gmail.com', '$2y$10$ZVxJjkrDvo8OiIXsSQwrleQJoJkwFxyIddYhr6aL5PgfYBg3Kx2aS', NULL, 936321565, 2, NULL, NULL, 0, NULL, 1, NULL, NULL, NULL, '2024-03-04 15:33:21', '2024-03-04 15:33:21'),
@@ -2142,8 +2561,11 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `birthday`, `email`, `pass
 (44, 'Majd', 'Saati', NULL, 'Hdadia.Azzoz@gmail.com', '$2y$10$2P8hJWM.KgF6s7OT90B2oOWGjzpcqKf/M8smrWqecopQAGHr2h3lm', NULL, 5387582, 2, NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, '2024-03-19 13:07:32', '2024-03-19 13:07:32'),
 (45, 'سير', 'Saati', NULL, 'Hadadia.Azzoz@gmail.com', '$2y$10$r/CDV4T22jigDOANcPP1hOEw6JBQPj0wJrWBLZqQV/SIereSFOuUW', NULL, 53875832, 3, NULL, NULL, 1, NULL, 2, NULL, NULL, NULL, '2024-03-19 13:13:50', '2024-03-19 13:13:50'),
 (46, 'sdc', 'Saati', NULL, 'Hdadcsdia.Azzoz@gmail.com', '$2y$10$/UVVw8Ywhhf2HwPaxtTgWexE7Kb2DWN8f6u/6IPulzO3JCWXz96oW', NULL, 538732582, 3, NULL, NULL, 1, NULL, 2, NULL, NULL, NULL, '2024-03-19 13:31:51', '2024-03-19 13:31:51'),
-(47, 'issa', 'halabi', '2024-01-02', NULL, '$2y$12$Iv8OwccwQGAYQxze4E9Lh.erkVGf20eDmmH8iB6p76J7k0RxmJ/cG', NULL, 946649532, 2, NULL, NULL, 1, 'qwer1234', NULL, NULL, NULL, NULL, '2024-04-02 16:00:40', '2024-04-18 12:53:34'),
-(48, 'issa', 'halabi', '2024-01-02', NULL, '$2y$10$kJfoCfc7T5I8duMcXm5yb.43CjLHHx2JScJuvHk0S/K26gEs3TqK6', NULL, 984350791, 2, NULL, NULL, 1, 'eWoQydnVRXihRlnUiEwyfR:APA91bFnSe8Qulas-eyogWC0yKR5tDWD6BMDY7m49tuk26TJFPgBpAa9uZWmE3xfgdQq48ksNQalxpxbSVChititUJuEM9N-AJGXlwTi1SkVyecPne5tEa_hnAcINtM_bw9XlPzQlvdJ', NULL, NULL, NULL, NULL, '2024-04-02 16:00:40', '2024-04-02 16:05:05');
+(47, 'issa', 'halabi', '2024-01-02', NULL, '$2y$12$Iv8OwccwQGAYQxze4E9Lh.erkVGf20eDmmH8iB6p76J7k0RxmJ/cG', NULL, 946649532, 2, NULL, NULL, 1, 'cDq8xZKoS9eYf3-xsuwG0s:APA91bFqXqAIZxpSFuSy7t2_n6sxk2OzamQgFxtIKpAauiLoI_gkT6SyU6n-a2tCW68eKpAa1CAMfgde8gBgk5Gx4QMUEwdy-bU6j03ApUDCViYHWD2jj6UUxSDI3OKYd6ds3Pb2rF-J', NULL, NULL, NULL, NULL, '2024-04-02 16:00:40', '2024-05-27 09:55:57'),
+(48, 'issa 2', 'halabi', '2024-01-02', 'issatest@gmail.com', '$2y$10$fbJP6JoT09FxMoDA0hnM5eddAvkvD66VlQU7zL1.1OYv6DBHnKjAi', NULL, 984350791, 2, NULL, NULL, 1, 'eWoQydnVRXihRlnUiEwyfR:APA91bFnSe8Qulas-eyogWC0yKR5tDWD6BMDY7m49tuk26TJFPgBpAa9uZWmE3xfgdQq48ksNQalxpxbSVChititUJuEM9N-AJGXlwTi1SkVyecPne5tEa_hnAcINtM_bw9XlPzQlvdJ', 2, NULL, NULL, NULL, '2024-04-02 16:00:40', '2024-04-23 13:21:39'),
+(49, 'ds', 'ds', NULL, NULL, '$2y$10$G1SCeQ1WJNHbctRWts4XLOWhcEo1nxxyrT1fWAPGTP31ji3R5kSbm', NULL, 123456789, 2, NULL, NULL, 1, 'sdfgndfsfs', NULL, NULL, NULL, NULL, '2024-04-17 14:53:17', '2024-04-17 14:53:17'),
+(50, 'تمارا', 'مرعي', '2024-01-01', NULL, '$2y$10$IYeyJzNePkFcsTNRVWfNoet9c/Bj0lpXVqFqAJmu3yZg/9BDD6Noe', NULL, 934105423, 2, NULL, NULL, 1, 'ejl8X6qBSGmy6w3zu9eu4-:APA91bFMI44kApWLVT8A8j_TlW8esBtWUCeikFD95QUQjgVt842ckpg7N_y_CdGg3lzH-9bSLgb00a6i-INqHFWBR2TwVqxz_wnckh9GpplJ279-E7Z7R3Xp9ghR-cDQKgHHavMbq5Ut', NULL, NULL, NULL, NULL, '2024-04-23 09:14:36', '2024-04-23 09:36:49'),
+(51, 'و', 'ع', NULL, NULL, '$2y$10$RYXjvnRo4cNXckLpkD10rO1IhLamctS7XzdrQTvBNIuyqQWw4tUsm', NULL, 993293402, 2, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, '2024-05-12 11:22:36', '2024-05-12 11:22:36');
 
 -- --------------------------------------------------------
 
@@ -2152,18 +2574,18 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `birthday`, `email`, `pass
 --
 
 CREATE TABLE `user_addresses` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `address` varchar(255) DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `area` varchar(255) DEFAULT NULL,
-  `street` varchar(255) DEFAULT NULL,
-  `building` varchar(255) DEFAULT NULL,
-  `building_number` varchar(255) DEFAULT NULL,
-  `floor` varchar(255) DEFAULT NULL,
-  `is_favourite` tinyint(4) NOT NULL DEFAULT 0,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `area` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `street` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `building` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `building_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `floor` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_favourite` tinyint NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2185,8 +2607,15 @@ INSERT INTO `user_addresses` (`id`, `name`, `address`, `latitude`, `longitude`, 
 (42, 'jkjk', 'kkkk', 37.430722817906194, -122.08597797900438, 28, 'kkk', 'jkj', 'kj', 'jkjkl', 'jkjk', 1, '2024-02-07 10:40:00', '2024-02-07 10:44:33'),
 (75, 'jbuh7', 'hfuh', 33.51593262631768, 36.27721857279539, 28, 'gf CJ oh h', 'vyv', 'bchf', 'uhi', 'hcu', 1, '2024-04-02 12:56:11', '2024-04-02 12:56:19'),
 (76, 'hcgy', 'hvh', 33.507866676170416, 36.27649202942848, 47, 'khj', 'gch', 'bvh', 'bvh', '2', 1, '2024-04-02 16:04:27', '2024-04-02 16:04:32'),
-(78, 'دمر الجزيرة العاشرة - بناء 25 - الطابق 12', 'دمشق', 33.507866676170416, 36.27649202942848, 20, 'مشروع دمر', 'دمر الجزيرة العاشرة', '25', '3', '12', 1, '2024-04-03 11:59:31', '2024-04-03 11:59:35'),
-(79, 'دمر الجزيرة العاشرة - بناء 25 - الطابق 12', 'مشروع دمر', 38.907255856648874, -77.03679297119379, 20, 'دمشق', 'دمر الجزيرة العاشرة', '22', '8', '4', 0, '2024-04-03 12:03:06', '2024-04-03 12:03:06');
+(80, 'morw', 'def', 33.49960754456142, 36.28243095859133, 20, 'yyy', 'ssd', 'vvv', 'v', 'vv', 0, '2024-04-18 08:58:33', '2024-04-18 08:58:33'),
+(81, 'mnbv', 'tt', 33.50788317000816, 36.27656947821379, 20, 'oo', 'uu', 'kk', '5', '5', 1, '2024-04-18 09:06:23', '2024-04-18 10:32:49'),
+(85, 'ss', 'البرامكة', 33.508088923380896, 36.27656947821379, 50, 'damas', 'المنطقة الحرة', 'peaklink', '1', 'الاول', 1, '2024-04-23 09:47:38', '2024-04-23 09:48:32'),
+(86, 'mmmm', 'gggg', 33.500173495776366, 36.332594119012356, 20, 'aaaaa', 'sss', 'bbb', 'eee', 'fff', 0, '2024-04-23 14:03:17', '2024-04-23 14:03:17'),
+(87, 'ff', 'tt', 33.50023136911683, 36.33271884173155, 20, 'zz', 'tt', 'fg', 'ff', 'dd', 1, '2024-04-24 09:12:55', '2024-04-24 09:13:23'),
+(88, 'hchchv', 'ydy', 33.508021829943544, 36.27651013433933, 20, 'hfhd', 'uru', 'jf6', '667', '66', 0, '2024-04-24 09:41:09', '2024-04-24 09:41:09'),
+(89, 'yyyyyyyy', 'aa', 33.51015313938358, 36.27903610467911, 20, 'Damace', 'sss', 'ooo', '22', '4', 0, '2024-04-24 11:12:30', '2024-04-24 11:12:30'),
+(90, 'tttttttttt', '333', 33.52897118416435, 36.317192539572716, 20, 'bɓ', 'yy', '11', '5', '11', 0, '2024-05-12 10:45:32', '2024-05-12 10:45:32'),
+(91, 'نن', 'مزة', 33.50959264139797, 36.27153296023607, 47, 'مزة', 'كوى', 'وو', '1', '1', 0, '2024-05-23 14:04:33', '2024-05-23 14:04:33');
 
 -- --------------------------------------------------------
 
@@ -2195,9 +2624,9 @@ INSERT INTO `user_addresses` (`id`, `name`, `address`, `latitude`, `longitude`, 
 --
 
 CREATE TABLE `user_ranks` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `limit` bigint(20) NOT NULL,
+  `limit` bigint NOT NULL,
   `features` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
@@ -2208,12 +2637,12 @@ CREATE TABLE `user_ranks` (
 --
 
 INSERT INTO `user_ranks` (`id`, `name`, `limit`, `features`, `description`, `color`) VALUES
-(1, 'Bronze', 0, '{\"coupon_per_month\":0,\"discount_on_deliver\":0,\"priority\":3}', 'تحصل على هذه الرتبة عند تسجيلك بالتطبيق ', '#915B40'),
-(2, 'Silver', 150, '{\"coupon_per_month\":1,\"discount_on_deliver\":0,\"priority\":4}', 'تحصل على هذه الرتبة عند وصولك ل 150 نقطة', '#646464'),
-(3, 'Gold', 300, '{\"coupon_per_month\":1,\"discount_on_deliver\":5,\"priority\":4}', 'تحصل على هذه الرتبة عند وصولك ل 300 نقطة', '#EAA441'),
-(4, 'Platinium', 500, '{\"coupon_per_month\":2,\"discount_on_deliver\":10,\"priority\":3}', 'تحصل على هذه الرتبة عند وصولك ل 500 نقطة', '#A2D5F6'),
-(5, 'Vip', 800, '{\"coupon_per_month\":3,\"discount_on_deliver\":20,\"priority\":2}', 'تحصل على هذه الرتبة عند وصولك ل 800 نقطة', '#A2D5F6'),
-(6, 'Vip plus', 1500, '{\"coupon_per_month\":4,\"discount_on_deliver\":30,\"priority\":1}', 'تحصل على هذه الرتبة عند وصولك ل 1500 نقطة', '#0A62C2');
+(1, '{\"ar\":\"Bronze\",\"en\":\"Bronze\"}', 0, '{\"coupon_per_month\":0,\"discount_on_deliver\":0,\"priority\":4}', '{\"ar\":تحصل على هذه الرتبة عند تسجيلك بالتطبيق ,\"en\":\"You get this rank when you register with the application\"}', '#915B40'),
+(2, '{\"ar\":\"Silver\",\"en\":\"Silver\"}', 150, '{\"coupon_per_month\":1,\"discount_on_deliver\":0,\"priority\":3}', '{\"ar\":تحصل على هذه الرتبة عند وصولك ل 150 نقطة,\"en\":\"You get this rank when you reach 150 points\"}', '#646464'),
+(3, '{\"ar\":\"Gold\",\"en\":\"Gold\"}', 300, '{\"coupon_per_month\":1,\"discount_on_deliver\":5,\"priority\":3}', '{\"ar\":تحصل على هذه الرتبة عند وصولك ل 300 نقطة,\"en\":\"You get this rank when you reach 300 points\"}', '#EAA441'),
+(4, '{\"ar\":\"Platinium\",\"en\":\"Platinium\"}', 500, '{\"coupon_per_month\":2,\"discount_on_deliver\":10,\"priority\":3}', '{\"ar\":تحصل على هذه الرتبة عند وصولك ل 500 نقطة}', '#A2D5F6'),
+(5, '{\"ar\":\"Vip\",\"en\":\"Vip\"}', 800, '{\"coupon_per_month\":3,\"discount_on_deliver\":20,\"priority\":2}', '{\"ar\":تحصل على هذه الرتبة عند وصولك ل 800 نقطة,\"en\":\"You get this rank when you reach 800 points\"}', '#A2D5F6'),
+(6, '{\"ar\":\"Vip plus\",\"en\":\"Vip plus\"}', 1500, '{\"coupon_per_month\":4,\"discount_on_deliver\":30,\"priority\":1}', '{\"ar\":تحصل على هذه الرتبة عند وصولك ل 1500 نقطة,,\"en\":\"You get this rank when you reach 1500 points\"}', '#0A62C2');
 
 --
 -- Indexes for dumped tables
@@ -2305,13 +2734,6 @@ ALTER TABLE `coupons_users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `coupons_users_user_id_foreign` (`user_id`),
   ADD KEY `coupons_users_coupon_id_foreign` (`coupon_id`);
-
---
--- Indexes for table `coupon_prices`
---
-ALTER TABLE `coupon_prices`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `coupon_prices_coupon_id_foreign` (`coupon_id`);
 
 --
 -- Indexes for table `delivery_attributes`
@@ -2430,6 +2852,7 @@ ALTER TABLE `notifications`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `orders_code` (`id`),
   ADD KEY `orders_delivery_method_id_foreign` (`delivery_method_id`),
   ADD KEY `orders_payment_method_id_foreign` (`payment_method_id`),
   ADD KEY `orders_user_address_id_foreign` (`user_address_id`),
@@ -2504,7 +2927,9 @@ ALTER TABLE `personal_access_tokens`
 -- Indexes for table `points`
 --
 ALTER TABLE `points`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `points_achievement_id_foreign` (`achievement_id`),
+  ADD KEY `points_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `point_in_pound`
@@ -2616,311 +3041,312 @@ ALTER TABLE `user_ranks`
 -- AUTO_INCREMENT for table `achievements`
 --
 ALTER TABLE `achievements`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `achievement_users`
 --
 ALTER TABLE `achievement_users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `areas`
 --
 ALTER TABLE `areas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `attributes`
 --
 ALTER TABLE `attributes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `attribute_values`
 --
 ALTER TABLE `attribute_values`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `banners`
 --
 ALTER TABLE `banners`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `commissions`
 --
 ALTER TABLE `commissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `contact_us`
 --
 ALTER TABLE `contact_us`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `coupons_types`
 --
 ALTER TABLE `coupons_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `coupons_users`
 --
 ALTER TABLE `coupons_users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
-
---
--- AUTO_INCREMENT for table `coupon_prices`
---
-ALTER TABLE `coupon_prices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `delivery_attributes`
 --
 ALTER TABLE `delivery_attributes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `delivery_methods`
 --
 ALTER TABLE `delivery_methods`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `delivery_time_infos`
 --
 ALTER TABLE `delivery_time_infos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `drivers`
 --
 ALTER TABLE `drivers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `driver_types`
 --
 ALTER TABLE `driver_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `favorits`
 --
 ALTER TABLE `favorits`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT for table `gifts`
 --
 ALTER TABLE `gifts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `home_page_dynamics`
 --
 ALTER TABLE `home_page_dynamics`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `home_page_dynamic_contents`
 --
 ALTER TABLE `home_page_dynamic_contents`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
 
 --
 -- AUTO_INCREMENT for table `join_our_teams`
 --
 ALTER TABLE `join_our_teams`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=437;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=437;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=303;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=702;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=269;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=364;
 
 --
 -- AUTO_INCREMENT for table `orders_rate_attributes`
 --
 ALTER TABLE `orders_rate_attributes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `order_delivery_attributes`
 --
 ALTER TABLE `order_delivery_attributes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=295;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=316;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=476;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=570;
 
 --
 -- AUTO_INCREMENT for table `order_driver_acceptances`
 --
 ALTER TABLE `order_driver_acceptances`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `o_t_p_s`
 --
 ALTER TABLE `o_t_p_s`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
 --
 ALTER TABLE `payment_methods`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `points`
 --
 ALTER TABLE `points`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
 
 --
 -- AUTO_INCREMENT for table `point_in_pound`
 --
 ALTER TABLE `point_in_pound`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `product_attribute_values`
 --
 ALTER TABLE `product_attribute_values`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `product_related_product`
 --
 ALTER TABLE `product_related_product`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `sellers`
 --
 ALTER TABLE `sellers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `states`
 --
 ALTER TABLE `states`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `sub_categories`
 --
 ALTER TABLE `sub_categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `user_addresses`
 --
 ALTER TABLE `user_addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `user_ranks`
 --
 ALTER TABLE `user_ranks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `achievement_users`
+--
+ALTER TABLE `achievement_users`
+  ADD CONSTRAINT `achievement_users_achievement_id_foreign` FOREIGN KEY (`achievement_id`) REFERENCES `achievements` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `achievement_users_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `attribute_values`
@@ -2933,6 +3359,19 @@ ALTER TABLE `attribute_values`
 --
 ALTER TABLE `cities`
   ADD CONSTRAINT `cities_state_id_foreign` FOREIGN KEY (`state_id`) REFERENCES `states` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `coupons`
+--
+ALTER TABLE `coupons`
+  ADD CONSTRAINT `coupons_coupon_type_id_foreign` FOREIGN KEY (`coupon_type_id`) REFERENCES `coupons_types` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `coupons_users`
+--
+ALTER TABLE `coupons_users`
+  ADD CONSTRAINT `coupons_users_coupon_id_foreign` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `coupons_users_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `drivers`
@@ -2950,7 +3389,7 @@ ALTER TABLE `driver_types`
 -- Constraints for table `home_page_dynamic_contents`
 --
 ALTER TABLE `home_page_dynamic_contents`
-  ADD CONSTRAINT `home_page_dynamic_contents_banner_id_foreign` FOREIGN KEY (`banner_id`) REFERENCES `banners` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `home_page_dynamic_contents_banner_id_foreign` FOREIGN KEY (`banner_id`) REFERENCES `banners` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `home_page_dynamic_contents_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `home_page_dynamic_contents_home_page_dynamic_id_foreign` FOREIGN KEY (`home_page_dynamic_id`) REFERENCES `home_page_dynamics` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `home_page_dynamic_contents_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
@@ -3005,11 +3444,18 @@ ALTER TABLE `order_driver_acceptances`
   ADD CONSTRAINT `order_driver_acceptances_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `points`
+--
+ALTER TABLE `points`
+  ADD CONSTRAINT `points_achievement_id_foreign` FOREIGN KEY (`achievement_id`) REFERENCES `achievements` (`id`),
+  ADD CONSTRAINT `points_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
 -- Constraints for table `product_related_product`
 --
 ALTER TABLE `product_related_product`
-  ADD CONSTRAINT `product_related_product_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
-  ADD CONSTRAINT `product_related_product_related_product_id_foreign` FOREIGN KEY (`related_product_id`) REFERENCES `products` (`id`);
+  ADD CONSTRAINT `product_related_product_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `product_related_product_related_product_id_foreign` FOREIGN KEY (`related_product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `purchases`
