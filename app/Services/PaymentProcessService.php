@@ -8,6 +8,8 @@ use App\Helpers\AuthHelper;
 use App\Traits\LocationTrait;
 use App\Traits\ModelHelper;
 use App\Enums\RewardRoutes;
+use App\Http\Resources\DeliveryAttributeResource;
+use App\Http\Resources\DeliveryMethodResource;
 use App\Models\DeliveryMethod;
 use App\Models\DeliveryTimeInfo;
 use App\Traits\RewardRequests;
@@ -68,8 +70,8 @@ class PaymentProcessService
         }
         $data = [
             'user_address'        => $user->addresses()->orderBy('is_favourite', 'desc')->get(),
-            'delivery_methods'    => $deliveryMethods,
-            'delivery_attributes' => $this->deliveryAttributeService->getAll(),
+            'delivery_methods'    => DeliveryMethodResource::collection($deliveryMethods),
+            'delivery_attributes' =>  DeliveryAttributeResource::collection($this->deliveryAttributeService->getAll()),
             'coupons'             => $this->rewardGetRequest(RewardRoutes::fixed_value_coupons),
             'changes'             => ChangeEnums::getAllValues(),
             'invoice'             => $invoice,
@@ -159,7 +161,7 @@ class PaymentProcessService
                     return $deliveryPrice - (int)(($deliveryPrice / 100) * $feature->value);
                 }
             }
-        }else{
+        } else {
             return $deliveryPrice;
         }
     }
