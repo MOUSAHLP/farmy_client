@@ -10,9 +10,10 @@ use Spatie\Translatable\HasTranslations;
 
 class Product extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia /*,HasTranslations*/;
+    use HasFactory, InteractsWithMedia;
 
-    // public $translatable = ['name'];
+    use HasTranslations;
+    public $translatable = ['name','description'];
 
     protected $fillable = [
         'name',

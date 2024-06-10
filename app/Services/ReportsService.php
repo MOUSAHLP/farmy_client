@@ -47,7 +47,12 @@ class ReportsService
                         if (request()->has("month")) {
                             $count->whereMonth('created_at', request()->month);
                         }
-                        if (request()->has("from_date") && request()->has("to_date")) {
+                        if (
+                            request()->has("from_date") &&
+                            request()->from_date != "" &&
+                            request()->has("to_date") &&
+                            request()->to_date != ""
+                        ) {
                             $count->whereDate('created_at', ">=", request()->from_date);
                             $count->whereDate('created_at', "<=", request()->to_date);
                         }
@@ -85,19 +90,19 @@ class ReportsService
                 $product = Product::find($key);
 
                 $earnings = 0;
-                foreach($model as $m){
-                    $earnings+=($m->price - $product->real_price) * $m->quantity ;
+                foreach ($model as $m) {
+                    $earnings += ($m->price - $product->real_price) * $m->quantity;
                 }
                 return [
                     "value" => $earnings,
-                    "label" =>$product->name,
+                    "label" => $product->name,
                 ];
             })->values();
     }
-    
+
     public function getUsedPointsReport()
     {
-        return $this->rewardGetRequest(RewardRoutes::used_points_report."?year=". request()->year)->data;
+        return $this->rewardGetRequest(RewardRoutes::used_points_report . "?year=" . request()->year)->data;
     }
 
     public function getCouponsReport()
