@@ -2,7 +2,7 @@
 
 return [
 
-    'membership_guide' => 'There are many levels of membership and the benefits of each at Farmi, which reflects the deep appreciation we feel towards all of our customers in general and our regular customers in particular. We have designed a special membership program that gives each rank or level benefits, discounts, and free gifts to our wonderful customers.',
+    'membership_guide' => 'There are many levels of membership and the benefits of each at Farmy, which reflects the deep appreciation we feel towards all of our customers in general and our regular customers in particular. We have designed a special membership program that gives each rank or level benefits, discounts, and free gifts to our wonderful customers.',
 
     'rewards_guide' => [
         'Marhaba_Customer_Rewards_Program' => '“Marhaba” Customer Rewards Program',
