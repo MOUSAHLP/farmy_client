@@ -31,9 +31,10 @@ class HomePageController extends Controller
     public function index()
     {
         $homePageDynamic = HomePageDynamic::with(["content"])->orderBy("order")->get();
-        if (AuthHelper::userAuth() && request()->page >= 2) {
+        if (AuthHelper::userAuth()) {
             $homePageDynamic->push($this->homePageService->getSuggestedProductSection());
             $homePageDynamic = $homePageDynamic->sortBy("order")->values();
+            // return ($homePageDynamic);
         }
         $response = PaginationHelper::paginate($homePageDynamic, request()->paginate ?? 3, request()->page, ['path' => request()->url()]);
         return HomePageDynamicResource::collection($response)->response()->getData(true);
