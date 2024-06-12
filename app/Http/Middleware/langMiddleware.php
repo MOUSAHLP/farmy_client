@@ -11,7 +11,7 @@ class langMiddleware
 
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = "en";
+        $locale = "ar";
         if (in_array(request()->lang, ["ar", "en"])) {
             $locale = request()->lang;
         }
